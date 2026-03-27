@@ -2,3 +2,53 @@
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 @plugin 'daisyui';
+
+@plugin "daisyui/theme" {
+	name: "urodapter";
+	default: true;
+	prefersdark: false;
+	color-scheme: light;
+
+	--color-base-100: oklch(100% 0 0);
+	--color-base-200: oklch(97% 0 0);
+	--color-base-300: oklch(93% 0 0);
+	--color-base-content: oklch(30% 0.02 200);
+
+	--color-primary: oklch(61.48% 0.1042 199.79);
+	--color-primary-content: oklch(100% 0 0);
+
+	--color-secondary: oklch(77.41% 0.0662 322.00);
+	--color-secondary-content: oklch(30% 0.02 322);
+
+	--color-accent: oklch(77.97% 0.0779 197.76);
+	--color-accent-content: oklch(25% 0.04 200);
+
+	--color-neutral: oklch(54.26% 0.0012 17.20);
+	--color-neutral-content: oklch(100% 0 0);
+
+	--color-info: oklch(70% 0.08 220);
+	--color-success: oklch(70% 0.15 155);
+	--color-warning: oklch(80% 0.12 85);
+	--color-error: oklch(65% 0.2 25);
+
+	--rounded-box: 0.75rem;
+	--rounded-btn: 1.25rem;
+	--rounded-badge: 1rem;
+	--animation-btn: 0.2s;
+	--animation-input: 0.2s;
+	--btn-focus-scale: 0.97;
+	--tab-radius: 0.5rem;
+}
+
+@theme {
+	--color-primary-light: oklch(77.97% 0.0779 197.76);
+	--color-primary-mid: oklch(61.48% 0.1042 199.79);
+	--color-primary-dark: oklch(42.95% 0.0735 193.48);
+	--color-secondary-dark: oklch(56.04% 0.1163 101.66);
+	--color-neutral-light: oklch(82.66% 0.0000 89.88);
+	--font-heading: 'Josefin Sans', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: var(--font-heading);
+}
