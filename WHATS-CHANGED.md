@@ -18,18 +18,19 @@ This document tracks all changes between the original scraped site (`scraped/app
 
 | Element | Original | New |
 |---|---|---|
-| Primary colors | `#0B3B54` (navy), `#072C3F` (dark navy), `#52B2D6` (highlight) | `#78c7c9` (light), `#02979d` (mid), `#005c5b` (dark) |
-| Secondary colors | N/A | `#caa8cf` (default), `#837603` (dark) |
-| Neutral colors | N/A | `#706f6f` (default), `#c6c6c6` (light) |
+| Primary colors | `#0B3B54` (navy), `#072C3F` (dark navy), `#52B2D6` (highlight) | DaisyUI OKLCH: navy `#0b3b54` + highlight `#52b2d6` (light theme primary / dark theme surfaces); teal palette removed |
+| Secondary colors | N/A | Purple/magenta secondary unchanged (OKLCH hue ~322) |
+| Neutral colors | N/A | Grayscale neutral unchanged |
 | Heading font | Source Sans 3 | Josefin Sans (Google Fonts) |
 | Body font | Source Sans 3 | System font stack (Tailwind default) |
-| Theme color (meta) | `#0b3b54` | `#02979d` |
+| Theme color (meta) | `#0b3b54` | `#0b3b54` (manifest + `app.html` aligned) |
+| Dark mode | N/A | Second DaisyUI theme `urodapter-dark` (`prefers-color-scheme: dark`): base surfaces from navy `#0b3b54`, primary/accent from `#52b2d6`; secondary/neutral tokens match light theme |
 
 ## Logo
 
 | Variant | Original | New |
 |---|---|---|
-| `logo_blue.svg` | `fill="#0B3B54"` | `fill="#78c7c9"` (primary light) |
+| `logo_blue.svg` | `fill="#0B3B54"` | `fill="#52b2d6"` (brand highlight blue) |
 | `logo_highlight_blue.svg` | `fill="#52B2D6"` (separate file) | **Discarded** -- `logo_blue.svg` used instead |
 | `logo_white.svg` | `fill="#FFFFFF"` | Unchanged (`fill="#FFFFFF"`) |
 
@@ -38,7 +39,7 @@ This document tracks all changes between the original scraped site (`scraped/app
 | Aspect | Original | New |
 |---|---|---|
 | Animation | JS image sequence (PNG frames: `intro_loop_000.png` ... `intro_loop_NNN.png`) | Single looping `<video>` (`intro_loop_seq.mp4`, 212KB) |
-| Background | SVG radial gradient (`intro_bg_gradient.svg`: `#205a74` → `#023249`) + canvas-driven sequence | CSS `radial-gradient` matching original SVG background, plus `<video>` with `autoplay`, `muted`, `loop`, `playsinline` |
+| Background | SVG radial gradient (`intro_bg_gradient.svg`: `#205a74` → `#023249`) + canvas-driven sequence | CSS `radial-gradient` and `intro_bg_gradient.svg` use `#52b2d6` → `#0b3b54` / `#072c3f` (no teal stops), plus `<video>` with `autoplay`, `muted`, `loop`, `playsinline` |
 | Black bg removal | N/A (PNG frames had transparent backgrounds) | `mix-blend-mode: screen` on `<video>` makes the MP4's black background transparent against the radial gradient |
 
 The original frame-by-frame animation cost a lot of bandwidth and CPU. One 212 KB MP4 is friendlier to low-end devices.
@@ -53,6 +54,7 @@ The original frame-by-frame animation cost a lot of bandwidth and CPU. One 212 K
 | Icons | icomoon icon font | icomoon font (preserved) or inline SVGs |
 
 - On the home page, table-of-contents icon handling is now data-driven and normalized to consistent `24x24` inline SVGs, and the `Install App` action appears beside `Share` in the footer action row instead of as a card.
+- The home TOC strip uses `bg-accent/20` from theme tokens (no hardcoded `dark:` background). Card icons use `text-accent`. Footer uses `bg-primary` / `dark:bg-base-300` instead of a hardcoded teal OKLCH fill.
 
 ## Pages & Routes
 

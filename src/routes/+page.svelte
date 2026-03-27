@@ -98,7 +98,9 @@
 {/snippet}
 
 {#if showIntro}
-	<div class="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[radial-gradient(circle,#205a74_0%,#0f445c_36%,#05364e_71%,#023249_100%)]">
+	<div
+		class="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[radial-gradient(circle,#52b2d6_0%,#2a6d8c_32%,#0b3b54_65%,#072c3f_100%)]"
+	>
 		<img src="/assets/img/logo_blue.svg" alt="Urodapter" class="w-48 mb-4" />
 		<h1 class="text-3xl font-bold text-white mb-2">How to Use</h1>
 
@@ -149,7 +151,7 @@
 			{#each cards as card (card.href)}
 				<a href={resolve(card.href as '/')} class="no-underline sm:last:col-span-full lg:last:col-start-2 h-full">
 					<div class="card items-center bg-base-100 shadow-md hover:shadow-lg transition-shadow pt-6 h-full">
-						<figure class="m-0 text-[#52B2D6]">
+						<figure class="m-0 text-accent">
 							{@render cardIcon(card.icon)}
 						</figure>
 						<div class="card-body items-center text-center p-4">
