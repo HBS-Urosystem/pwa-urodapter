@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { videoFiles } from '$lib/data/video-manifest';
 	import { introPlayed } from '$lib/stores/intro.svelte';
 
@@ -45,9 +46,31 @@
 		{ title: 'What to do prior to instillation', href: '/what-to-do-prior-to-instillation', icon: 'gear' },
 		{ title: 'Instructions for female patients', href: '/instructions-for-doctors-on-female-patients', icon: 'female' },
 		{ title: 'Instructions for male patients', href: '/instructions-for-doctors-on-male-patients', icon: 'male' },
-		{ title: 'FAQ', href: '/faq', icon: 'help' },
-		{ title: 'Install App', href: '/install', icon: 'download' }
+		{ title: 'FAQ', href: '/faq', icon: 'help' }
 	];
+
+	$effect(() => {
+		if (!showIntro) return;
+
+		const html = document.documentElement;
+		const body = document.body;
+		const prevHtmlOverflow = html.style.overflow;
+		const prevBodyOverflow = body.style.overflow;
+		const prevHtmlOverscroll = html.style.overscrollBehavior;
+		const prevBodyOverscroll = body.style.overscrollBehavior;
+
+		html.style.overflow = 'hidden';
+		body.style.overflow = 'hidden';
+		html.style.overscrollBehavior = 'none';
+		body.style.overscrollBehavior = 'none';
+
+		return () => {
+			html.style.overflow = prevHtmlOverflow;
+			body.style.overflow = prevBodyOverflow;
+			html.style.overscrollBehavior = prevHtmlOverscroll;
+			body.style.overscrollBehavior = prevBodyOverscroll;
+		};
+	});
 </script>
 
 <svelte:head>
@@ -124,13 +147,13 @@
 
 		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto px-4">
 			{#each cards as card (card.href)}
-				<a href={card.href} class="no-underline">
-					<div class="card items-center bg-base-100 shadow-md hover:shadow-lg transition-shadow pt-6">
+				<a href={resolve(card.href as '/')} class="no-underline sm:last:col-span-full lg:last:col-start-2 h-full">
+					<div class="card items-center bg-base-100 shadow-md hover:shadow-lg transition-shadow pt-6 h-full">
 						<figure class="m-0 text-[#52B2D6]">
 							{@render cardIcon(card.icon)}
 						</figure>
 						<div class="card-body items-center text-center p-4">
-							<h3 class="card-title text-sm">{card.title}</h3>
+							<h3 class="card-title">{card.title}</h3>
 						</div>
 					</div>
 				</a>
@@ -153,19 +176,38 @@
 			{/if}
 		</div>
 
-		<div class="text-center mt-4">
+		<div class="mt-4 flex flex-wrap items-center justify-center gap-2">
+			<a href={resolve('/install')} class="btn btn-ghost btn-sm">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="h-6 w-6 mt-1"
+					viewBox="0 0 40 40"
+				>
+					<path
+						d="M16.5 3v18m0 0l-6-6m6 6l6-6M5 24v3h23v-3"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="4"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					/>
+				</svg>
+				Install App
+			</a>
+
 			<button class="btn btn-ghost btn-sm" onclick={share}>
 				{#if copied}
 					Copied!
 				{:else}
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						class="h-6 w-6 mr-1"
+						class="h-6 w-6 mt-1"
 						viewBox="0 0 24 24"
 						fill="currentColor"
-					>
+						>
 					<path
-							d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"
+						stroke-width="1"
+						d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"
 					/>
 					</svg>
 					Share

@@ -38,10 +38,10 @@ This document tracks all changes between the original scraped site (`scraped/app
 | Aspect | Original | New |
 |---|---|---|
 | Animation | JS image sequence (PNG frames: `intro_loop_000.png` ... `intro_loop_NNN.png`) | Single looping `<video>` (`intro_loop_seq.mp4`, 212KB) |
-| Background | SVG radial gradient (`intro_bg_gradient.svg`: `#205a74` → `#023249`) + canvas-driven sequence | CSS `radial-gradient` matching original SVG stops, plus `<video>` with `autoplay`, `muted`, `loop`, `playsinline` |
+| Background | SVG radial gradient (`intro_bg_gradient.svg`: `#205a74` → `#023249`) + canvas-driven sequence | CSS `radial-gradient` matching original SVG background, plus `<video>` with `autoplay`, `muted`, `loop`, `playsinline` |
 | Black bg removal | N/A (PNG frames had transparent backgrounds) | `mix-blend-mode: screen` on `<video>` makes the MP4's black background transparent against the radial gradient |
 
-The original frame-by-frame animation cost a lot of bandwidth and CPU. One 212 KB MP4 plus `mix-blend-mode: screen` is friendlier to low-end devices.
+The original frame-by-frame animation cost a lot of bandwidth and CPU. One 212 KB MP4 is friendlier to low-end devices.
 
 ## Navigation & Layout
 
@@ -52,7 +52,7 @@ The original frame-by-frame animation cost a lot of bandwidth and CPU. One 212 K
 | Footer | Bootstrap grid with links | DaisyUI footer with app version display |
 | Icons | icomoon icon font | icomoon font (preserved) or inline SVGs |
 
-- Home page table-of-contents icons were refactored to a data-driven Svelte snippet (`card.icon` -> `cardIcon`) and normalized to `24x24` SVGs (`viewBox="0 0 24 24"`), with path scaling so glyphs fill the icon frame consistently.
+- On the home page, table-of-contents icon handling is now data-driven and normalized to consistent `24x24` inline SVGs, and the `Install App` action appears beside `Share` in the footer action row instead of as a card.
 
 ## Pages & Routes
 

@@ -1,11 +1,18 @@
-<nav class="navbar bg-base-100 shadow-sm px-4">
+<script lang="ts">
+	import { resolve } from '$app/paths';
+</script>
+
+<nav class="navbar bg-base-100 shadow-sm px-4 sticky top-0 z-40">
 	<div class="flex-1">
-		<a href="/" class="btn btn-ghost p-0">
+		<a
+			href={resolve('/')}
+			class="btn btn-ghost hover:bg-transparent hover:bg-transparent hover:border-transparent hover:shadow-none"
+		>
 			<img src="/assets/img/logo_blue.svg" alt="Urodapter" class="h-8" />
 		</a>
 	</div>
 	<div class="flex-none gap-1">
-		<a href="/" class="btn btn-ghost btn-square" aria-label="Home">
+		<a href={resolve('/')} class="btn btn-ghost btn-square" aria-label="Home">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="h-6 w-6"
