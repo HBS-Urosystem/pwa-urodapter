@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import './layout.css';
-	import favicon from '$lib/assets/favicon.svg';
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import UpdateToast from '$lib/components/UpdateToast.svelte';
@@ -16,7 +15,6 @@
 
 <svelte:head>
 	<title>Urodapter - How to Use</title>
-	<link rel="icon" href={favicon} />
 </svelte:head>
 
 <div class="drawer drawer-end">
@@ -34,7 +32,7 @@
 			class="bg-base-100 flex min-h-full max-h-dvh w-72 flex-col overflow-y-auto overscroll-y-contain"
 		>
 			<div
-				class="sticky top-0 z-10 flex shrink-0 items-center justify-end gap-1 border-b border-base-200 bg-base-100 px-4 pb-2 pt-4"
+				class="sticky top-0 z-10 flex shrink-0 items-center justify-end gap-1 shadow-sm bg-base-100 px-4 pb-2 pt-2 h-16"
 			>
 				<a
 					href={resolve('/')}

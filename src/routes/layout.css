@@ -3,7 +3,7 @@
 @plugin '@tailwindcss/typography';
 @plugin 'daisyui';
 
-/* Brand blues (OKLCH from #0b3b54 / #52b2d6): navy + highlight */
+/* Light: primary #78c7c9, secondary #02979d, neutral #005c5b, accent #caa8cf; dark = urodapter-dark */
 @plugin "daisyui/theme" {
 	name: "urodapter";
 	default: true;
@@ -13,24 +13,24 @@
 	--color-base-100: oklch(100% 0 0);
 	--color-base-200: oklch(97% 0 0);
 	--color-base-300: oklch(93% 0 0);
-	--color-base-content: oklch(30% 0.02 237);
+	--color-base-content: oklch(42.95% 0.0735 193.48);
 
-	--color-primary: oklch(33.47% 0.0657 237.02);
+	--color-primary: oklch(77.97% 0.0779 197.76);
 	--color-primary-content: oklch(100% 0 0);
 
-	--color-secondary: oklch(77.41% 0.0662 322.00);
-	--color-secondary-content: oklch(30% 0.02 322);
+	--color-secondary: oklch(61.48% 0.1042 199.79);
+	--color-secondary-content: oklch(100% 0 0);
 
-	--color-accent: oklch(72.02% 0.1037 225.69);
-	--color-accent-content: oklch(22% 0.07 237);
+	--color-accent: oklch(77.41% 0.0662 322);
+	--color-accent-content: oklch(30% 0.04 322);
 
-	--color-neutral: oklch(54.26% 0.0012 17.20);
-	--color-neutral-content: oklch(100% 0 0);
+	--color-neutral: oklch(42.95% 0.0735 193.48);
+	--color-neutral-content: oklch(98% 0.02 195);
 
-	--color-info: oklch(70% 0.08 226);
-	--color-success: oklch(70% 0.15 155);
-	--color-warning: oklch(80% 0.12 85);
-	--color-error: oklch(65% 0.2 25);
+	--color-info: oklch(78% 0.07 226);
+	--color-success: oklch(78% 0.13 155);
+	--color-warning: oklch(88% 0.1 85);
+	--color-error: oklch(74% 0.17 25);
 
 	--rounded-box: 0.75rem;
 	--rounded-btn: 1.25rem;
@@ -53,13 +53,13 @@
 	--color-base-content: oklch(96% 0.015 237);
 
 	--color-primary: oklch(72.02% 0.1037 225.69);
-	--color-primary-content: oklch(22% 0.07 237);
+	--color-primary-content: oklch(100% 0 0);
 
-	--color-secondary: oklch(77.41% 0.0662 322.00);
-	--color-secondary-content: oklch(30% 0.02 322);
+	--color-secondary: oklch(89.53% 0.0345 233.08);
+	--color-secondary-content: oklch(33% 0.06 237);
 
-	--color-accent: oklch(72.02% 0.1037 225.69);
-	--color-accent-content: oklch(22% 0.07 237);
+	--color-accent: oklch(77.41% 0.0662 322.00);
+	--color-accent-content: oklch(30% 0.02 322);
 
 	--color-neutral: oklch(54.26% 0.0012 17.20);
 	--color-neutral-content: oklch(100% 0 0);
@@ -76,14 +76,18 @@
 	--animation-input: 0.2s;
 	--btn-focus-scale: 0.97;
 	--tab-radius: 0.5rem;
+	--color-info-content: oklch(100% 0 0);
+	--color-success-content: oklch(100% 0 0);
+	--color-warning-content: oklch(100% 0 0);
+	--color-error-content: oklch(100% 0 0);
 }
 
 @theme {
-	--color-primary-light: oklch(72.02% 0.1037 225.69);
-	--color-primary-mid: oklch(50% 0.085 235);
-	--color-primary-dark: oklch(33.47% 0.0657 237.02);
-	--color-secondary-dark: oklch(56.04% 0.08 322);
-	--color-neutral-light: oklch(82.66% 0.0000 89.88);
+	--color-primary-light: oklch(88% 0.045 198);
+	--color-primary-mid: oklch(61.48% 0.1042 199.79);
+	--color-primary-dark: oklch(42.95% 0.0735 193.48);
+	--color-secondary-dark: oklch(52% 0.11 199);
+	--color-neutral-light: oklch(90% 0.025 195);
 	--font-heading: 'Josefin Sans', sans-serif;
 }
 

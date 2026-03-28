@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import LogoWordmark from '$lib/components/LogoWordmark.svelte';
 	import { videoFiles } from '$lib/data/video-manifest';
 	import { introPlayed } from '$lib/stores/intro.svelte';
 
@@ -99,9 +100,10 @@
 
 {#if showIntro}
 	<div
-		class="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[radial-gradient(circle,#52b2d6_0%,#2a6d8c_32%,#0b3b54_65%,#072c3f_100%)]"
+		class="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[radial-gradient(circle,#2a6d8c_0%,#0b3b54_61%,#072c3f_100%)] text-primary"
 	>
-		<img src="/assets/img/logo_blue.svg" alt="Urodapter" class="w-48 mb-4" />
+		<LogoWordmark class="w-48 mb-4" />
+
 		<h1 class="text-3xl font-bold text-white mb-2">How to Use</h1>
 
 		<video
@@ -110,17 +112,18 @@
 			muted
 			loop
 			playsinline
-			class="w-48 h-48 object-contain my-4 mix-blend-screen"
+			class="w-48 h-48 object-contain mt-12 mb-4 mix-blend-screen"
 		></video>
 
-		<img src="/assets/img/intro-img-shadow.png" alt="" class="w-48 -mt-4 opacity-50" />
+		<svg class="w-48 -mt-8" viewBox="0 0 320 64" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><radialGradient id="a" cx="160" cy="32" gradientTransform="matrix(1 0 0 .15 0 20.7)" gradientUnits="userSpaceOnUse" r="160"><stop offset="0" stop-color="#22303a" stop-opacity=".1"/><stop offset="1" stop-color="#22303a" stop-opacity="0"/></radialGradient><rect fill="url(#a)" height="100%" width="100%"/></svg>
+		<!-- <img src="/assets/img/intro-img-shadow.svg" alt="" class="w-48 -mt-8" /> -->
 
 		<p class="text-white text-center max-w-md px-4 mt-4">
 			Everything you need to know about the urological syringe adapter which can completely replace
 			the catheter in the field of Bladder Instillation
 		</p>
 
-		<button class="btn btn-accent btn-lg mt-6" onclick={() => { showIntro = false; introPlayed.seen = true; }}>
+		<button class="btn btn-primary rounded-full text-neutral-content btn-lg mt-6" onclick={() => { showIntro = false; introPlayed.seen = true; }}>
 			Enter
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -138,7 +141,7 @@
 	</div>
 {/if}
 
-<section class="bg-accent/20 py-12 flex-1">
+<section class="bg-primary/20 py-12 flex-1">
 	<div class="container mx-auto">
 		<h2 class="text-2xl font-bold text-center mb-8">Table of Contents</h2>
 
@@ -151,7 +154,7 @@
 			{#each cards as card (card.href)}
 				<a href={resolve(card.href as '/')} class="no-underline sm:last:col-span-full lg:last:col-start-2 h-full">
 					<div class="card items-center bg-base-100 shadow-md hover:shadow-lg transition-shadow pt-6 h-full">
-						<figure class="m-0 text-accent">
+						<figure class="m-0 text-primary">
 							{@render cardIcon(card.icon)}
 						</figure>
 						<div class="card-body items-center text-center p-4">
@@ -166,7 +169,7 @@
 			{#if progress >= 100}
 				<p class="text-success font-bold">Downloaded!</p>
 			{:else}
-				<button class="btn btn-primary btn-outline" onclick={downloadAllVideos} disabled={downloading}>
+				<button class="btn btn-secondary btn-outline" onclick={downloadAllVideos} disabled={downloading}>
 					Download all videos for offline use
 				</button>
 			{/if}

@@ -1,14 +1,17 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import LogoWordmark from '$lib/components/LogoWordmark.svelte';
 </script>
 
 <nav class="navbar bg-base-100 shadow-sm px-4 sticky top-0 z-40">
 	<div class="flex-1">
+		<!-- svelte-ignore a11y_consider_explicit_label -->
 		<a
 			href={resolve('/')}
-			class="btn btn-ghost hover:bg-transparent hover:bg-transparent hover:border-transparent hover:shadow-none"
+			class="btn btn-ghost hover:bg-transparent hover:bg-transparent hover:border-transparent hover:shadow-none text-primary"
 		>
-			<img src="/assets/img/logo_blue.svg" alt="Urodapter" class="h-8" />
+			<LogoWordmark class="h-8" />
+
 		</a>
 	</div>
 	<div class="flex-none gap-1">
