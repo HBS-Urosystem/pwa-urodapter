@@ -123,7 +123,7 @@
 			the catheter in the field of Bladder Instillation
 		</p>
 
-		<button class="btn btn-primary rounded-full text-neutral-content btn-lg mt-6" onclick={() => { showIntro = false; introPlayed.seen = true; }}>
+		<button class="btn btn-primary rounded-full text-neutral-content btn--lg mt-6" onclick={() => { showIntro = false; introPlayed.seen = true; }}>
 			Enter
 			<svg
 				xmlns="http://www.w3.org/2000/svg"

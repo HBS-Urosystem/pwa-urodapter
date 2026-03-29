@@ -1,0 +1,61 @@
+steps:
+  - id: relaxation-intro
+    title: Relaxation of pelvic muscles and sphincter
+    video: null
+    body: |
+      It is important to ask the patient to relax his pelvic muscles. The urethral sphincter should be relaxed to let the solution easily flow into the bladder.
+  - id: insertion
+    title: UroDapter insertion
+    video: 111
+    body: |
+      Make sure that the UroDapter has entered the urethral orifice properly and the sealing collar covers the nearby surface of the glans tightly. If not, leakage can occur.
+  - id: instillation-speed
+    title: Instillation speed
+    video: 112
+    body: |
+      Begin slowly instilling the liquid. Perform the instillation at low speed.
+  - id: opening-sphincter
+    title: Opening of the sphincter
+    video: 109
+    body: |
+      During proper instillation the instilled solution will increase the intraurethral pressure above the sphincter pressure and will completely open the already relaxed sphincter, allowing the solution to easily flow into the bladder.
+  - id: sphincter-contraction
+    title: Sphincter contraction
+    video: 113
+    body: |
+      Slow down or pause the instillation if the sphincter is constricted. Instruct the patient to take a few deep breaths, and relax his pelvic muscles and sphincter. Resume when the patient relaxed his sphincter.
+  - id: two-step
+    title: Two-step process for male patients
+    video: 114
+    body: |
+      Due to the long male urethra, a significant portion of the instilled solution remains in the urethra, which would be lost after removing the UroDapter. To avoid this and to deliver the whole amount of drug solution in the bladder, the two-step process should be followed in each male patient.
+  - id: instillation-solution
+    title: Instillation of the solution
+    video: 121
+    body: |
+      After complete instillation of the solution, compress the urethra below the orifice with two fingers of your other hand and remove the Luer-Lock or Luer-Slip syringe with the UroDapter from the orifice.
+  - id: syringe-air
+    title: Filling a Luer-Lock or Luer-Slip syringe with air
+    video: 122
+    body: |
+      While keeping the compression of the urethra, fill up the Luer-Lock or Luer-Slip syringe with 20ml air.
+  - id: sealing
+    title: Sealing
+    video: 123
+    body: |
+      Re-insert the Luer-Lock or Luer-Slip syringe with the UroDapter into the still compressed orifice and ensure its complete sealing by the isolating collar.
+  - id: instillation-air
+    title: Instillation of air
+    video: 124
+    body: |
+      Release the urethral compression and push the air slowly into the urethra. The instilled air is capable and will push the remaining liquid into the bladder.
+  - id: air-bladder
+    title: Air enters the bladder
+    video: 125
+    body: |
+      As soon as the air reaches the bladder, the patient will report on an unfamiliar feeling and it is also sensible, typically audible for the physician. The small amount of instilled air is completely harmless and will be emptied with the first urination after the instillation.
+  - id: retention
+    title: Retention of solution
+    video: 126
+    body: |
+      The patient should retain the instilled solution in the bladder for the time recommended by the therapist, but no more than 3 hours.

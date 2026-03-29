@@ -10,4 +10,11 @@ declare global {
 	}
 }
 
+declare module 'svelte/elements' {
+	interface HTMLFormAttributes {
+		/** Netlify Forms honeypot field name */
+		'netlify-honeypot'?: string;
+	}
+}
+
 export {};

@@ -7,3 +7,6 @@ bun.lockb
 
 # Miscellaneous
 /static/
+
+# Codegen output (tabs/format from compile script)
+src/lib/content/generated.ts

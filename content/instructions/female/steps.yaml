@@ -1,0 +1,60 @@
+steps:
+  - id: inserting
+    title: Inserting the UroDapter
+    video: 157
+    plusModalId: 1
+    body: |
+      Insert the UroDapter into the urethral orifice and gently position the orifice under the symphysis toward the rectum. To achieve this, push downwards the labiae with your exploring fingers.
+  - id: spooning
+    title: Spooning
+    video: 158
+    body: |
+      Gently drive the Luer-Lock or Luer-Slip syringe with a “spooning” motion under the symphysis in all cases. This is crucial, as it allows for the liquid to flow from the syringe through the urethra.
+  - id: angle-adjustment
+    title: Angle adjustment
+    video: 159
+    plusModalId: 3
+    body: |
+      After the "spooning" motion, adjust the angle of the Luer-Lock or Luer-Slip syringe so that it is parallel with the urethra. The optimal angle will cause the least resistance while pressing the plunger of the syringe. The proper angle might be depending on the pelvic anatomy, which usually relates to the patients’ age.
+  - id: relaxation
+    title: Relaxation of pelvic muscles
+    video: 160
+    body: |
+      It is important to ask the patient to relax her pelvic muscles. The urethral sphincter should be relaxed to let the solution easily flow into the bladder.
+  - id: sealing
+    title: Sealing
+    video: 161
+    body: |
+      Make sure that the UroDapter has entered the orifice properly and the sealing collar covers the nearby tissues tightly. If not, leakage can occur.
+  - id: instillation-speed
+    title: Instillation speed
+    video: 162
+    plusModalId: 6
+    body: |
+      Begin slowly instilling the liquid and adjust the angle as needed: At the optimal angle you will feel the least resistance while pressing the plunger of the syringe. Perform the instillation at low speed.
+  - id: opening-sphincter
+    title: Opening of the sphincter
+    video: 163
+    body: |
+      During proper instillation the instilled solution will increase the intraurethral pressure above the sphincter pressure and will completely open the already relaxed sphincter, allowing the solution to easily flow into the bladder.
+  - id: sphincter-contraction
+    title: Sphincter contraction
+    video: 170
+    body: |
+      Slow down or pause the instillation if the sphincter is constricted. Instruct the patient to take a few deep breaths, and relax her pelvic muscles and sphincter. Resume when the patient relaxed her sphincter.
+  - id: leakage-during
+    title: Leakage during instillation
+    video: 165
+    plusModalId: 9
+    body: |
+      If there is any leakage during the instillation, it can have different causes, like insufficient coverage of the sealing collar, too little or too much pressure on the Luer-Lock or Luer-Slip syringe.
+  - id: leakage-after
+    title: Leakage after instillation
+    video: 168
+    body: |
+      Some minimal leakage may occur after instillation. Usually, it is insignificant, only a few drops.
+  - id: retention
+    title: Retention of solution
+    video: 169
+    body: |
+      The patient should retain the instilled solution in the bladder for the time recommended by the therapist, but no more than 3 hours.
