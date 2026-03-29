@@ -64,8 +64,8 @@ The original frame-by-frame animation cost a lot of bandwidth and CPU. One 212 K
 | `index.html`                                   | `/`                                            | Intro overlay + table of contents             |
 | `how-the-urodapter-works/`                     | `/how-the-urodapter-works`                     | Same content                                  |
 | `what-to-do-prior-to-instillation/`            | `/what-to-do-prior-to-instillation`            | Same content                                  |
-| `instructions-for-doctors-on-female-patients/` | `/instructions-for-doctors-on-female-patients` | Added step memory, keyboard nav, horizontal swipe between steps on the Instructions tab |
-| `instructions-for-doctors-on-male-patients/`   | `/instructions-for-doctors-on-male-patients`   | Added step memory, keyboard nav, horizontal swipe between steps on the Instructions tab   |
+| `instructions-for-doctors-on-female-patients/` | `/instructions-for-doctors-on-female-patients` | Added step memory; on mobile, a one-finger horizontal swipe goes to the previous or next step |
+| `instructions-for-doctors-on-male-patients/`   | `/instructions-for-doctors-on-male-patients`   | Added step memory; on mobile, a one-finger horizontal swipe goes to the previous or next step   |
 | `faq/`                                         | `/faq`                                         | DaisyUI collapse replaces Bootstrap accordion |
 | `privacy-policy/`                              | `/privacy-policy`                              | Content cleaned up (see below)                |
 | `cookie-policy/`                               | `/cookie-policy`                               | Content cleaned up (see below)                |
@@ -93,6 +93,7 @@ The original frame-by-frame animation cost a lot of bandwidth and CPU. One 212 K
 - **Update notification**: toast when a new service worker version is deployed
 - **Share / QR**: Web Share API button for easy clinic distribution
 - **SEO / Open Graph**: per-page `<title>`, `og:*` meta tags, `<meta name="description">`
+- **Instruction videos**: silent clips use `muted`; native volume/mute controls are hidden in WebKit/Blink
 - **Accessibility**: `aria-label` on videos, `playsinline`, proper heading hierarchy, keyboard-navigable slider
 
 ## Removed

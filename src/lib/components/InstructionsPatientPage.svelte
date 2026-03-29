@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { tick, onMount } from 'svelte';
+	import { fly } from 'svelte/transition';
+	import { cubicOut } from 'svelte/easing';
 	import type { InstructionPack } from '$lib/content';
 	import { formatInlineMarkdown } from '$lib/markdown-inline';
 
@@ -20,6 +22,10 @@
 
 	let tab = $state<'before' | 'steps'>('before');
 	let stepIndex = $state(0);
+	/** 1 = forward (next), -1 = back — drives slide direction */
+	let stepDir = $state(1);
+	/** false until after mount + tick so localStorage restore does not animate */
+	let allowStepAnim = $state(false);
 	let dialogEl = $state<HTMLDialogElement | undefined>(undefined);
 	let activeModal = $state<
 		null | 'emptyingTheBladder' | 'disinfection' | 'plus-1' | 'plus-3' | 'plus-6' | 'plus-9'
@@ -50,23 +56,138 @@
 		} catch {
 			/* ignore */
 		}
+		void tick().then(() => {
+			allowStepAnim = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		});
 	});
+
+	/** When true, keyed step block skips fly (full-width CSS slide handles motion). */
+	let suppressStepFly = $state(false);
+
+	const stepFlyIn = $derived(
+		suppressStepFly || !allowStepAnim
+			? { x: 0, y: 0, duration: 0 }
+			: { x: 22 * stepDir, duration: 240, easing: cubicOut, opacity: 0.92 }
+	);
+	const stepFlyOut = $derived(
+		suppressStepFly || !allowStepAnim
+			? { x: 0, y: 0, duration: 0 }
+			: { x: -22 * stepDir, duration: 200, easing: cubicOut, opacity: 0.92 }
+	);
+
+	/** Full-width CSS slide; step index updates only after exit transition ends. */
+	const SWIPE_SLIDE_MS = 280;
+	type SwipeSlidePhase = 'idle' | 'exitNext' | 'enterNext' | 'exitPrev' | 'enterPrev';
+	let swipeSlidePhase = $state<SwipeSlidePhase>('idle');
+	let swipeSlideSnap = $state(false);
+	let stepsSwipeTrackEl = $state<HTMLDivElement | undefined>(undefined);
+
+	const swipeSlideTx = $derived.by(() => {
+		if (swipeSlidePhase === 'exitNext') return '-100%';
+		if (swipeSlidePhase === 'exitPrev') return '100%';
+		if (swipeSlidePhase === 'enterNext') return swipeSlideSnap ? '100%' : '0%';
+		if (swipeSlidePhase === 'enterPrev') return swipeSlideSnap ? '-100%' : '0%';
+		return '0%';
+	});
+
+	const swipeSlideTransitionMs = $derived(
+		swipeSlideSnap || swipeSlidePhase === 'idle' ? 0 : SWIPE_SLIDE_MS
+	);
+
+	const swipeSlideBusy = $derived(swipeSlidePhase !== 'idle');
+
+	function onSwipeTrackTransitionEnd(e: TransitionEvent) {
+		if (e.propertyName !== 'transform') return;
+		if (e.target !== stepsSwipeTrackEl) return;
+
+		if (swipeSlidePhase === 'exitNext') {
+			suppressStepFly = true;
+			swipeSlideSnap = true;
+			swipeSlidePhase = 'enterNext';
+			stepDir = 1;
+			stepIndex = Math.min(pack.steps.length - 1, stepIndex + 1);
+			persistStep();
+			void tick().then(() => {
+				requestAnimationFrame(() => {
+					swipeSlideSnap = false;
+				});
+			});
+			return;
+		}
+
+		if (swipeSlidePhase === 'enterNext') {
+			if (swipeSlideSnap) return;
+			suppressStepFly = false;
+			swipeSlidePhase = 'idle';
+			return;
+		}
+
+		if (swipeSlidePhase === 'exitPrev') {
+			suppressStepFly = true;
+			swipeSlideSnap = true;
+			swipeSlidePhase = 'enterPrev';
+			stepDir = -1;
+			stepIndex = Math.max(0, stepIndex - 1);
+			persistStep();
+			void tick().then(() => {
+				requestAnimationFrame(() => {
+					swipeSlideSnap = false;
+				});
+			});
+			return;
+		}
+
+		if (swipeSlidePhase === 'enterPrev') {
+			if (swipeSlideSnap) return;
+			suppressStepFly = false;
+			swipeSlidePhase = 'idle';
+		}
+	}
 
 	function goToInstructions() {
 		tab = 'steps';
 	}
 
 	function prevStep() {
-		stepIndex = Math.max(0, stepIndex - 1);
+		if (stepIndex <= 0) return;
+		stepDir = -1;
+		stepIndex = stepIndex - 1;
 		persistStep();
 	}
 
 	function nextStep() {
-		stepIndex = Math.min(pack.steps.length - 1, stepIndex + 1);
+		if (stepIndex >= pack.steps.length - 1) return;
+		stepDir = 1;
+		stepIndex = stepIndex + 1;
 		persistStep();
 	}
 
-	/** Horizontal swipe between steps (mobile); same as ArrowLeft/ArrowRight. */
+	/** Next/previous step: same full-width slide as swipe when motion is allowed. */
+	function goNextStep() {
+		if (!allowStepAnim) {
+			nextStep();
+			return;
+		}
+		if (swipeSlideBusy) return;
+		if (stepIndex >= pack.steps.length - 1) return;
+		requestAnimationFrame(() => {
+			swipeSlidePhase = 'exitNext';
+		});
+	}
+
+	function goPrevStep() {
+		if (!allowStepAnim) {
+			prevStep();
+			return;
+		}
+		if (swipeSlideBusy) return;
+		if (stepIndex <= 0) return;
+		requestAnimationFrame(() => {
+			swipeSlidePhase = 'exitPrev';
+		});
+	}
+
+	/** Horizontal swipe between steps (mobile). */
 	const SWIPE_MIN_PX = 56;
 	const SWIPE_DOMINANCE = 1.25;
 
@@ -74,18 +195,13 @@
 	let swipeStartX = 0;
 	let swipeStartY = 0;
 
-	function swipeTargetAllowed(target: EventTarget | null): boolean {
-		if (!(target instanceof Element)) return false;
-		return !target.closest('video, button, a, input, textarea, select, label');
-	}
-
+	/** Any one-finger gesture inside the Instructions step region can count as a step swipe. */
 	function onStepsTouchStart(e: TouchEvent) {
-		if (tab !== 'steps' || activeModal != null) return;
+		if (tab !== 'steps' || activeModal != null || swipeSlideBusy) return;
 		if (e.touches.length !== 1) {
 			swipeTouchId = null;
 			return;
 		}
-		if (!swipeTargetAllowed(e.target)) return;
 		const t = e.touches[0];
 		swipeTouchId = t.identifier;
 		swipeStartX = t.clientX;
@@ -93,7 +209,7 @@
 	}
 
 	function onStepsTouchEnd(e: TouchEvent) {
-		if (swipeTouchId === null || tab !== 'steps') return;
+		if (swipeTouchId === null || tab !== 'steps' || swipeSlideBusy) return;
 		let ended: Touch | undefined;
 		for (let i = 0; i < e.changedTouches.length; i++) {
 			const c = e.changedTouches.item(i);
@@ -108,12 +224,19 @@
 		const dy = ended.clientY - swipeStartY;
 		if (Math.abs(dx) < SWIPE_MIN_PX) return;
 		if (Math.abs(dx) < Math.abs(dy) * SWIPE_DOMINANCE) return;
-		if (dx < 0) nextStep();
-		else prevStep();
+		if (dx < 0) goNextStep();
+		else goPrevStep();
 	}
 
 	function onStepsTouchCancel() {
 		swipeTouchId = null;
+		if (swipeSlidePhase === 'exitNext' || swipeSlidePhase === 'exitPrev') {
+			swipeSlideSnap = true;
+			swipeSlidePhase = 'idle';
+			void tick().then(() => {
+				swipeSlideSnap = false;
+			});
+		}
 	}
 
 	type ModalKind = NonNullable<typeof activeModal>;
@@ -156,11 +279,11 @@
 			if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
 			if (e.key === 'ArrowRight') {
 				e.preventDefault();
-				nextStep();
+				goNextStep();
 			}
 			if (e.key === 'ArrowLeft') {
 				e.preventDefault();
-				prevStep();
+				goPrevStep();
 			}
 		};
 		window.addEventListener('keydown', onKey);
@@ -292,59 +415,80 @@
 					<span class="hidden sm:inline">Use arrow keys to change steps</span>
 				</div>
 
-				<h2 class="text-xl font-semibold">{step.title}</h2>
-
-				{#if step.video != null}
-					<video
-						class="aspect-video w-full rounded-lg bg-black"
-						controls
-						playsinline
-						loop
-						aria-label={step.title}
+				<div class="overflow-x-hidden">
+					<div
+						bind:this={stepsSwipeTrackEl}
+						class="ease-out will-change-transform"
+						style:transform="translateX({swipeSlideTx})"
+						style:transition-property="transform"
+						style:transition-duration="{swipeSlideTransitionMs}ms"
+						style:transition-timing-function="cubic-bezier(0.33, 1, 0.68, 1)"
+						ontransitionend={onSwipeTrackTransitionEnd}
 					>
-						<source src="/assets/video/{step.video}.mp4" type="video/mp4" />
-					</video>
-				{/if}
+						{#key stepIndex}
+							<div
+								class="flex flex-col gap-4"
+								in:fly|local={stepFlyIn}
+								out:fly|local={stepFlyOut}
+							>
+								<h2 class="text-xl font-semibold">{step.title}</h2>
 
-				<p class="whitespace-pre-line text-base-content/90">{step.body.trim()}</p>
+								{#if step.video != null}
+									<video
+										class="instruction-step-video aspect-video w-full rounded-lg bg-black"
+										controls
+										muted
+										playsinline
+										loop
+										aria-label={step.title}
+									>
+										<source src="/assets/video/{step.video}.mp4" type="video/mp4" />
+									</video>
+								{/if}
 
-				{#if plusModalId != null}
-					<button
-						type="button"
-						class="btn gap-1 self-start text-primary btn-ghost btn-sm"
-						onclick={() => plusModalId != null && openPlusModal(plusModalId)}
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							class="h-5 w-5"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-							><path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-							/></svg
-						>
-						{PLUS_LABELS[plusModalId]}
-					</button>
-				{/if}
+								<p class="whitespace-pre-line text-base-content/90">{step.body.trim()}</p>
+
+								{#if plusModalId != null}
+									<button
+										type="button"
+										class="btn gap-1 self-start text-primary btn-ghost btn-sm"
+										onclick={() => plusModalId != null && openPlusModal(plusModalId)}
+									>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											class="h-5 w-5"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor"
+											><path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+											/></svg
+										>
+										{PLUS_LABELS[plusModalId]}
+									</button>
+								{/if}
+							</div>
+						{/key}
+					</div>
+				</div>
 
 				<div class="flex justify-between pt-4">
 					<button
 						type="button"
 						class="btn btn-outline"
-						disabled={stepIndex === 0}
-						onclick={prevStep}
+						disabled={stepIndex === 0 || swipeSlideBusy}
+						onclick={goPrevStep}
 					>
 						Previous
 					</button>
 					<button
 						type="button"
 						class="btn btn-primary"
-						disabled={stepIndex >= pack.steps.length - 1}
-						onclick={nextStep}
+						disabled={stepIndex >= pack.steps.length - 1 || swipeSlideBusy}
+						onclick={goNextStep}
 					>
 						Next
 					</button>

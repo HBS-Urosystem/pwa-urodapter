@@ -94,3 +94,14 @@
 h1, h2, h3, h4, h5, h6 {
 	font-family: var(--font-heading);
 }
+
+/* Instruction steps: silent MP4s — hide native volume/mute controls (WebKit/Blink). */
+video.instruction-step-video::-webkit-media-controls-mute-button {
+	display: none !important;
+}
+video.instruction-step-video::-webkit-media-controls-volume-slider {
+	display: none !important;
+}
+video.instruction-step-video::-webkit-media-controls-volume-slider-container {
+	display: none !important;
+}
