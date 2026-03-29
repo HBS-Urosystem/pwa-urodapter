@@ -64,8 +64,8 @@ The original frame-by-frame animation cost a lot of bandwidth and CPU. One 212 K
 | `index.html`                                   | `/`                                            | Intro overlay + table of contents             |
 | `how-the-urodapter-works/`                     | `/how-the-urodapter-works`                     | Same content                                  |
 | `what-to-do-prior-to-instillation/`            | `/what-to-do-prior-to-instillation`            | Same content                                  |
-| `instructions-for-doctors-on-female-patients/` | `/instructions-for-doctors-on-female-patients` | Added step memory; on mobile, a one-finger horizontal swipe goes to the previous or next step |
-| `instructions-for-doctors-on-male-patients/`   | `/instructions-for-doctors-on-male-patients`   | Added step memory; on mobile, a one-finger horizontal swipe goes to the previous or next step   |
+| `instructions-for-doctors-on-female-patients/` | `/instructions-for-doctors-on-female-patients` | Client-rendered only (`ssr = false`) so reload reapplies Instructions tab + step from `localStorage` without a “Before starting” flash; on mobile, one-finger horizontal swipe for previous/next step |
+| `instructions-for-doctors-on-male-patients/`   | `/instructions-for-doctors-on-male-patients`   | Same as female doctor instructions row above   |
 | `faq/`                                         | `/faq`                                         | DaisyUI collapse replaces Bootstrap accordion |
 | `privacy-policy/`                              | `/privacy-policy`                              | Content cleaned up (see below)                |
 | `cookie-policy/`                               | `/cookie-policy`                               | Content cleaned up (see below)                |
@@ -88,7 +88,7 @@ The original frame-by-frame animation cost a lot of bandwidth and CPU. One 212 K
 - **PWA / Offline support**: service worker with precache (app shell, images, fonts) and runtime video caching; `/assets/video/*` uses **cache-first** (cached response if present, otherwise fetch and store).
 - **Download all videos**: home page button precaches all 23 instruction videos (~390MB). **Benefits**: full offline viewing after download; when still online, replays use the cached file—**less mobile data**, **faster starts**, **fewer stalls** on weak Wi‑Fi (same files are not re-downloaded each time).
 - **PWA install guide**: `/install` page with platform-specific instructions (iOS, Android, desktop)
-- **Step memory**: instruction slider remembers last-viewed step in `localStorage`
+- **Step memory**: instruction flow stores the active tab and step in `localStorage` so reload returns to the same place (e.g. Instructions 4/11)
 - **Keyboard navigation**: arrow keys navigate instruction slider steps
 - **Update notification**: toast when a new service worker version is deployed
 - **Share / QR**: Web Share API button for easy clinic distribution

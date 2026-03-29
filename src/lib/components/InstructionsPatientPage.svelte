@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { tick, onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
@@ -14,14 +15,47 @@
 
 	let { storageKey, pack }: { storageKey: string; pack: InstructionPack } = $props();
 
+	function readStoredInstructionState(
+		key: string,
+		numSteps: number
+	): { tab: 'before' | 'steps'; stepIndex: number } {
+		if (!browser) return { tab: 'before', stepIndex: 0 };
+		if (numSteps < 1) return { tab: 'before', stepIndex: 0 };
+		try {
+			const maxIdx = numSteps - 1;
+			let stepIndex = 0;
+			let hadStep = false;
+			const raw = localStorage.getItem(key);
+			if (raw != null) {
+				const n = parseInt(raw, 10);
+				if (!Number.isNaN(n)) {
+					stepIndex = Math.min(Math.max(0, n), maxIdx);
+					hadStep = true;
+				}
+			}
+			const tabRaw = localStorage.getItem(`${key}-tab`);
+			if (tabRaw === 'steps' || tabRaw === 'before') {
+				return { tab: tabRaw, stepIndex };
+			}
+			if (hadStep) return { tab: 'steps', stepIndex };
+			return { tab: 'before', stepIndex };
+		} catch {
+			return { tab: 'before', stepIndex: 0 };
+		}
+	}
+
+	// storageKey / pack are fixed per route instance (female vs male).
+	// svelte-ignore state_referenced_locally
+	const initialUi = readStoredInstructionState(storageKey, pack.steps.length);
+
 	const tabScope = $derived(storageKey.replace(/[^a-zA-Z0-9]+/g, '-'));
 	const beforeTabId = $derived(`${tabScope}-tab-before`);
 	const stepsTabId = $derived(`${tabScope}-tab-steps`);
 	const beforePanelId = $derived(`${tabScope}-panel-before`);
 	const stepsPanelId = $derived(`${tabScope}-panel-steps`);
 
-	let tab = $state<'before' | 'steps'>('before');
-	let stepIndex = $state(0);
+	let tab = $state<'before' | 'steps'>(initialUi.tab);
+	let stepIndex = $state(initialUi.stepIndex);
 	/** 1 = forward (next), -1 = back — drives slide direction */
 	let stepDir = $state(1);
 	/** false until after mount + tick so localStorage restore does not animate */
@@ -46,16 +80,21 @@
 		}
 	}
 
-	onMount(() => {
+	function persistTab() {
 		try {
-			const raw = localStorage.getItem(storageKey);
-			if (raw != null) {
-				const n = parseInt(raw, 10);
-				if (!Number.isNaN(n)) stepIndex = Math.min(Math.max(0, n), pack.steps.length - 1);
-			}
+			localStorage.setItem(`${storageKey}-tab`, tab);
 		} catch {
 			/* ignore */
 		}
+	}
+
+	function setTab(next: 'before' | 'steps') {
+		tab = next;
+		persistTab();
+		if (next === 'steps') persistStep();
+	}
+
+	onMount(() => {
 		void tick().then(() => {
 			allowStepAnim = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		});
@@ -145,7 +184,7 @@
 	}
 
 	function goToInstructions() {
-		tab = 'steps';
+		setTab('steps');
 	}
 
 	function prevStep() {
@@ -310,7 +349,7 @@
 				aria-selected={tab === 'before'}
 				aria-controls={beforePanelId}
 				tabindex={tab === 'before' ? 0 : -1}
-				onclick={() => (tab = 'before')}
+				onclick={() => setTab('before')}
 			>
 				Before starting
 			</button>
@@ -323,7 +362,7 @@
 				aria-selected={tab === 'steps'}
 				aria-controls={stepsPanelId}
 				tabindex={tab === 'steps' ? 0 : -1}
-				onclick={() => (tab = 'steps')}
+				onclick={() => setTab('steps')}
 			>
 				Instructions
 			</button>
