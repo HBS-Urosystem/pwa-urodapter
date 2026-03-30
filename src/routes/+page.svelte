@@ -33,9 +33,18 @@
 		navigator.serviceWorker.addEventListener('message', onMessage);
 	}
 
+	let error = $state<string | null>(null);
 	async function share() {
 		if (navigator.share) {
-			await navigator.share({ title: 'Urodapter - How to Use', url: window.location.origin });
+			// await navigator.share({ title: 'Urodapter - How to Use', url: window.location.origin });
+			try {
+				// console.log(window.location.origin);
+				error = 'Waiting';
+				await navigator.share({ title: 'Urodapter - How to Use', url: window.location.origin });
+				// console.log('Shared successfully');
+			} catch (err) {
+				error = 'Error: ' + err;
+			}
 		} else {
 			await navigator.clipboard.writeText(window.location.origin);
 			copied = true;
@@ -328,6 +337,9 @@
 					Share
 				{/if}
 			</button>
+			{#if error != null}
+				<p class="text-error text-center">{error}</p>
+			{/if}
 		</div>
 	</div>
 </section>
