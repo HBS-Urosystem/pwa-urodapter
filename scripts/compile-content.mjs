@@ -18,12 +18,18 @@ const StepSchema = z.object({
 	title: z.string(),
 	video: z.number().nullable(),
 	body: z.string(),
-	plusModalId: z.union([z.literal(1), z.literal(3), z.literal(6), z.literal(9)]).optional()
+	plusModalId: z.union([z.literal(1), z.literal(3), z.literal(6), z.literal(9)]).optional(),
+	plusLabel: z.string().optional()
 });
 
 const StepsFileSchema = z.object({
 	steps: z.array(StepSchema)
 });
+
+/** @param {number | null} videoId */
+function toVideoPoster(videoId) {
+	return videoId == null ? null : `/assets/video/${videoId}.jpg`;
+}
 
 const ModalButtonsSchema = z.object({
 	modalButtons: z.array(
@@ -176,7 +182,7 @@ function parseEducationalVideo(md) {
 		if (m) videoId = Number(m[1]);
 		notes = vid.body.replace(/^\s*\d+\s*/, '').trim();
 	}
-	return { title, videoId, notes };
+	return { title, videoId, poster: toVideoPoster(videoId), notes };
 }
 
 /** @param {string} md */
@@ -231,7 +237,7 @@ function buildFemale() {
 		beforeStarting,
 		modalButtons,
 		modals,
-		steps
+		steps: steps.map((step) => ({ ...step, poster: toVideoPoster(step.video) }))
 	};
 }
 
@@ -246,7 +252,7 @@ function buildMale() {
 		beforeStarting,
 		modalButtons,
 		modals,
-		steps
+		steps: steps.map((step) => ({ ...step, poster: toVideoPoster(step.video) }))
 	};
 }
 

@@ -4,16 +4,22 @@
 	import { fly } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
 	import type { InstructionPack } from '$lib/content';
+	import SeoHead from '$lib/components/SeoHead.svelte';
 	import { formatInlineMarkdown } from '$lib/markdown-inline';
 
-	const PLUS_LABELS: Record<number, string> = {
-		1: 'Malformation of the orifice',
-		3: 'Optimal angle',
-		6: 'Optimal angle',
-		9: 'How to avoid leakage'
-	};
+	let {
+		storageKey,
+		pack,
+		seoPath
+	}: {
+		storageKey: string;
+		pack: InstructionPack;
+		seoPath: string;
+	} = $props();
 
-	let { storageKey, pack }: { storageKey: string; pack: InstructionPack } = $props();
+	const seoDescription = $derived(
+		`${pack.pageTitle} — Video instructions and tips for bladder instillation using UroDapter® for healthcare professionals.`
+	);
 
 	function readStoredInstructionState(
 		key: string,
@@ -289,7 +295,8 @@
 
 	function openPlusModal(id: 1 | 3 | 6 | 9) {
 		const map = { 1: 'plus-1', 3: 'plus-3', 6: 'plus-6', 9: 'plus-9' } as const;
-		void showDialog(map[id], PLUS_LABELS[id]);
+		const title = 'plusLabel' in step && step.plusLabel ? step.plusLabel : '';
+		void showDialog(map[id], title);
 	}
 
 	function onModalBackdropClick(e: MouseEvent) {
@@ -330,16 +337,13 @@
 	});
 </script>
 
-<svelte:head>
-	<title>{pack.pageTitle} | Urodapter</title>
-	<meta name="description" content={pack.pageTitle} />
-</svelte:head>
+<SeoHead title={`${pack.pageTitle} | Urodapter`} description={seoDescription} path={seoPath} />
 
 <section class="min-h-full bg-base-200/40 px-4 py-6">
 	<div class="mx-auto max-w-3xl">
 		<h1 class="mb-6 text-2xl font-bold text-base-content">{pack.pageTitle}</h1>
 
-		<div role="tablist" class="tabs tabs-box mb-6 w-full" aria-label="Instruction sections">
+		<div role="tablist" class="tabs-box mb-6 tabs w-full" aria-label="Instruction sections">
 			<button
 				type="button"
 				id={beforeTabId}
@@ -443,7 +447,7 @@
 			<div
 				role="region"
 				aria-label="Instruction step content"
-				class="card-body gap-4 touch-pan-y"
+				class="card-body touch-pan-y gap-4"
 				ontouchstart={onStepsTouchStart}
 				ontouchend={onStepsTouchEnd}
 				ontouchcancel={onStepsTouchCancel}
@@ -465,11 +469,7 @@
 						ontransitionend={onSwipeTrackTransitionEnd}
 					>
 						{#key stepIndex}
-							<div
-								class="flex flex-col gap-4"
-								in:fly|local={stepFlyIn}
-								out:fly|local={stepFlyOut}
-							>
+							<div class="flex flex-col gap-4" in:fly|local={stepFlyIn} out:fly|local={stepFlyOut}>
 								<h2 class="text-xl font-semibold">{step.title}</h2>
 
 								{#if step.video != null}
@@ -479,6 +479,7 @@
 										muted
 										playsinline
 										loop
+										poster={step.poster ?? undefined}
 										aria-label={step.title}
 									>
 										<source src="/assets/video/{step.video}.mp4" type="video/mp4" />
@@ -506,7 +507,7 @@
 												d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
 											/></svg
 										>
-										{PLUS_LABELS[plusModalId]}
+										{'plusLabel' in step ? step.plusLabel : ''}
 									</button>
 								{/if}
 							</div>
@@ -551,12 +552,22 @@
 			<h3 class="modal-title mb-4 text-lg font-bold">{modalTitle}</h3>
 		{/if}
 		{#if activeModal === 'plus-9' && 'plus9' in pack.modals && pack.modals.plus9}
-			{#each pack.modals.plus9.subsections as sub (sub.label)}
-				<h4 class="mt-4 font-semibold">{sub.label}</h4>
-				{#each sub.paragraphs as p, j (`${sub.label}-${j}`)}
-					<p>{p}</p>
+			<div class="not-prose flex flex-col gap-4">
+				{#each pack.modals.plus9.subsections as sub (sub.label)}
+					<div class="flex gap-4">
+						<div
+							class="flex h-8 w-8 mt-1 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-content"
+						>
+							{sub.label}
+						</div>
+						<div class="min-w-0 flex-1">
+							{#each sub.paragraphs as p, j (`${sub.label}-${j}`)}
+								<p class="mt-0 mb-3 last:mb-0">{p}</p>
+							{/each}
+						</div>
+					</div>
 				{/each}
-			{/each}
+			</div>
 		{:else}
 			{#each modalParagraphs() as p, i (i)}
 				<p>{p}</p>

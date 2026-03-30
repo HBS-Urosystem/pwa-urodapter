@@ -6,4 +6,5 @@
 <InstructionsPatientPage
 	storageKey="urodapter-instructions-male-v1"
 	pack={siteContent.maleInstructions}
+	seoPath="/instructions-for-doctors-on-male-patients"
 />

@@ -7,7 +7,7 @@
 		"content:build": "node scripts/compile-content.mjs",
 		"predev": "npm run content:build",
 		"prebuild": "npm run content:build",
-		"dev": "vite dev",
+		"dev": "vite dev --host",
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",

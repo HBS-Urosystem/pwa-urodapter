@@ -1,16 +1,23 @@
-<svelte:head>
-	<title>Install App | Urodapter</title>
-</svelte:head>
+<script lang="ts">
+	import { resolve } from '$app/paths';
+	import SeoHead from '$lib/components/SeoHead.svelte';
 
-<section class="py-8 px-4 max-w-2xl mx-auto">
-	<h1 class="text-3xl font-bold mb-4">Install Urodapter App</h1>
+	const title = 'Install App | Urodapter';
+	const description =
+		'Install the Urodapter PWA on your device for quick access from your home screen. Works offline once installed — instructions and videos without an internet connection.';
+</script>
+
+<SeoHead {title} {description} path="/install" />
+
+<section class="mx-auto max-w-2xl px-4 py-8">
+	<h1 class="mb-4 text-3xl font-bold">Install Urodapter App</h1>
 
 	<p class="mb-4">
 		Install the Urodapter app on your device for quick access from your home screen. The app works
 		offline once installed — no internet connection needed for viewing instructions and videos.
 	</p>
 
-	<div role="alert" class="alert alert-info mb-6">
+	<div role="alert" class="mb-6 alert alert-info">
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
@@ -30,11 +37,11 @@
 		</span>
 	</div>
 
-	<div class="collapse collapse-arrow bg-base-200 mb-2">
+	<div class="collapse-arrow collapse mb-2 bg-base-200">
 		<input type="radio" name="install-accordion" checked />
 		<div class="collapse-title font-semibold">iOS — Safari</div>
 		<div class="collapse-content">
-			<ol class="list-decimal list-inside space-y-1">
+			<ol class="list-inside list-decimal space-y-1">
 				<li>Open this page in <strong>Safari</strong> (not Chrome or other browsers)</li>
 				<li>
 					Tap the <strong>Share</strong> button (square with arrow) at the bottom of the screen
@@ -49,11 +56,11 @@
 		</div>
 	</div>
 
-	<div class="collapse collapse-arrow bg-base-200 mb-2">
+	<div class="collapse-arrow collapse mb-2 bg-base-200">
 		<input type="radio" name="install-accordion" />
 		<div class="collapse-title font-semibold">Android — Chrome</div>
 		<div class="collapse-content">
-			<ol class="list-decimal list-inside space-y-1">
+			<ol class="list-inside list-decimal space-y-1">
 				<li>Tap the <strong>three-dot menu</strong> (⋮) in the top right corner</li>
 				<li>Tap <strong>"Install app"</strong> or <strong>"Add to Home Screen"</strong></li>
 				<li>Tap <strong>"Install"</strong> to confirm</li>
@@ -65,11 +72,11 @@
 		</div>
 	</div>
 
-	<div class="collapse collapse-arrow bg-base-200 mb-2">
+	<div class="collapse-arrow collapse mb-2 bg-base-200">
 		<input type="radio" name="install-accordion" />
 		<div class="collapse-title font-semibold">Desktop — Chrome / Edge</div>
 		<div class="collapse-content">
-			<ol class="list-decimal list-inside space-y-1">
+			<ol class="list-inside list-decimal space-y-1">
 				<li>Click the <strong>install icon</strong> (⊕) in the address bar on the right side</li>
 				<li>Click <strong>"Install"</strong> in the dialog that appears</li>
 				<li>
@@ -82,5 +89,5 @@
 		</div>
 	</div>
 
-	<a href="/" class="btn btn-primary mt-6">Back to Home</a>
+	<a href={resolve('/')} class="btn mt-6 btn-primary">Back to Home</a>
 </section>

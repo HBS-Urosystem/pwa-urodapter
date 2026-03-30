@@ -13,15 +13,11 @@
 	}
 </script>
 
-<svelte:head>
-	<title>Urodapter - How to Use</title>
-</svelte:head>
-
 <div class="drawer drawer-end">
 	<input id="app-drawer" type="checkbox" class="drawer-toggle" />
-	<div class="drawer-content flex flex-col min-h-screen">
+	<div class="drawer-content flex min-h-screen flex-col">
 		<Header />
-		<main class="flex-1 flex flex-col">
+		<main class="flex flex-1 flex-col">
 			{@render children()}
 		</main>
 		<Footer />
@@ -29,14 +25,14 @@
 	<div class="drawer-side z-50">
 		<label for="app-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
 		<div
-			class="bg-base-100 flex min-h-full max-h-dvh w-72 flex-col overflow-y-auto overscroll-y-contain"
+			class="flex max-h-dvh min-h-full w-72 flex-col overflow-y-auto overscroll-y-contain bg-base-100"
 		>
 			<div
-				class="sticky top-0 z-10 flex shrink-0 items-center justify-end gap-1 shadow-sm bg-base-100 px-4 pb-2 pt-2 h-16"
+				class="sticky top-0 z-10 flex h-16 shrink-0 items-center justify-end gap-1 bg-base-100 px-4 pt-2 pb-2 shadow-sm"
 			>
 				<a
 					href={resolve('/')}
-					class="btn btn-ghost btn-square"
+					class="btn btn-square btn-ghost"
 					aria-label="Home"
 					onclick={closeDrawer}
 				>
@@ -55,7 +51,7 @@
 						/>
 					</svg>
 				</a>
-				<label for="app-drawer" class="btn btn-ghost btn-square" aria-label="Close menu">
+				<label for="app-drawer" class="btn btn-square btn-ghost" aria-label="Close menu">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						class="h-6 w-6"
@@ -72,29 +68,30 @@
 				<ul>
 					<li><a href={resolve('/')} onclick={closeDrawer}>Table of Contents</a></li>
 					<li>
-						<a href={resolve('/how-the-urodapter-works' as any)} onclick={closeDrawer}>Educational Video</a>
+						<a href={resolve('/how-the-urodapter-works')} onclick={closeDrawer}>Educational Video</a
+						>
 					</li>
 					<li>
-						<a href={resolve('/what-to-do-prior-to-instillation' as any)} onclick={closeDrawer}
+						<a href={resolve('/what-to-do-prior-to-instillation')} onclick={closeDrawer}
 							>What to do prior to instillation</a
 						>
 					</li>
 					<li>
-						<a href={resolve('/instructions-for-doctors-on-female-patients' as any)} onclick={closeDrawer}
+						<a href={resolve('/instructions-for-doctors-on-female-patients')} onclick={closeDrawer}
 							>Instructions for female patients</a
 						>
 					</li>
 					<li>
-						<a href={resolve('/instructions-for-doctors-on-male-patients' as any)} onclick={closeDrawer}
+						<a href={resolve('/instructions-for-doctors-on-male-patients')} onclick={closeDrawer}
 							>Instructions for male patients</a
 						>
 					</li>
-					<li><a href={resolve('/faq' as any)} onclick={closeDrawer}>FAQ</a></li>
+					<li><a href={resolve('/faq')} onclick={closeDrawer}>FAQ</a></li>
 					<div class="divider"></div>
 					<li><a href={resolve('/install')} onclick={closeDrawer}>Install App</a></li>
-					<li><a href={resolve('/privacy-policy' as any)} onclick={closeDrawer}>Privacy Policy</a></li>
-					<li><a href={resolve('/cookie-policy' as any)} onclick={closeDrawer}>Cookie Policy</a></li>
-					<li><a href={resolve('/contact' as any)} onclick={closeDrawer}>Contact</a></li>
+					<li><a href={resolve('/privacy-policy')} onclick={closeDrawer}>Privacy Policy</a></li>
+					<li><a href={resolve('/cookie-policy')} onclick={closeDrawer}>Cookie Policy</a></li>
+					<li><a href={resolve('/contact')} onclick={closeDrawer}>Contact</a></li>
 				</ul>
 			</nav>
 		</div>

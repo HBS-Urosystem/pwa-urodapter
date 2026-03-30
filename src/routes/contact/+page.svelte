@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import SeoHead from '$lib/components/SeoHead.svelte';
 	import { siteContent } from '$lib/content';
 	import { formatInlineMarkdown } from '$lib/markdown-inline';
 
 	const c = siteContent.pageCopy.contact;
+	const pageTitle = `${c.title} | Urodapter`;
 	const privacyIdx = c.legalCheckboxLabel.indexOf('Privacy Policy');
 	const beforePrivacy =
 		privacyIdx >= 0 ? c.legalCheckboxLabel.slice(0, privacyIdx) : c.legalCheckboxLabel;
@@ -86,9 +88,7 @@
 				<span class="label-text text-sm">
 					{beforePrivacy}
 					{#if privacyIdx >= 0}
-						<a href={resolve('/privacy-policy' as '/privacy-policy')} class="link link-primary"
-							>Privacy Policy</a
-						>
+						<a href={resolve('/privacy-policy')} class="link link-primary">Privacy Policy</a>
 					{/if}
 					{afterPrivacy}
 				</span>

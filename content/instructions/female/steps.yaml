@@ -3,6 +3,7 @@ steps:
     title: Inserting the UroDapter
     video: 157
     plusModalId: 1
+    plusLabel: Malformation of the orifice
     body: |
       Insert the UroDapter into the urethral orifice and gently position the orifice under the symphysis toward the rectum. To achieve this, push downwards the labiae with your exploring fingers.
   - id: spooning
@@ -14,6 +15,7 @@ steps:
     title: Angle adjustment
     video: 159
     plusModalId: 3
+    plusLabel: Optimal angle
     body: |
       After the "spooning" motion, adjust the angle of the Luer-Lock or Luer-Slip syringe so that it is parallel with the urethra. The optimal angle will cause the least resistance while pressing the plunger of the syringe. The proper angle might be depending on the pelvic anatomy, which usually relates to the patients’ age.
   - id: relaxation
@@ -30,6 +32,7 @@ steps:
     title: Instillation speed
     video: 162
     plusModalId: 6
+    plusLabel: Optimal angle
     body: |
       Begin slowly instilling the liquid and adjust the angle as needed: At the optimal angle you will feel the least resistance while pressing the plunger of the syringe. Perform the instillation at low speed.
   - id: opening-sphincter
@@ -46,6 +49,7 @@ steps:
     title: Leakage during instillation
     video: 165
     plusModalId: 9
+    plusLabel: How to avoid leakage
     body: |
       If there is any leakage during the instillation, it can have different causes, like insufficient coverage of the sealing collar, too little or too much pressure on the Luer-Lock or Luer-Slip syringe.
   - id: leakage-after

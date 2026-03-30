@@ -6,13 +6,13 @@ This document tracks all changes between the original scraped site (`scraped/app
 
 ## Platform & Framework
 
-| Aspect    | Original (scraped)                             | New (SvelteKit PWA)                                     |
-| --------- | ---------------------------------------------- | ------------------------------------------------------- |
-| Framework | Laravel + jQuery + Bootstrap 4                 | SvelteKit + Svelte 5 (runes)                            |
-| CSS       | Bootstrap 4 + custom `app.css` (~11K lines)    | Tailwind CSS v4 + DaisyUI v5                            |
-| JS        | jQuery + Webpack bundle (`app.js`, ~24K lines) | SvelteKit with Vite                                     |
-| Adapter   | Server-rendered (Laravel)                      | Netlify (`@sveltejs/adapter-netlify`)                   |
-| PWA       | None (no service worker, no manifest)          | Full PWA with service worker, manifest, offline support |
+| Aspect    | Original (scraped)                             | New (SvelteKit PWA)                                                                                                                                            |
+| --------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Framework | Laravel + jQuery + Bootstrap 4                 | SvelteKit + Svelte 5 (runes)                                                                                                                                   |
+| CSS       | Bootstrap 4 + custom `app.css` (~11K lines)    | Tailwind CSS v4 + DaisyUI v5                                                                                                                                   |
+| JS        | jQuery + Webpack bundle (`app.js`, ~24K lines) | SvelteKit with Vite                                                                                                                                            |
+| Adapter   | Server-rendered (Laravel)                      | Netlify (`@sveltejs/adapter-netlify`); [`netlify.toml`](netlify.toml) sets `publish` to `build` and cache headers for `/_app/immutable/*` and the web manifest |
+| PWA       | None (no service worker, no manifest)          | Full PWA with service worker, manifest, offline support                                                                                                        |
 
 ## Branding
 
@@ -59,28 +59,28 @@ The original frame-by-frame animation cost a lot of bandwidth and CPU. One 212 K
 
 ## Pages & Routes
 
-| Original URL                                   | New Route                                      | Notes                                         |
-| ---------------------------------------------- | ---------------------------------------------- | --------------------------------------------- |
-| `index.html`                                   | `/`                                            | Intro overlay + table of contents             |
-| `how-the-urodapter-works/`                     | `/how-the-urodapter-works`                     | Same content                                  |
-| `what-to-do-prior-to-instillation/`            | `/what-to-do-prior-to-instillation`            | Same content                                  |
+| Original URL                                   | New Route                                      | Notes                                                                                                                                                                                                 |
+| ---------------------------------------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `index.html`                                   | `/`                                            | Intro overlay + table of contents                                                                                                                                                                     |
+| `how-the-urodapter-works/`                     | `/how-the-urodapter-works`                     | Same content                                                                                                                                                                                          |
+| `what-to-do-prior-to-instillation/`            | `/what-to-do-prior-to-instillation`            | Same content                                                                                                                                                                                          |
 | `instructions-for-doctors-on-female-patients/` | `/instructions-for-doctors-on-female-patients` | Client-rendered only (`ssr = false`) so reload reapplies Instructions tab + step from `localStorage` without a “Before starting” flash; on mobile, one-finger horizontal swipe for previous/next step |
-| `instructions-for-doctors-on-male-patients/`   | `/instructions-for-doctors-on-male-patients`   | Same as female doctor instructions row above   |
-| `faq/`                                         | `/faq`                                         | DaisyUI collapse replaces Bootstrap accordion |
-| `privacy-policy/`                              | `/privacy-policy`                              | Content cleaned up (see below)                |
-| `cookie-policy/`                               | `/cookie-policy`                               | Content cleaned up (see below)                |
-| `contact/`                                     | `/contact`                                     | Netlify Forms replaces Laravel POST           |
-| N/A                                            | `/install`                                     | **New page**: PWA install instructions        |
+| `instructions-for-doctors-on-male-patients/`   | `/instructions-for-doctors-on-male-patients`   | Same as female doctor instructions row above                                                                                                                                                          |
+| `faq/`                                         | `/faq`                                         | DaisyUI collapse replaces Bootstrap accordion                                                                                                                                                         |
+| `privacy-policy/`                              | `/privacy-policy`                              | Content cleaned up (see below)                                                                                                                                                                        |
+| `cookie-policy/`                               | `/cookie-policy`                               | Content cleaned up (see below)                                                                                                                                                                        |
+| `contact/`                                     | `/contact`                                     | Netlify Forms replaces Laravel POST                                                                                                                                                                   |
+| N/A                                            | `/install`                                     | **New page**: PWA install instructions                                                                                                                                                                |
 
 ## Content authoring (`content/`)
 
-| Aspect                                                      | Original (scraped)                               | New (SvelteKit PWA)                                                                                                                                                                           |
-| ----------------------------------------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Where copy lives                                            | HTML in Laravel templates / scraped `._scraped/` | Repo-root **`content/`**: Markdown + YAML, compiled to **`src/lib/content/generated.ts`** via **`npm run content:build`** (runs automatically before **`npm run dev`** / **`npm run build`**) |
-| Instruction steps                                           | Embedded in scraped HTML                         | **`content/instructions/female/steps.yaml`** and **`male/steps.yaml`** (ordered `video`, `body`, optional `plusModalId`)                                                                      |
-| Instruction modals (plus-data, empty bladder, disinfection) | Loaded via AJAX from Laravel                     | **`content/instructions/*/modals.md`** + DaisyUI `<dialog>`; no runtime fetch                                                                                                                 |
-| FAQ, legal, contact blurbs                                  | Scraped HTML                                     | **`content/pages/*.md`**, **`content/legal/*.md`** — routes import **`$lib/content`** only                                                                                                    |
-| Editorial pointer                                           | `_workfiles/ajax_modals.md` as scratch reference | **`_workfiles/ajax_modals.md`** is deprecated; points at **`content/instructions/*/modals.md`**                                                                                               |
+| Aspect                                                      | Original (scraped)                                         | New (SvelteKit PWA)                                                                                                                                                                           |
+| ----------------------------------------------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Where copy lives                                            | HTML in Laravel templates / scraped `._scraped/`           | Repo-root **`content/`**: Markdown + YAML, compiled to **`src/lib/content/generated.ts`** via **`npm run content:build`** (runs automatically before **`npm run dev`** / **`npm run build`**) |
+| Instruction steps                                           | Embedded in scraped HTML                                   | **`content/instructions/female/steps.yaml`** and **`male/steps.yaml`** (ordered `video`, `body`, optional `plusModalId`; female plus triggers use content-driven `plusLabel`)                 |
+| Instruction modals (plus-data, empty bladder, disinfection) | Loaded via AJAX from Laravel                               | **`content/instructions/*/modals.md`** + DaisyUI `<dialog>`; no runtime fetch                                                                                                                 |
+| FAQ, legal, contact blurbs                                  | Scraped HTML                                               | **`content/pages/*.md`**, **`content/legal/*.md`** — routes import **`$lib/content`** only                                                                                                    |
+| Editorial pointer                                           | `_workfiles/ajax_modals.md` as scratch reference           | **`_workfiles/ajax_modals.md`** is deprecated; points at **`content/instructions/*/modals.md`**                                                                                               |
 | Before-starting modal openers                               | Second trigger below A/B/C as a separate full-width button | Both triggers use the same compact ghost control under **A** and **C** (`before-starting.meta.yaml`: disinfection uses `letter: C`)                                                           |
 
 ## New Features (not in original)
@@ -92,8 +92,11 @@ The original frame-by-frame animation cost a lot of bandwidth and CPU. One 212 K
 - **Keyboard navigation**: arrow keys navigate instruction slider steps
 - **Update notification**: toast when a new service worker version is deployed
 - **Share / QR**: Web Share API button for easy clinic distribution
-- **SEO / Open Graph**: per-page `<title>`, `og:*` meta tags, `<meta name="description">`
+- **SEO / social**: [`SeoHead.svelte`](src/lib/components/SeoHead.svelte) on each route — `<title>`, `<meta name="description">`, `<link rel="canonical">`, Open Graph (`og:title`, `og:description`, `og:type`, `og:url`, `og:image`, `og:site_name`), and Twitter Card (`twitter:card`, `twitter:title`, `twitter:description`, `twitter:image`). Default share image: `/icon-512.png`. Absolute URLs use **`PUBLIC_SITE_URL`** when set (Netlify env); otherwise the current request `origin` is used.
+- **Sitemap / robots**: `GET /sitemap.xml` emits all public paths ([`src/lib/seo.ts`](src/lib/seo.ts) `SITEMAP_PATHS`); `GET /robots.txt` allows all crawlers and points to the sitemap (replaces the previous static `robots.txt` in `static/`).
 - **Instruction videos**: silent clips use `muted`; native volume/mute controls are hidden in WebKit/Blink
+- **Instruction video posters**: matching JPEG poster frames (`/assets/video/<id>.jpg`) are now wired through compiled content and used as `<video poster>` on educational and step videos
+- **How to avoid leakage modal**: the female instructions `plus-9` dialog now renders a structured A/B/C layout with letter badges on the left and explanatory text on the right, matching the visual pattern used on `/what-to-do-prior-to-instillation`
 - **Accessibility**: `aria-label` on videos, `playsinline`, proper heading hierarchy, keyboard-navigable slider
 
 ## Removed
@@ -110,11 +113,11 @@ The original frame-by-frame animation cost a lot of bandwidth and CPU. One 212 K
 
 ## Contact Form
 
-| Aspect          | Original                                               | New                                                            |
-| --------------- | ------------------------------------------------------ | -------------------------------------------------------------- |
-| Submission      | `POST https://app.urodapter.com/postcontact` (Laravel) | Netlify Forms (`data-netlify="true"` via `static/_forms.html`) |
-| Spam protection | Google reCAPTCHA v3                                    | Netlify honeypot field (`bot-field`)                           |
-| Feedback        | Bootstrap modal (success/fail icons)                   | DaisyUI alert component                                        |
+| Aspect          | Original                                               | New                                                                                                                                               |
+| --------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Submission      | `POST https://app.urodapter.com/postcontact` (Laravel) | Netlify Forms: [`src/routes/contact/+page.svelte`](src/routes/contact/+page.svelte) with `data-netlify="true"` and `netlify-honeypot="bot-field"` |
+| Spam protection | Google reCAPTCHA v3                                    | Netlify honeypot field (`bot-field`)                                                                                                              |
+| Feedback        | Bootstrap modal (success/fail icons)                   | DaisyUI alert component                                                                                                                           |
 
 ## Privacy Policy Changes
 
@@ -137,7 +140,7 @@ The original frame-by-frame animation cost a lot of bandwidth and CPU. One 212 K
 | -------------------------- | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `img/`                     | `static/assets/img/`                     | `logo_highlight_blue.svg` removed; wordmark in UI is inlined with `currentColor` + `text-primary` (see Logo section); `logo_white.svg` kept for footer on primary background |
 | `fonts/icomoon/`           | `static/assets/fonts/icomoon/`           | Copied as-is                                                                                                                                                                 |
-| `media/video/*.mp4`        | `static/assets/video/`                   | 23 files (~390MB), copied as-is                                                                                                                                              |
+| `media/video/*.mp4`        | `static/assets/video/`                   | 23 files (~390MB), copied as-is; new build also consumes matching `*.jpg` poster images in this folder for video placeholders                                              |
 | `favicon/` + `favicon.ico` | `static/favicon/` + `static/favicon.ico` | Copied as-is                                                                                                                                                                 |
 | `css/app.css`              | Not copied                               | Replaced by Tailwind + DaisyUI                                                                                                                                               |
 | `js/app.js`                | Not copied                               | Replaced by SvelteKit components                                                                                                                                             |

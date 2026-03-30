@@ -1,13 +1,15 @@
 <script lang="ts">
+	import SeoHead from '$lib/components/SeoHead.svelte';
+	import VideoPlayer from '$lib/components/VideoPlayer.svelte';
 	import { siteContent } from '$lib/content';
 
-	const { title, videoId, notes } = siteContent.pageCopy.educationalVideo;
+	const { title, videoId, poster, notes } = siteContent.pageCopy.educationalVideo;
+	const pageTitle = `${title} | Urodapter`;
+	const description =
+		'Educational video — how the UroDapter urological syringe adapter works for bladder instillation.';
 </script>
 
-<svelte:head>
-	<title>{title} | Urodapter</title>
-	<meta name="description" content={title} />
-</svelte:head>
+<SeoHead title={pageTitle} {description} path="/how-the-urodapter-works" />
 
 <section class="min-h-full bg-base-200/40 px-4 py-8">
 	<div class="mx-auto max-w-3xl text-center">
@@ -15,13 +17,11 @@
 		{#if notes}
 			<p class="mx-auto mb-6 max-w-xl text-base-content/80">{notes}</p>
 		{/if}
-		<video
+		<VideoPlayer
 			class="aspect-video w-full rounded-lg bg-black shadow-lg"
-			controls
-			playsinline
-			aria-label={title}
-		>
-			<source src="/assets/video/{videoId}.mp4" type="video/mp4" />
-		</video>
+			src={`/assets/video/${videoId}.mp4`}
+			{poster}
+			{title}
+		/>
 	</div>
 </section>

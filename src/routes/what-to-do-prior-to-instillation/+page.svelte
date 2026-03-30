@@ -1,14 +1,15 @@
 <script lang="ts">
+	import SeoHead from '$lib/components/SeoHead.svelte';
 	import { siteContent } from '$lib/content';
 	import { formatBlockMarkdown } from '$lib/markdown-blocks';
 
 	const page = siteContent.pageCopy.preInstillation;
+	const pageTitle = `${page.title} | Urodapter`;
+	const description =
+		'Patient preparation before bladder instillation with UroDapter — sexual abstinence, empty bladder, and residual urine.';
 </script>
 
-<svelte:head>
-	<title>{page.title} | Urodapter</title>
-	<meta name="description" content={page.title} />
-</svelte:head>
+<SeoHead title={pageTitle} {description} path="/what-to-do-prior-to-instillation" />
 
 <section class="min-h-full bg-base-200/40 px-4 py-8">
 	<div class="mx-auto max-w-3xl">
@@ -18,7 +19,7 @@
 				{#each page.sections as s (s.letter)}
 					<div class="flex gap-4">
 						<div
-							class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-content"
+							class="flex h-8 w-8 mt-4 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-content"
 						>
 							{s.letter}
 						</div>

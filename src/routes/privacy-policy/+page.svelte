@@ -1,15 +1,16 @@
 <script lang="ts">
+	import SeoHead from '$lib/components/SeoHead.svelte';
 	import { siteContent } from '$lib/content';
 	import { splitMarkdownH2, formatBlockMarkdown } from '$lib/markdown-blocks';
 
 	const { title, body } = siteContent.legal.privacy;
 	const chunks = splitMarkdownH2(body);
+	const pageTitle = `${title} | Urodapter`;
+	const description =
+		'Privacy Policy for the Urodapter app — how UroSystem processes personal data when you use app.urodapter.com.';
 </script>
 
-<svelte:head>
-	<title>{title} | Urodapter</title>
-	<meta name="description" content={title} />
-</svelte:head>
+<SeoHead title={pageTitle} {description} path="/privacy-policy" />
 
 <section class="min-h-full bg-base-200/40 px-4 py-8">
 	<div class="mx-auto max-w-3xl">

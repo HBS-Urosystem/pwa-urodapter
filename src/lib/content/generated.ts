@@ -87,70 +87,85 @@ export const siteContent = {
 				"title": "Inserting the UroDapter",
 				"video": 157,
 				"body": "Insert the UroDapter into the urethral orifice and gently position the orifice under the symphysis toward the rectum. To achieve this, push downwards the labiae with your exploring fingers.\n",
-				"plusModalId": 1
+				"plusModalId": 1,
+				"plusLabel": "Malformation of the orifice",
+				"poster": "/assets/video/157.jpg"
 			},
 			{
 				"id": "spooning",
 				"title": "Spooning",
 				"video": 158,
-				"body": "Gently drive the Luer-Lock or Luer-Slip syringe with a “spooning” motion under the symphysis in all cases. This is crucial, as it allows for the liquid to flow from the syringe through the urethra.\n"
+				"body": "Gently drive the Luer-Lock or Luer-Slip syringe with a “spooning” motion under the symphysis in all cases. This is crucial, as it allows for the liquid to flow from the syringe through the urethra.\n",
+				"poster": "/assets/video/158.jpg"
 			},
 			{
 				"id": "angle-adjustment",
 				"title": "Angle adjustment",
 				"video": 159,
 				"body": "After the \"spooning\" motion, adjust the angle of the Luer-Lock or Luer-Slip syringe so that it is parallel with the urethra. The optimal angle will cause the least resistance while pressing the plunger of the syringe. The proper angle might be depending on the pelvic anatomy, which usually relates to the patients’ age.\n",
-				"plusModalId": 3
+				"plusModalId": 3,
+				"plusLabel": "Optimal angle",
+				"poster": "/assets/video/159.jpg"
 			},
 			{
 				"id": "relaxation",
 				"title": "Relaxation of pelvic muscles",
 				"video": 160,
-				"body": "It is important to ask the patient to relax her pelvic muscles. The urethral sphincter should be relaxed to let the solution easily flow into the bladder.\n"
+				"body": "It is important to ask the patient to relax her pelvic muscles. The urethral sphincter should be relaxed to let the solution easily flow into the bladder.\n",
+				"poster": "/assets/video/160.jpg"
 			},
 			{
 				"id": "sealing",
 				"title": "Sealing",
 				"video": 161,
-				"body": "Make sure that the UroDapter has entered the orifice properly and the sealing collar covers the nearby tissues tightly. If not, leakage can occur.\n"
+				"body": "Make sure that the UroDapter has entered the orifice properly and the sealing collar covers the nearby tissues tightly. If not, leakage can occur.\n",
+				"poster": "/assets/video/161.jpg"
 			},
 			{
 				"id": "instillation-speed",
 				"title": "Instillation speed",
 				"video": 162,
 				"body": "Begin slowly instilling the liquid and adjust the angle as needed: At the optimal angle you will feel the least resistance while pressing the plunger of the syringe. Perform the instillation at low speed.\n",
-				"plusModalId": 6
+				"plusModalId": 6,
+				"plusLabel": "Optimal angle",
+				"poster": "/assets/video/162.jpg"
 			},
 			{
 				"id": "opening-sphincter",
 				"title": "Opening of the sphincter",
 				"video": 163,
-				"body": "During proper instillation the instilled solution will increase the intraurethral pressure above the sphincter pressure and will completely open the already relaxed sphincter, allowing the solution to easily flow into the bladder.\n"
+				"body": "During proper instillation the instilled solution will increase the intraurethral pressure above the sphincter pressure and will completely open the already relaxed sphincter, allowing the solution to easily flow into the bladder.\n",
+				"poster": "/assets/video/163.jpg"
 			},
 			{
 				"id": "sphincter-contraction",
 				"title": "Sphincter contraction",
 				"video": 170,
-				"body": "Slow down or pause the instillation if the sphincter is constricted. Instruct the patient to take a few deep breaths, and relax her pelvic muscles and sphincter. Resume when the patient relaxed her sphincter.\n"
+				"body": "Slow down or pause the instillation if the sphincter is constricted. Instruct the patient to take a few deep breaths, and relax her pelvic muscles and sphincter. Resume when the patient relaxed her sphincter.\n",
+				"poster": "/assets/video/170.jpg"
 			},
 			{
 				"id": "leakage-during",
 				"title": "Leakage during instillation",
 				"video": 165,
 				"body": "If there is any leakage during the instillation, it can have different causes, like insufficient coverage of the sealing collar, too little or too much pressure on the Luer-Lock or Luer-Slip syringe.\n",
-				"plusModalId": 9
+				"plusModalId": 9,
+				"plusLabel": "How to avoid leakage",
+				"poster": "/assets/video/165.jpg"
 			},
 			{
 				"id": "leakage-after",
 				"title": "Leakage after instillation",
 				"video": 168,
-				"body": "Some minimal leakage may occur after instillation. Usually, it is insignificant, only a few drops.\n"
+				"body": "Some minimal leakage may occur after instillation. Usually, it is insignificant, only a few drops.\n",
+				"poster": "/assets/video/168.jpg"
 			},
 			{
 				"id": "retention",
 				"title": "Retention of solution",
 				"video": 169,
-				"body": "The patient should retain the instilled solution in the bladder for the time recommended by the therapist, but no more than 3 hours.\n"
+				"body": "The patient should retain the instilled solution in the bladder for the time recommended by the therapist, but no more than 3 hours.\n",
+				"poster": "/assets/video/169.jpg"
 			}
 		]
 	},
@@ -199,73 +214,85 @@ export const siteContent = {
 				"id": "relaxation-intro",
 				"title": "Relaxation of pelvic muscles and sphincter",
 				"video": null,
-				"body": "It is important to ask the patient to relax his pelvic muscles. The urethral sphincter should be relaxed to let the solution easily flow into the bladder.\n"
+				"body": "It is important to ask the patient to relax his pelvic muscles. The urethral sphincter should be relaxed to let the solution easily flow into the bladder.\n",
+				"poster": null
 			},
 			{
 				"id": "insertion",
 				"title": "UroDapter insertion",
 				"video": 111,
-				"body": "Make sure that the UroDapter has entered the urethral orifice properly and the sealing collar covers the nearby surface of the glans tightly. If not, leakage can occur.\n"
+				"body": "Make sure that the UroDapter has entered the urethral orifice properly and the sealing collar covers the nearby surface of the glans tightly. If not, leakage can occur.\n",
+				"poster": "/assets/video/111.jpg"
 			},
 			{
 				"id": "instillation-speed",
 				"title": "Instillation speed",
 				"video": 112,
-				"body": "Begin slowly instilling the liquid. Perform the instillation at low speed.\n"
+				"body": "Begin slowly instilling the liquid. Perform the instillation at low speed.\n",
+				"poster": "/assets/video/112.jpg"
 			},
 			{
 				"id": "opening-sphincter",
 				"title": "Opening of the sphincter",
 				"video": 109,
-				"body": "During proper instillation the instilled solution will increase the intraurethral pressure above the sphincter pressure and will completely open the already relaxed sphincter, allowing the solution to easily flow into the bladder.\n"
+				"body": "During proper instillation the instilled solution will increase the intraurethral pressure above the sphincter pressure and will completely open the already relaxed sphincter, allowing the solution to easily flow into the bladder.\n",
+				"poster": "/assets/video/109.jpg"
 			},
 			{
 				"id": "sphincter-contraction",
 				"title": "Sphincter contraction",
 				"video": 113,
-				"body": "Slow down or pause the instillation if the sphincter is constricted. Instruct the patient to take a few deep breaths, and relax his pelvic muscles and sphincter. Resume when the patient relaxed his sphincter.\n"
+				"body": "Slow down or pause the instillation if the sphincter is constricted. Instruct the patient to take a few deep breaths, and relax his pelvic muscles and sphincter. Resume when the patient relaxed his sphincter.\n",
+				"poster": "/assets/video/113.jpg"
 			},
 			{
 				"id": "two-step",
 				"title": "Two-step process for male patients",
 				"video": 114,
-				"body": "Due to the long male urethra, a significant portion of the instilled solution remains in the urethra, which would be lost after removing the UroDapter. To avoid this and to deliver the whole amount of drug solution in the bladder, the two-step process should be followed in each male patient.\n"
+				"body": "Due to the long male urethra, a significant portion of the instilled solution remains in the urethra, which would be lost after removing the UroDapter. To avoid this and to deliver the whole amount of drug solution in the bladder, the two-step process should be followed in each male patient.\n",
+				"poster": "/assets/video/114.jpg"
 			},
 			{
 				"id": "instillation-solution",
 				"title": "Instillation of the solution",
 				"video": 121,
-				"body": "After complete instillation of the solution, compress the urethra below the orifice with two fingers of your other hand and remove the Luer-Lock or Luer-Slip syringe with the UroDapter from the orifice.\n"
+				"body": "After complete instillation of the solution, compress the urethra below the orifice with two fingers of your other hand and remove the Luer-Lock or Luer-Slip syringe with the UroDapter from the orifice.\n",
+				"poster": "/assets/video/121.jpg"
 			},
 			{
 				"id": "syringe-air",
 				"title": "Filling a Luer-Lock or Luer-Slip syringe with air",
 				"video": 122,
-				"body": "While keeping the compression of the urethra, fill up the Luer-Lock or Luer-Slip syringe with 20ml air.\n"
+				"body": "While keeping the compression of the urethra, fill up the Luer-Lock or Luer-Slip syringe with 20ml air.\n",
+				"poster": "/assets/video/122.jpg"
 			},
 			{
 				"id": "sealing",
 				"title": "Sealing",
 				"video": 123,
-				"body": "Re-insert the Luer-Lock or Luer-Slip syringe with the UroDapter into the still compressed orifice and ensure its complete sealing by the isolating collar.\n"
+				"body": "Re-insert the Luer-Lock or Luer-Slip syringe with the UroDapter into the still compressed orifice and ensure its complete sealing by the isolating collar.\n",
+				"poster": "/assets/video/123.jpg"
 			},
 			{
 				"id": "instillation-air",
 				"title": "Instillation of air",
 				"video": 124,
-				"body": "Release the urethral compression and push the air slowly into the urethra. The instilled air is capable and will push the remaining liquid into the bladder.\n"
+				"body": "Release the urethral compression and push the air slowly into the urethra. The instilled air is capable and will push the remaining liquid into the bladder.\n",
+				"poster": "/assets/video/124.jpg"
 			},
 			{
 				"id": "air-bladder",
 				"title": "Air enters the bladder",
 				"video": 125,
-				"body": "As soon as the air reaches the bladder, the patient will report on an unfamiliar feeling and it is also sensible, typically audible for the physician. The small amount of instilled air is completely harmless and will be emptied with the first urination after the instillation.\n"
+				"body": "As soon as the air reaches the bladder, the patient will report on an unfamiliar feeling and it is also sensible, typically audible for the physician. The small amount of instilled air is completely harmless and will be emptied with the first urination after the instillation.\n",
+				"poster": "/assets/video/125.jpg"
 			},
 			{
 				"id": "retention",
 				"title": "Retention of solution",
 				"video": 126,
-				"body": "The patient should retain the instilled solution in the bladder for the time recommended by the therapist, but no more than 3 hours.\n"
+				"body": "The patient should retain the instilled solution in the bladder for the time recommended by the therapist, but no more than 3 hours.\n",
+				"poster": "/assets/video/126.jpg"
 			}
 		]
 	},
@@ -273,7 +300,8 @@ export const siteContent = {
 		"educationalVideo": {
 			"title": "Educational Video",
 			"videoId": 193,
-			"notes": "The main educational clip uses video **193** (`/assets/video/193.mp4`), matching the scraped app."
+			"poster": "/assets/video/193.jpg",
+			"notes": ""
 		},
 		"preInstillation": {
 			"title": "What to do prior to instillation",
