@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { tick, onMount } from 'svelte';
-	import { fly } from 'svelte/transition';
-	import { cubicOut } from 'svelte/easing';
 	import type { InstructionPack } from '$lib/content';
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import { formatInlineMarkdown } from '$lib/markdown-inline';
@@ -62,21 +60,15 @@
 
 	let tab = $state<'before' | 'steps'>(initialUi.tab);
 	let stepIndex = $state(initialUi.stepIndex);
-	/** 1 = forward (next), -1 = back — drives slide direction */
-	let stepDir = $state(1);
-	/** false until after mount + tick so localStorage restore does not animate */
+	/** false until after mount + tick so prefers-reduced-motion is known */
 	let allowStepAnim = $state(false);
+	let stepsCarouselEl = $state<HTMLDivElement | undefined>(undefined);
 	let dialogEl = $state<HTMLDialogElement | undefined>(undefined);
 	let activeModal = $state<
 		null | 'emptyingTheBladder' | 'disinfection' | 'plus-1' | 'plus-3' | 'plus-6' | 'plus-9'
 	>(null);
 	/** Heading in the dialog: matches the button label that opened it */
 	let modalTitle = $state('');
-
-	const step = $derived(pack.steps[stepIndex] ?? pack.steps[0]);
-	const plusModalId = $derived(
-		'plusModalId' in step && step.plusModalId != null ? step.plusModalId : undefined
-	);
 
 	function persistStep() {
 		try {
@@ -97,191 +89,96 @@
 	function setTab(next: 'before' | 'steps') {
 		tab = next;
 		persistTab();
-		if (next === 'steps') persistStep();
+		if (next === 'steps') {
+			persistStep();
+			void tick().then(() => {
+				requestAnimationFrame(() => alignCarouselToStep());
+			});
+		}
+	}
+
+	function alignCarouselToStep() {
+		const el = stepsCarouselEl;
+		if (!el || tab !== 'steps') return;
+		const w = el.clientWidth;
+		if (w <= 0) return;
+		const maxIdx = Math.max(0, pack.steps.length - 1);
+		const idx = Math.min(maxIdx, stepIndex);
+		el.scrollLeft = idx * w;
+	}
+
+	function syncStepIndexFromCarouselScroll() {
+		const el = stepsCarouselEl;
+		if (!el || tab !== 'steps') return;
+		const w = el.clientWidth;
+		if (w <= 0) return;
+		const i = Math.round(el.scrollLeft / w);
+		const clamped = Math.max(0, Math.min(pack.steps.length - 1, i));
+		if (clamped !== stepIndex) {
+			stepIndex = clamped;
+			persistStep();
+		}
+	}
+
+	function moveToStep(i: number) {
+		const clamped = Math.max(0, Math.min(pack.steps.length - 1, i));
+		stepIndex = clamped;
+		persistStep();
+		const el = stepsCarouselEl;
+		if (!el) return;
+		const w = el.clientWidth;
+		if (w <= 0) return;
+		el.scrollTo({
+			left: clamped * w,
+			behavior: allowStepAnim ? 'smooth' : 'auto'
+		});
 	}
 
 	onMount(() => {
 		void tick().then(() => {
 			allowStepAnim = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+			requestAnimationFrame(() => alignCarouselToStep());
 		});
 	});
 
-	/** When true, keyed step block skips fly (full-width CSS slide handles motion). */
-	let suppressStepFly = $state(false);
-
-	const stepFlyIn = $derived(
-		suppressStepFly || !allowStepAnim
-			? { x: 0, y: 0, duration: 0 }
-			: { x: 22 * stepDir, duration: 240, easing: cubicOut, opacity: 0.92 }
-	);
-	const stepFlyOut = $derived(
-		suppressStepFly || !allowStepAnim
-			? { x: 0, y: 0, duration: 0 }
-			: { x: -22 * stepDir, duration: 200, easing: cubicOut, opacity: 0.92 }
-	);
-
-	/** Full-width CSS slide; step index updates only after exit transition ends. */
-	const SWIPE_SLIDE_MS = 280;
-	type SwipeSlidePhase = 'idle' | 'exitNext' | 'enterNext' | 'exitPrev' | 'enterPrev';
-	let swipeSlidePhase = $state<SwipeSlidePhase>('idle');
-	let swipeSlideSnap = $state(false);
-	let stepsSwipeTrackEl = $state<HTMLDivElement | undefined>(undefined);
-
-	const swipeSlideTx = $derived.by(() => {
-		if (swipeSlidePhase === 'exitNext') return '-100%';
-		if (swipeSlidePhase === 'exitPrev') return '100%';
-		if (swipeSlidePhase === 'enterNext') return swipeSlideSnap ? '100%' : '0%';
-		if (swipeSlidePhase === 'enterPrev') return swipeSlideSnap ? '-100%' : '0%';
-		return '0%';
+	$effect(() => {
+		if (!browser) return;
+		const el = stepsCarouselEl;
+		if (!el) return;
+		let debounce: ReturnType<typeof setTimeout> | undefined;
+		const onScrollSettle = () => {
+			clearTimeout(debounce);
+			debounce = setTimeout(() => syncStepIndexFromCarouselScroll(), 100);
+		};
+		const onScrollEnd = () => syncStepIndexFromCarouselScroll();
+		el.addEventListener('scrollend', onScrollEnd);
+		el.addEventListener('scroll', onScrollSettle, { passive: true });
+		return () => {
+			el.removeEventListener('scrollend', onScrollEnd);
+			el.removeEventListener('scroll', onScrollSettle);
+			clearTimeout(debounce);
+		};
 	});
 
-	const swipeSlideTransitionMs = $derived(
-		swipeSlideSnap || swipeSlidePhase === 'idle' ? 0 : SWIPE_SLIDE_MS
-	);
-
-	const swipeSlideBusy = $derived(swipeSlidePhase !== 'idle');
-
-	function onSwipeTrackTransitionEnd(e: TransitionEvent) {
-		if (e.propertyName !== 'transform') return;
-		if (e.target !== stepsSwipeTrackEl) return;
-
-		if (swipeSlidePhase === 'exitNext') {
-			suppressStepFly = true;
-			swipeSlideSnap = true;
-			swipeSlidePhase = 'enterNext';
-			stepDir = 1;
-			stepIndex = Math.min(pack.steps.length - 1, stepIndex + 1);
-			persistStep();
-			void tick().then(() => {
-				requestAnimationFrame(() => {
-					swipeSlideSnap = false;
-				});
-			});
-			return;
-		}
-
-		if (swipeSlidePhase === 'enterNext') {
-			if (swipeSlideSnap) return;
-			suppressStepFly = false;
-			swipeSlidePhase = 'idle';
-			return;
-		}
-
-		if (swipeSlidePhase === 'exitPrev') {
-			suppressStepFly = true;
-			swipeSlideSnap = true;
-			swipeSlidePhase = 'enterPrev';
-			stepDir = -1;
-			stepIndex = Math.max(0, stepIndex - 1);
-			persistStep();
-			void tick().then(() => {
-				requestAnimationFrame(() => {
-					swipeSlideSnap = false;
-				});
-			});
-			return;
-		}
-
-		if (swipeSlidePhase === 'enterPrev') {
-			if (swipeSlideSnap) return;
-			suppressStepFly = false;
-			swipeSlidePhase = 'idle';
-		}
-	}
+	$effect(() => {
+		if (!browser || tab !== 'steps') return;
+		const onResize = () => alignCarouselToStep();
+		window.addEventListener('resize', onResize);
+		return () => window.removeEventListener('resize', onResize);
+	});
 
 	function goToInstructions() {
 		setTab('steps');
 	}
 
-	function prevStep() {
-		if (stepIndex <= 0) return;
-		stepDir = -1;
-		stepIndex = stepIndex - 1;
-		persistStep();
-	}
-
-	function nextStep() {
-		if (stepIndex >= pack.steps.length - 1) return;
-		stepDir = 1;
-		stepIndex = stepIndex + 1;
-		persistStep();
-	}
-
-	/** Next/previous step: same full-width slide as swipe when motion is allowed. */
 	function goNextStep() {
-		if (!allowStepAnim) {
-			nextStep();
-			return;
-		}
-		if (swipeSlideBusy) return;
 		if (stepIndex >= pack.steps.length - 1) return;
-		requestAnimationFrame(() => {
-			swipeSlidePhase = 'exitNext';
-		});
+		moveToStep(stepIndex + 1);
 	}
 
 	function goPrevStep() {
-		if (!allowStepAnim) {
-			prevStep();
-			return;
-		}
-		if (swipeSlideBusy) return;
 		if (stepIndex <= 0) return;
-		requestAnimationFrame(() => {
-			swipeSlidePhase = 'exitPrev';
-		});
-	}
-
-	/** Horizontal swipe between steps (mobile). */
-	const SWIPE_MIN_PX = 56;
-	const SWIPE_DOMINANCE = 1.25;
-
-	let swipeTouchId: number | null = null;
-	let swipeStartX = 0;
-	let swipeStartY = 0;
-
-	/** Any one-finger gesture inside the Instructions step region can count as a step swipe. */
-	function onStepsTouchStart(e: TouchEvent) {
-		if (tab !== 'steps' || activeModal != null || swipeSlideBusy) return;
-		if (e.touches.length !== 1) {
-			swipeTouchId = null;
-			return;
-		}
-		const t = e.touches[0];
-		swipeTouchId = t.identifier;
-		swipeStartX = t.clientX;
-		swipeStartY = t.clientY;
-	}
-
-	function onStepsTouchEnd(e: TouchEvent) {
-		if (swipeTouchId === null || tab !== 'steps' || swipeSlideBusy) return;
-		let ended: Touch | undefined;
-		for (let i = 0; i < e.changedTouches.length; i++) {
-			const c = e.changedTouches.item(i);
-			if (c?.identifier === swipeTouchId) {
-				ended = c;
-				break;
-			}
-		}
-		swipeTouchId = null;
-		if (!ended) return;
-		const dx = ended.clientX - swipeStartX;
-		const dy = ended.clientY - swipeStartY;
-		if (Math.abs(dx) < SWIPE_MIN_PX) return;
-		if (Math.abs(dx) < Math.abs(dy) * SWIPE_DOMINANCE) return;
-		if (dx < 0) goNextStep();
-		else goPrevStep();
-	}
-
-	function onStepsTouchCancel() {
-		swipeTouchId = null;
-		if (swipeSlidePhase === 'exitNext' || swipeSlidePhase === 'exitPrev') {
-			swipeSlideSnap = true;
-			swipeSlidePhase = 'idle';
-			void tick().then(() => {
-				swipeSlideSnap = false;
-			});
-		}
+		moveToStep(stepIndex - 1);
 	}
 
 	type ModalKind = NonNullable<typeof activeModal>;
@@ -293,10 +190,9 @@
 		dialogEl?.showModal();
 	}
 
-	function openPlusModal(id: 1 | 3 | 6 | 9) {
+	function openPlusModal(id: 1 | 3 | 6 | 9, label: string) {
 		const map = { 1: 'plus-1', 3: 'plus-3', 6: 'plus-6', 9: 'plus-9' } as const;
-		const title = 'plusLabel' in step && step.plusLabel ? step.plusLabel : '';
-		void showDialog(map[id], title);
+		void showDialog(map[id], label);
 	}
 
 	function onModalBackdropClick(e: MouseEvent) {
@@ -444,55 +340,50 @@
 			hidden={tab !== 'steps'}
 			class="card border border-base-300 bg-base-100 shadow-sm"
 		>
-			<div
-				role="region"
-				aria-label="Instruction step content"
-				class="card-body touch-pan-y gap-4"
-				ontouchstart={onStepsTouchStart}
-				ontouchend={onStepsTouchEnd}
-				ontouchcancel={onStepsTouchCancel}
-			>
+			<div role="region" aria-label="Instruction step content" class="card-body gap-4">
 				<div class="flex flex-wrap items-center justify-between gap-2 text-sm opacity-80">
 					<span>Step {stepIndex + 1} / {pack.steps.length}</span>
-					<span class="sm:hidden">Swipe horizontally to change steps</span>
+					<span class="sm:hidden">Swipe to change steps</span>
 					<span class="hidden sm:inline">Use arrow keys to change steps</span>
 				</div>
 
-				<div class="overflow-x-hidden">
-					<div
-						bind:this={stepsSwipeTrackEl}
-						class="ease-out will-change-transform"
-						style:transform="translateX({swipeSlideTx})"
-						style:transition-property="transform"
-						style:transition-duration="{swipeSlideTransitionMs}ms"
-						style:transition-timing-function="cubic-bezier(0.33, 1, 0.68, 1)"
-						ontransitionend={onSwipeTrackTransitionEnd}
-					>
-						{#key stepIndex}
-							<div class="flex flex-col gap-4" in:fly|local={stepFlyIn} out:fly|local={stepFlyOut}>
-								<h2 class="text-xl font-semibold">{step.title}</h2>
+				<div
+					bind:this={stepsCarouselEl}
+					class="carousel w-full carousel-start rounded-lg"
+					aria-label="Instruction video steps"
+				>
+					{#each pack.steps as s (s.id)}
+						<div class="carousel-item w-full">
+							<div class="flex w-full min-w-0 flex-col gap-4">
+								<h2 class="text-xl font-semibold">{s.title}</h2>
 
-								{#if step.video != null}
+								{#if s.video != null}
 									<video
 										class="instruction-step-video aspect-video w-full rounded-lg bg-black"
 										controls
 										muted
 										playsinline
 										loop
-										poster={step.poster ?? undefined}
-										aria-label={step.title}
+										preload="none"
+										poster={s.poster ?? undefined}
+										aria-label={s.title}
 									>
-										<source src="/assets/video/{step.video}.mp4" type="video/mp4" />
+										<source src="/assets/video/{s.video}.mp4" type="video/mp4" />
 									</video>
 								{/if}
 
-								<p class="whitespace-pre-line text-base-content/90">{step.body.trim()}</p>
+								<p class="whitespace-pre-line text-base-content/90">{s.body.trim()}</p>
 
-								{#if plusModalId != null}
+								{#if 'plusModalId' in s && s.plusModalId != null}
 									<button
 										type="button"
 										class="btn gap-1 self-start text-primary btn-ghost btn-sm"
-										onclick={() => plusModalId != null && openPlusModal(plusModalId)}
+										onclick={() => {
+											openPlusModal(
+												s.plusModalId!,
+												'plusLabel' in s && s.plusLabel ? s.plusLabel : ''
+											);
+										}}
 									>
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
@@ -507,19 +398,19 @@
 												d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
 											/></svg
 										>
-										{'plusLabel' in step ? step.plusLabel : ''}
+										{'plusLabel' in s && s.plusLabel ? s.plusLabel : ''}
 									</button>
 								{/if}
 							</div>
-						{/key}
-					</div>
+						</div>
+					{/each}
 				</div>
 
 				<div class="flex justify-between pt-4">
 					<button
 						type="button"
 						class="btn btn-outline"
-						disabled={stepIndex === 0 || swipeSlideBusy}
+						disabled={stepIndex === 0}
 						onclick={goPrevStep}
 					>
 						Previous
@@ -527,7 +418,7 @@
 					<button
 						type="button"
 						class="btn btn-primary"
-						disabled={stepIndex >= pack.steps.length - 1 || swipeSlideBusy}
+						disabled={stepIndex >= pack.steps.length - 1}
 						onclick={goNextStep}
 					>
 						Next
@@ -556,7 +447,7 @@
 				{#each pack.modals.plus9.subsections as sub (sub.label)}
 					<div class="flex gap-4">
 						<div
-							class="flex h-8 w-8 mt-1 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-content"
+							class="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-content"
 						>
 							{sub.label}
 						</div>

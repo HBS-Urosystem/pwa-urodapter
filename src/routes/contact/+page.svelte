@@ -78,11 +78,11 @@
 				required
 			></textarea>
 
-			<label class="label cursor-pointer items-start justify-start gap-3">
+			<label class="label cursor-pointer items-center gap-3">
 				<input
 					type="checkbox"
 					name="contact_legal"
-					class="checkbox mt-1 checkbox-primary"
+					class="checkbox checkbox-primary"
 					required
 				/>
 				<span class="label-text text-sm">

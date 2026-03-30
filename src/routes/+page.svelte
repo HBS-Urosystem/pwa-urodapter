@@ -72,21 +72,39 @@
 
 		const html = document.documentElement;
 		const body = document.body;
+		const scrollY = window.scrollY;
+
 		const prevHtmlOverflow = html.style.overflow;
 		const prevBodyOverflow = body.style.overflow;
 		const prevHtmlOverscroll = html.style.overscrollBehavior;
 		const prevBodyOverscroll = body.style.overscrollBehavior;
+		const prevBodyPosition = body.style.position;
+		const prevBodyTop = body.style.top;
+		const prevBodyLeft = body.style.left;
+		const prevBodyRight = body.style.right;
+		const prevBodyWidth = body.style.width;
 
 		html.style.overflow = 'hidden';
 		body.style.overflow = 'hidden';
 		html.style.overscrollBehavior = 'none';
 		body.style.overscrollBehavior = 'none';
+		body.style.position = 'fixed';
+		body.style.top = `-${scrollY}px`;
+		body.style.left = '0';
+		body.style.right = '0';
+		body.style.width = '100%';
 
 		return () => {
 			html.style.overflow = prevHtmlOverflow;
 			body.style.overflow = prevBodyOverflow;
 			html.style.overscrollBehavior = prevHtmlOverscroll;
 			body.style.overscrollBehavior = prevBodyOverscroll;
+			body.style.position = prevBodyPosition;
+			body.style.top = prevBodyTop;
+			body.style.left = prevBodyLeft;
+			body.style.right = prevBodyRight;
+			body.style.width = prevBodyWidth;
+			window.scrollTo(0, scrollY);
 		};
 	});
 </script>
@@ -163,7 +181,7 @@
 
 {#if showIntro}
 	<div
-		class="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[radial-gradient(circle,#2a6d8c_0%,#0b3b54_61%,#072c3f_100%)] text-primary"
+		class="fixed inset-0 z-40 flex touch-none flex-col items-center justify-center overscroll-none bg-[radial-gradient(circle,#2a6d8c_0%,#0b3b54_61%,#072c3f_100%)] text-primary"
 	>
 		<LogoWordmark class="mb-4 w-48" />
 
