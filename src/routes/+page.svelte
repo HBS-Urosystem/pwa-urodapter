@@ -33,17 +33,18 @@
 		navigator.serviceWorker.addEventListener('message', onMessage);
 	}
 
-	let error = $state<string | null>(null);
+	// let error = $state<string | null>(null);
 	async function share() {
 		if (navigator.share) {
 			// await navigator.share({ title: 'Urodapter - How to Use', url: window.location.origin });
 			try {
 				// console.log(window.location.origin);
-				error = 'Waiting';
+				// error = 'Waiting';
 				await navigator.share({ title: 'Urodapter - How to Use', url: window.location.origin });
 				// console.log('Shared successfully');
+				// error = null;
 			} catch (err) {
-				error = 'Error: ' + err;
+				// error = 'Cancelled';
 			}
 		} else {
 			await navigator.clipboard.writeText(window.location.origin);
@@ -55,6 +56,15 @@
 	const homeTitle = 'Urodapter – How to Use';
 	const homeDescription =
 		'Everything you need to know about the urological syringe adapter which can completely replace the catheter in the field of Bladder Instillation';
+
+	/** First intro frame (PNG) + loop — preloaded in `<head>` when the splash is shown for LCP / fetch priority. */
+	const introVideoSrc = '/assets/intro_loop_seq.mp4';
+	const introPosterSrc = '/assets/intro_loop_seq-poster.jpg';
+
+	/** `fetchpriority` on `<video>` (Chromium) — setAttribute avoids older DOM typings. */
+	function introVideoFetchPriority(node: HTMLVideoElement) {
+		node.setAttribute('fetchpriority', 'high');
+	}
 
 	const cards = [
 		{ title: 'Educational Video', href: '/how-the-urodapter-works', icon: 'tool' },
@@ -119,6 +129,14 @@
 </script>
 
 <SeoHead title={homeTitle} description={homeDescription} path="/" />
+
+<svelte:head>
+	{#if !introPlayed.seen}
+		<!-- LCP: poster + video URLs are discoverable in the initial document (not injected later). -->
+		<link rel="preload" href={introPosterSrc} as="image" fetchpriority="high" />
+		<link rel="preload" href={introVideoSrc} as="video" type="video/mp4" fetchpriority="high" />
+	{/if}
+</svelte:head>
 
 {#snippet cardIcon(icon: string)}
 	{#if icon === 'tool'}
@@ -197,7 +215,12 @@
 		<h1 class="mb-2 text-3xl font-bold text-white">How to Use</h1>
 
 		<video
-			src="/assets/intro_loop_seq.mp4"
+			use:introVideoFetchPriority
+			src={introVideoSrc}
+			poster={introPosterSrc}
+			width="192"
+			height="192"
+			preload="auto"
 			autoplay
 			muted
 			loop
@@ -337,9 +360,9 @@
 					Share
 				{/if}
 			</button>
-			{#if error != null}
-				<p class="text-error text-center">{error}</p>
-			{/if}
+			<!-- {#if error != null}
+				<span class="text-info text-center text-sm">{error}</span>
+			{/if} -->
 		</div>
 	</div>
 </section>
