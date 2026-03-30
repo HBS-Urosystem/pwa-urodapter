@@ -52,7 +52,7 @@ The original frame-by-frame animation cost a lot of bandwidth and CPU. One 212 K
 | Header      | Custom Bootstrap navbar + jQuery hamburger toggle | DaisyUI drawer + navbar component       |
 | Mobile menu | jQuery-driven slide panel (`#header-menu-mobile`) | DaisyUI drawer sidebar                  |
 | Footer      | Bootstrap grid with links                         | DaisyUI footer with app version display |
-| Icons       | icomoon icon font                                 | icomoon font (preserved) or inline SVGs |
+| Icons       | icomoon icon font                                 | inline SVGs (no icon font)           |
 
 - On the home page, table-of-contents icon handling is now data-driven and normalized to consistent `24x24` inline SVGs, and the `Install App` action appears beside `Share` in the footer action row instead of as a card.
 - The site-wide footer groups **Contact** and **Install App** as two adjacent icon-only links (envelope + download tray, Heroicons-style strokes) with `aria-label`s; Privacy Policy and Cookie Policy stay text links.
@@ -86,7 +86,7 @@ The original frame-by-frame animation cost a lot of bandwidth and CPU. One 212 K
 
 ## New Features (not in original)
 
-- **PWA / Offline support**: service worker with precache (app shell, images, fonts) and runtime video caching; `/assets/video/*` uses **cache-first** (cached response if present, otherwise fetch and store).
+- **PWA / Offline support**: service worker with precache (app shell, images, fonts) and runtime video caching; `/assets/video/*` uses **cache-first** (cached response if present, otherwise fetch and store). Runtime `cache.put` only runs for full responses (not **206** partial / `Content-Range`), since the Cache API rejects partial responses when the browser uses `Range` for playback.
 - **Download all videos**: home page button precaches all 23 instruction videos (~390MB). **Benefits**: full offline viewing after download; when still online, replays use the cached file—**less mobile data**, **faster starts**, **fewer stalls** on weak Wi‑Fi (same files are not re-downloaded each time).
 - **PWA install guide**: `/install` page with platform-specific instructions (iOS, Android, desktop)
 - **Step memory**: instruction flow stores the active tab and step in `localStorage` so reload returns to the same place (e.g. Instructions 4/11)
@@ -141,7 +141,7 @@ The original frame-by-frame animation cost a lot of bandwidth and CPU. One 212 K
 | Original location          | New location                             | Notes                                                                                                                                                                        |
 | -------------------------- | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `img/`                     | `static/assets/img/`                     | `logo_highlight_blue.svg` removed; wordmark in UI is inlined with `currentColor` + `text-primary` (see Logo section); `logo_white.svg` kept for footer on primary background |
-| `fonts/icomoon/`           | `static/assets/fonts/icomoon/`           | Copied as-is                                                                                                                                                                 |
+| `fonts/icomoon/`           | Not copied (removed)                     | icomoon icon font files deleted; icons are rendered via inline SVGs |
 | `media/video/*.mp4`        | `static/assets/video/`                   | 23 files (~390MB), copied as-is; new build also consumes matching `*.jpg` poster images in this folder for video placeholders                                                |
 | `favicon/` + `favicon.ico` | `static/favicon/` + `static/favicon.ico` | Copied as-is                                                                                                                                                                 |
 | `css/app.css`              | Not copied                               | Replaced by Tailwind + DaisyUI                                                                                                                                               |

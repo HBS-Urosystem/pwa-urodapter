@@ -2,13 +2,12 @@
 	command = "npm run build"
 	publish = "build"
 
-# SvelteKit + Netlify adapter: long-cache immutable build assets
-[[headers]]
-	for = "/_app/immutable/*"
-	[headers.values]
-		Cache-Control = "public, max-age=31536000, immutable"
+# Immutable asset caching for `/_app/immutable/*` is appended to `build/_headers` by
+# `@sveltejs/adapter-netlify` (lowercase `cache-control`). Do not duplicate that here —
+# Netlify merges `netlify.toml` and `_headers`, which triggers "same header set twice
+# with different cases" (Cache-Control vs cache-control).
 
 [[headers]]
 	for = "/manifest.webmanifest"
 	[headers.values]
-		Cache-Control = "public, max-age=3600"
+		"cache-control" = "public, max-age=3600"

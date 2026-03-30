@@ -9,6 +9,14 @@ const sw = self as unknown as ServiceWorkerGlobalScope;
 
 const CACHE_NAME = `cache-${version}`;
 
+/** Cache API cannot store 206 Partial Content; `response.ok` is still true for 206 (common for video `Range` requests). */
+function canStoreInCache(response: Response): boolean {
+	if (!response.ok) return false;
+	if (response.status === 206) return false;
+	if (response.headers.has('Content-Range')) return false;
+	return true;
+}
+
 const PRECACHE_ASSETS = [
 	...build,
 	...files.filter(
@@ -58,7 +66,7 @@ sw.addEventListener('fetch', (event) => {
 				(cached) =>
 					cached ||
 					fetch(event.request).then((response) => {
-						if (response.ok) {
+						if (canStoreInCache(response)) {
 							const clone = response.clone();
 							caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
 						}
@@ -75,7 +83,7 @@ sw.addEventListener('fetch', (event) => {
 				cached ||
 				fetch(event.request)
 					.then((response) => {
-						if (response.ok && response.type === 'basic') {
+						if (canStoreInCache(response) && response.type === 'basic') {
 							const clone = response.clone();
 							caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
 						}
@@ -98,7 +106,7 @@ sw.addEventListener('message', (event) => {
 					const existing = await cache.match(url);
 					if (!existing) {
 						const response = await fetch(url);
-						if (response.ok) {
+						if (canStoreInCache(response)) {
 							await cache.put(url, response);
 						}
 					}

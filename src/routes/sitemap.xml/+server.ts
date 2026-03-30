@@ -12,7 +12,7 @@ ${SITEMAP_PATHS.map((p) => `  <url><loc>${base}${p}</loc></url>`).join('\n')}
 	return new Response(body, {
 		headers: {
 			'Content-Type': 'application/xml; charset=utf-8',
-			'Cache-Control': 'public, max-age=3600'
+			'cache-control': 'public, max-age=3600'
 		}
 	});
 };

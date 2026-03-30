@@ -26,7 +26,7 @@
 		<div class="alert alert-info shadow-lg gap-2">
 			<span>App update available</span>
 			<div class="flex gap-1">
-				<button class="btn btn-sm btn-primary" onclick={() => window.location.reload()}>
+				<button class="btn btn-sm btn-secondary" onclick={() => window.location.reload()}>
 					Refresh
 				</button>
 				<button class="btn btn-sm btn-ghost" onclick={() => (showUpdate = false)}>
