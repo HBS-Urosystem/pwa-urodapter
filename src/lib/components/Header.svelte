@@ -9,13 +9,14 @@
 		<a
 			href={resolve('/')}
 			class="btn btn-ghost hover:bg-transparent hover:bg-transparent hover:border-transparent hover:shadow-none text-primary"
+			aria-label="Home"
 		>
 			<LogoWordmark class="h-8" />
 
 		</a>
 	</div>
 	<div class="flex-none gap-1">
-		<a href={resolve('/')} class="btn btn-ghost btn-square" aria-label="Home">
+		<a href={resolve('/')} class="btn btn-ghost btn-square" aria-label="Table of Contents">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="h-6 w-6"

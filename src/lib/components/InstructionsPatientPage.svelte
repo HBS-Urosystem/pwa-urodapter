@@ -63,6 +63,7 @@
 	/** false until after mount + tick so prefers-reduced-motion is known */
 	let allowStepAnim = $state(false);
 	let stepsCarouselEl = $state<HTMLDivElement | undefined>(undefined);
+	let carouselWidth = $state(0);
 	let dialogEl = $state<HTMLDialogElement | undefined>(undefined);
 	let activeModal = $state<
 		null | 'emptyingTheBladder' | 'disinfection' | 'plus-1' | 'plus-3' | 'plus-6' | 'plus-9'
@@ -100,7 +101,7 @@
 	function alignCarouselToStep() {
 		const el = stepsCarouselEl;
 		if (!el || tab !== 'steps') return;
-		const w = el.clientWidth;
+		const w = carouselWidth;
 		if (w <= 0) return;
 		const maxIdx = Math.max(0, pack.steps.length - 1);
 		const idx = Math.min(maxIdx, stepIndex);
@@ -110,7 +111,7 @@
 	function syncStepIndexFromCarouselScroll() {
 		const el = stepsCarouselEl;
 		if (!el || tab !== 'steps') return;
-		const w = el.clientWidth;
+		const w = carouselWidth;
 		if (w <= 0) return;
 		const i = Math.round(el.scrollLeft / w);
 		const clamped = Math.max(0, Math.min(pack.steps.length - 1, i));
@@ -126,7 +127,7 @@
 		persistStep();
 		const el = stepsCarouselEl;
 		if (!el) return;
-		const w = el.clientWidth;
+		const w = carouselWidth;
 		if (w <= 0) return;
 		el.scrollTo({
 			left: clamped * w,
@@ -139,6 +140,20 @@
 			allowStepAnim = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 			requestAnimationFrame(() => alignCarouselToStep());
 		});
+	});
+
+	$effect(() => {
+		if (!browser) return;
+		const el = stepsCarouselEl;
+		if (!el) return;
+		const updateWidth = () => {
+			// Cache viewport width to avoid repeated forced-layout reads during scroll/key handlers.
+			carouselWidth = Math.round(el.getBoundingClientRect().width);
+		};
+		updateWidth();
+		const observer = new ResizeObserver(updateWidth);
+		observer.observe(el);
+		return () => observer.disconnect();
 	});
 
 	$effect(() => {
