@@ -352,7 +352,7 @@ export const siteContent = {
 		},
 		"contact": {
 			"title": "Contact",
-			"companyMarkdown": "**UroSystem Zrt.**  \nHungary, 1137 Budapest, Szent István park 26. fszt. 2.  \n[www.urosystem.com](http://www.urosystem.com), [www.urodapter.com](http://www.urodapter.com)  \n[Mail@urosystem.com](mailto:Mail@urosystem.com)",
+			"companyMarkdown": "**UroSystem Zrt.**  \nHungary, 1137 Budapest, Szent István park 26. fszt. 2.  \n[www.urosystem.com](http://www.urosystem.com), [www.urodapter.com](http://www.urodapter.com)  \n[mail@urosystem.com](mailto:mail@urosystem.com)",
 			"formIntro": "Please, fill out this form below and leave us a short description of your inquiry or remarks. We will get in touch with you soon.",
 			"legalCheckboxLabel": "I have read and agree to the Privacy Policy"
 		}

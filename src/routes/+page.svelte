@@ -3,9 +3,10 @@
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import LogoWordmark from '$lib/components/LogoWordmark.svelte';
 	import { videoFiles } from '$lib/data/video-manifest';
-	import { introPlayed } from '$lib/stores/intro.svelte';
+	import { introPlayed, markIntroSeen } from '$lib/stores/intro.svelte';
 
-	let showIntro = $state(!introPlayed.seen);
+	/** Splash only on the client so SSR/hydration match after the user has dismissed it (stored in session). */
+	const showIntro = $derived(!import.meta.env.SSR && !introPlayed.seen);
 	let downloading = $state(false);
 	let progress = $state(0);
 	let copied = $state(false);
@@ -254,13 +255,7 @@
 			the catheter in the field of Bladder Instillation
 		</p>
 
-		<button
-			class="btn--lg btn mt-6 rounded-full text-neutral-content btn-primary"
-			onclick={() => {
-				showIntro = false;
-				introPlayed.seen = true;
-			}}
-		>
+		<button class="btn--lg btn mt-6 rounded-full text-neutral-content btn-primary" onclick={markIntroSeen}>
 			Enter
 			<svg
 				xmlns="http://www.w3.org/2000/svg"

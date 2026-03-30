@@ -5,7 +5,7 @@
 **UroSystem Zrt.**  
 Hungary, 1137 Budapest, Szent István park 26. fszt. 2.  
 [www.urosystem.com](http://www.urosystem.com), [www.urodapter.com](http://www.urodapter.com)  
-[Mail@urosystem.com](mailto:Mail@urosystem.com)
+[mail@urosystem.com](mailto:mail@urosystem.com)
 
 ## formIntro
 

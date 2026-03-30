@@ -57,15 +57,15 @@
 		</span>
 	</nav>
 	<div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-4 text-sm">
-		<a href={resolve('/')}>
-			<!-- <img src="/assets/img/logo_white.svg" alt="Urodapter" class="h-4" /> -->
-			<LogoWordmark class="h-4" />
-		</a>
 		<span>
 			For more information visit
 			<a href="https://www.urodapter.com" target="_blank" rel="noopener noreferrer" class="link link-hover underline">
 				urodapter.com
 			</a>
 		</span>
+		<a href={resolve('/')}>
+			<!-- <img src="/assets/img/logo_white.svg" alt="Urodapter" class="h-4" /> -->
+			<LogoWordmark class="h-4" />
+		</a>
 	</div>
 </footer>
