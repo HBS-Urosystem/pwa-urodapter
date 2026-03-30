@@ -89,5 +89,5 @@
 		</div>
 	</div>
 
-	<a href={resolve('/')} class="btn mt-6 btn-primary">Back to Home</a>
+	<!-- <a href={resolve('/')} class="btn mt-6 btn-primary">Back to Home</a> -->
 </section>
