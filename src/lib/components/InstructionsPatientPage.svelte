@@ -295,7 +295,7 @@
 				{#each pack.beforeStarting as item (item.letter)}
 					<div class="flex gap-4">
 						<div
-							class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-content"
+							class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-content"
 						>
 							{item.letter}
 						</div>
