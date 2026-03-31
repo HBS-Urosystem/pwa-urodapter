@@ -9,15 +9,23 @@ export const siteContent = {
 		"beforeStarting": [
 			{
 				"letter": "A",
-				"body": "**The patient should empty the bladder completely**\n\nResidual urine should be checked prior to the first instillation"
+				"paragraphs": [
+					"**The patient should empty the bladder completely**",
+					"Residual urine should be checked prior to the first instillation."
+				]
 			},
 			{
 				"letter": "B",
-				"body": "**UroDapter should be mounted on a Luer-Lock or Luer-Slip syringe**\n\nThe device is ready for use"
+				"paragraphs": [
+					"**UroDapter should be mounted on a Luer-Lock or Luer-Slip syringe**",
+					"The device is ready for use."
+				]
 			},
 			{
 				"letter": "C",
-				"body": "**The urethral orifice should be disinfected**"
+				"paragraphs": [
+					"**The urethral orifice should be disinfected**"
+				]
 			}
 		],
 		"modalButtons": [
@@ -86,85 +94,107 @@ export const siteContent = {
 				"id": "inserting",
 				"title": "Inserting the UroDapter",
 				"video": 157,
-				"body": "Insert the UroDapter into the urethral orifice and gently position the orifice under the symphysis toward the rectum. To achieve this, push downwards the labiae with your exploring fingers.\n",
 				"plusModalId": 1,
 				"plusLabel": "Malformation of the orifice",
+				"paragraphs": [
+					"Insert the UroDapter into the urethral orifice and gently position the orifice under the symphysis toward the rectum. To achieve this, push downwards the labiae with your exploring fingers."
+				],
 				"poster": "/assets/video/157.jpg"
 			},
 			{
 				"id": "spooning",
 				"title": "Spooning",
 				"video": 158,
-				"body": "Gently drive the Luer-Lock or Luer-Slip syringe with a “spooning” motion under the symphysis in all cases. This is crucial, as it allows for the liquid to flow from the syringe through the urethra.\n",
+				"paragraphs": [
+					"Gently drive the Luer-Lock or Luer-Slip syringe with a “spooning” motion under the symphysis in all cases. This is crucial, as it allows for the liquid to flow from the syringe through the urethra."
+				],
 				"poster": "/assets/video/158.jpg"
 			},
 			{
 				"id": "angle-adjustment",
 				"title": "Angle adjustment",
 				"video": 159,
-				"body": "After the \"spooning\" motion, adjust the angle of the Luer-Lock or Luer-Slip syringe so that it is parallel with the urethra. The optimal angle will cause the least resistance while pressing the plunger of the syringe. The proper angle might be depending on the pelvic anatomy, which usually relates to the patients’ age.\n",
 				"plusModalId": 3,
 				"plusLabel": "Optimal angle",
+				"paragraphs": [
+					"After the \"spooning\" motion, adjust the angle of the Luer-Lock or Luer-Slip syringe so that it is parallel with the urethra. The optimal angle will cause the least resistance while pressing the plunger of the syringe. The proper angle might be depending on the pelvic anatomy, which usually relates to the patients’ age."
+				],
 				"poster": "/assets/video/159.jpg"
 			},
 			{
 				"id": "relaxation",
 				"title": "Relaxation of pelvic muscles",
 				"video": 160,
-				"body": "It is important to ask the patient to relax her pelvic muscles. The urethral sphincter should be relaxed to let the solution easily flow into the bladder.\n",
+				"paragraphs": [
+					"It is important to ask the patient to relax her pelvic muscles. The urethral sphincter should be relaxed to let the solution easily flow into the bladder."
+				],
 				"poster": "/assets/video/160.jpg"
 			},
 			{
 				"id": "sealing",
 				"title": "Sealing",
 				"video": 161,
-				"body": "Make sure that the UroDapter has entered the orifice properly and the sealing collar covers the nearby tissues tightly. If not, leakage can occur.\n",
+				"paragraphs": [
+					"Make sure that the UroDapter has entered the orifice properly and the sealing collar covers the nearby tissues tightly. If not, leakage can occur."
+				],
 				"poster": "/assets/video/161.jpg"
 			},
 			{
 				"id": "instillation-speed",
 				"title": "Instillation speed",
 				"video": 162,
-				"body": "Begin slowly instilling the liquid and adjust the angle as needed: At the optimal angle you will feel the least resistance while pressing the plunger of the syringe. Perform the instillation at low speed.\n",
 				"plusModalId": 6,
 				"plusLabel": "Optimal angle",
+				"paragraphs": [
+					"Begin slowly instilling the liquid and adjust the angle as needed: At the optimal angle you will feel the least resistance while pressing the plunger of the syringe. Perform the instillation at low speed."
+				],
 				"poster": "/assets/video/162.jpg"
 			},
 			{
 				"id": "opening-sphincter",
 				"title": "Opening of the sphincter",
 				"video": 163,
-				"body": "During proper instillation the instilled solution will increase the intraurethral pressure above the sphincter pressure and will completely open the already relaxed sphincter, allowing the solution to easily flow into the bladder.\n",
+				"paragraphs": [
+					"During proper instillation the instilled solution will increase the intraurethral pressure above the sphincter pressure and will completely open the already relaxed sphincter, allowing the solution to easily flow into the bladder."
+				],
 				"poster": "/assets/video/163.jpg"
 			},
 			{
 				"id": "sphincter-contraction",
 				"title": "Sphincter contraction",
 				"video": 170,
-				"body": "Slow down or pause the instillation if the sphincter is constricted. Instruct the patient to take a few deep breaths, and relax her pelvic muscles and sphincter. Resume when the patient relaxed her sphincter.\n",
+				"paragraphs": [
+					"Slow down or pause the instillation if the sphincter is constricted. Instruct the patient to take a few deep breaths, and relax her pelvic muscles and sphincter. Resume when the patient relaxed her sphincter."
+				],
 				"poster": "/assets/video/170.jpg"
 			},
 			{
 				"id": "leakage-during",
 				"title": "Leakage during instillation",
 				"video": 165,
-				"body": "If there is any leakage during the instillation, it can have different causes, like insufficient coverage of the sealing collar, too little or too much pressure on the Luer-Lock or Luer-Slip syringe.\n",
 				"plusModalId": 9,
 				"plusLabel": "How to avoid leakage",
+				"paragraphs": [
+					"If there is any leakage during the instillation, it can have different causes, like insufficient coverage of the sealing collar, too little or too much pressure on the Luer-Lock or Luer-Slip syringe."
+				],
 				"poster": "/assets/video/165.jpg"
 			},
 			{
 				"id": "leakage-after",
 				"title": "Leakage after instillation",
 				"video": 168,
-				"body": "Some minimal leakage may occur after instillation. Usually, it is insignificant, only a few drops.\n",
+				"paragraphs": [
+					"Some minimal leakage may occur after instillation. Usually, it is insignificant, only a few drops."
+				],
 				"poster": "/assets/video/168.jpg"
 			},
 			{
 				"id": "retention",
 				"title": "Retention of solution",
 				"video": 169,
-				"body": "The patient should retain the instilled solution in the bladder for the time recommended by the therapist, but no more than 3 hours.\n",
+				"paragraphs": [
+					"The patient should retain the instilled solution in the bladder for the time recommended by the therapist, but no more than 3 hours."
+				],
 				"poster": "/assets/video/169.jpg"
 			}
 		]
@@ -174,15 +204,23 @@ export const siteContent = {
 		"beforeStarting": [
 			{
 				"letter": "A",
-				"body": "**The patient should empty the bladder completely**\n\nResidual urine should be checked prior to the first instillation."
+				"paragraphs": [
+					"**The patient should empty the bladder completely**",
+					"Residual urine should be checked prior to the first instillation."
+				]
 			},
 			{
 				"letter": "B",
-				"body": "**UroDapter should be mounted on a Luer-Lock or Luer-Slip syringe**\n\nThe device is ready for use"
+				"paragraphs": [
+					"**UroDapter should be mounted on a Luer-Lock or Luer-Slip syringe**",
+					"The device is ready for use."
+				]
 			},
 			{
 				"letter": "C",
-				"body": "**The urethral orifice should be disinfected**"
+				"paragraphs": [
+					"**The urethral orifice should be disinfected**"
+				]
 			}
 		],
 		"modalButtons": [
@@ -214,84 +252,108 @@ export const siteContent = {
 				"id": "relaxation-intro",
 				"title": "Relaxation of pelvic muscles and sphincter",
 				"video": null,
-				"body": "It is important to ask the patient to relax his pelvic muscles. The urethral sphincter should be relaxed to let the solution easily flow into the bladder.\n",
+				"paragraphs": [
+					"It is important to ask the patient to relax his pelvic muscles. The urethral sphincter should be relaxed to let the solution easily flow into the bladder."
+				],
 				"poster": null
 			},
 			{
 				"id": "insertion",
 				"title": "UroDapter insertion",
 				"video": 111,
-				"body": "Make sure that the UroDapter has entered the urethral orifice properly and the sealing collar covers the nearby surface of the glans tightly. If not, leakage can occur.\n",
+				"paragraphs": [
+					"Make sure that the UroDapter has entered the urethral orifice properly and the sealing collar covers the nearby surface of the glans tightly. If not, leakage can occur."
+				],
 				"poster": "/assets/video/111.jpg"
 			},
 			{
 				"id": "instillation-speed",
 				"title": "Instillation speed",
 				"video": 112,
-				"body": "Begin slowly instilling the liquid. Perform the instillation at low speed.\n",
+				"paragraphs": [
+					"Begin slowly instilling the liquid. Perform the instillation at low speed."
+				],
 				"poster": "/assets/video/112.jpg"
 			},
 			{
 				"id": "opening-sphincter",
 				"title": "Opening of the sphincter",
 				"video": 109,
-				"body": "During proper instillation the instilled solution will increase the intraurethral pressure above the sphincter pressure and will completely open the already relaxed sphincter, allowing the solution to easily flow into the bladder.\n",
+				"paragraphs": [
+					"During proper instillation the instilled solution will increase the intraurethral pressure above the sphincter pressure and will completely open the already relaxed sphincter, allowing the solution to easily flow into the bladder."
+				],
 				"poster": "/assets/video/109.jpg"
 			},
 			{
 				"id": "sphincter-contraction",
 				"title": "Sphincter contraction",
 				"video": 113,
-				"body": "Slow down or pause the instillation if the sphincter is constricted. Instruct the patient to take a few deep breaths, and relax his pelvic muscles and sphincter. Resume when the patient relaxed his sphincter.\n",
+				"paragraphs": [
+					"Slow down or pause the instillation if the sphincter is constricted. Instruct the patient to take a few deep breaths, and relax his pelvic muscles and sphincter. Resume when the patient relaxed his sphincter."
+				],
 				"poster": "/assets/video/113.jpg"
 			},
 			{
 				"id": "two-step",
 				"title": "Two-step process for male patients",
 				"video": 114,
-				"body": "Due to the long male urethra, a significant portion of the instilled solution remains in the urethra, which would be lost after removing the UroDapter. To avoid this and to deliver the whole amount of drug solution in the bladder, the two-step process should be followed in each male patient.\n",
+				"paragraphs": [
+					"Due to the long male urethra, a significant portion of the instilled solution remains in the urethra, which would be lost after removing the UroDapter. To avoid this and to deliver the whole amount of drug solution in the bladder, the two-step process should be followed in each male patient."
+				],
 				"poster": "/assets/video/114.jpg"
 			},
 			{
 				"id": "instillation-solution",
 				"title": "Instillation of the solution",
 				"video": 121,
-				"body": "After complete instillation of the solution, compress the urethra below the orifice with two fingers of your other hand and remove the Luer-Lock or Luer-Slip syringe with the UroDapter from the orifice.\n",
+				"paragraphs": [
+					"After complete instillation of the solution, compress the urethra below the orifice with two fingers of your other hand and remove the Luer-Lock or Luer-Slip syringe with the UroDapter from the orifice."
+				],
 				"poster": "/assets/video/121.jpg"
 			},
 			{
 				"id": "syringe-air",
 				"title": "Filling a Luer-Lock or Luer-Slip syringe with air",
 				"video": 122,
-				"body": "While keeping the compression of the urethra, fill up the Luer-Lock or Luer-Slip syringe with 20ml air.\n",
+				"paragraphs": [
+					"While keeping the compression of the urethra, fill up the Luer-Lock or Luer-Slip syringe with 20ml air."
+				],
 				"poster": "/assets/video/122.jpg"
 			},
 			{
 				"id": "sealing",
 				"title": "Sealing",
 				"video": 123,
-				"body": "Re-insert the Luer-Lock or Luer-Slip syringe with the UroDapter into the still compressed orifice and ensure its complete sealing by the isolating collar.\n",
+				"paragraphs": [
+					"Re-insert the Luer-Lock or Luer-Slip syringe with the UroDapter into the still compressed orifice and ensure its complete sealing by the isolating collar."
+				],
 				"poster": "/assets/video/123.jpg"
 			},
 			{
 				"id": "instillation-air",
 				"title": "Instillation of air",
 				"video": 124,
-				"body": "Release the urethral compression and push the air slowly into the urethra. The instilled air is capable and will push the remaining liquid into the bladder.\n",
+				"paragraphs": [
+					"Release the urethral compression and push the air slowly into the urethra. The instilled air is capable and will push the remaining liquid into the bladder."
+				],
 				"poster": "/assets/video/124.jpg"
 			},
 			{
 				"id": "air-bladder",
 				"title": "Air enters the bladder",
 				"video": 125,
-				"body": "As soon as the air reaches the bladder, the patient will report on an unfamiliar feeling and it is also sensible, typically audible for the physician. The small amount of instilled air is completely harmless and will be emptied with the first urination after the instillation.\n",
+				"paragraphs": [
+					"As soon as the air reaches the bladder, the patient will report on an unfamiliar feeling and it is also sensible, typically audible for the physician. The small amount of instilled air is completely harmless and will be emptied with the first urination after the instillation."
+				],
 				"poster": "/assets/video/125.jpg"
 			},
 			{
 				"id": "retention",
 				"title": "Retention of solution",
 				"video": 126,
-				"body": "The patient should retain the instilled solution in the bladder for the time recommended by the therapist, but no more than 3 hours.\n",
+				"paragraphs": [
+					"The patient should retain the instilled solution in the bladder for the time recommended by the therapist, but no more than 3 hours."
+				],
 				"poster": "/assets/video/126.jpg"
 			}
 		]
@@ -301,7 +363,7 @@ export const siteContent = {
 			"title": "Educational Video",
 			"videoId": 193,
 			"poster": "/assets/video/193.jpg",
-			"notes": ""
+			"notesParagraphs": []
 		},
 		"preInstillation": {
 			"title": "What to do prior to instillation",
@@ -318,42 +380,62 @@ export const siteContent = {
 		},
 		"faq": {
 			"title": "FAQ",
-			"intro": "If you have any further questions, please write us here",
+			"introParagraphs": [
+				"If you have any further questions, please write us here"
+			],
 			"items": [
 				{
 					"question": "What type of syringe tips can I use the UroDapter with?",
-					"answer": "The UroDapter can be used with syringes of Luer Lock or Luer Slip tips."
+					"paragraphs": [
+						"The UroDapter can be used with syringes of Luer Lock or Luer Slip tips."
+					]
 				},
 				{
 					"question": "Can the UroDapter be used in male and female patients as well?",
-					"answer": "Yes, the UroDapter was designed to be effective and easy to use in both female and male patients."
+					"paragraphs": [
+						"Yes, the UroDapter was designed to be effective and easy to use in both female and male patients."
+					]
 				},
 				{
 					"question": "Should I check for residual urine prior to each instillation in a patient?",
-					"answer": "Post-void residual urine should be checked only prior to the first instillation in every patient (e.g., with ultrasound). In case of no significant residual urine, further checks are not necessary prior to subsequent instillations in the same patient, unless stated otherwise in local guidelines or protocols. Patients should be simply asked to go to the restroom and empty their bladder before instillations."
+					"paragraphs": [
+						"Post-void residual urine should be checked only prior to the first instillation in every patient (e.g., with ultrasound). In case of no significant residual urine, further checks are not necessary prior to subsequent instillations in the same patient, unless stated otherwise in local guidelines or protocols. Patients should be simply asked to go to the restroom and empty their bladder before instillations."
+					]
 				},
 				{
 					"question": "Should I drain the urine from the bladder prior to instillations?",
-					"answer": "Most patients do not have significant residual urine in their bladder after urination. This should be checked prior to the first instillation (e.g., with ultrasound). In patients without significant post-void residual urine, drainage of urine prior to intravesical instillations is not necessary. Patients should be simply asked to go to the restroom and empty their bladder before instillations. The minimal amount of urine still in the bladder after urination will not cause any significant dilution of the instilled solution."
+					"paragraphs": [
+						"Most patients do not have significant residual urine in their bladder after urination. This should be checked prior to the first instillation (e.g., with ultrasound). In patients without significant post-void residual urine, drainage of urine prior to intravesical instillations is not necessary. Patients should be simply asked to go to the restroom and empty their bladder before instillations. The minimal amount of urine still in the bladder after urination will not cause any significant dilution of the instilled solution."
+					]
 				},
 				{
 					"question": "Can I use the UroDapter to drain urine from the bladder?",
-					"answer": "The UroDapter was designed to provide a catheter-free and painless alternative for intravesical drug delivery. It is not suitable to drain urine from the bladder."
+					"paragraphs": [
+						"The UroDapter was designed to provide a catheter-free and painless alternative for intravesical drug delivery. It is not suitable to drain urine from the bladder."
+					]
 				},
 				{
 					"question": "Can I use the UroDapter in case of significant post-void residual urine?",
-					"answer": "Since the UroDapter is not suitable to drain urine from the bladder, in the minority of patients with a significant post-void residual urine intravesical instillations should be performed using a standard catheter."
+					"paragraphs": [
+						"Since the UroDapter is not suitable to drain urine from the bladder, in the minority of patients with a significant post-void residual urine intravesical instillations should be performed using a standard catheter."
+					]
 				},
 				{
 					"question": "I tried the UroDapter on a female patient once but experienced some leakage of the solution. Is this normal?",
-					"answer": "No. With proper use of the UroDapter, intravesical instillations can be delivered completely free of any leakage in most patients. However, - just like any other medical device - its proper use requires appropriate technique and some experience. Based on clinicians’ feedback, after performing 10 instillations in female patients, leakage occurs no more than 5% of the cases. After some further learning curve, the rate of leakage decreases to 0,5%."
+					"paragraphs": [
+						"No. With proper use of the UroDapter, intravesical instillations can be delivered completely free of any leakage in most patients. However, - just like any other medical device - its proper use requires appropriate technique and some experience. Based on clinicians’ feedback, after performing 10 instillations in female patients, leakage occurs no more than 5% of the cases. After some further learning curve, the rate of leakage decreases to 0,5%."
+					]
 				}
 			]
 		},
 		"contact": {
 			"title": "Contact",
-			"companyMarkdown": "**UroSystem Zrt.**  \nHungary, 1137 Budapest, Szent István park 26. fszt. 2.  \n[www.urosystem.com](http://www.urosystem.com), [www.urodapter.com](http://www.urodapter.com)  \n[mail@urosystem.com](mailto:mail@urosystem.com)",
-			"formIntro": "Please, fill out this form below and leave us a short description of your inquiry or remarks. We will get in touch with you soon.",
+			"companyParagraphs": [
+				"**UroSystem Zrt.**  \nHungary, 1137 Budapest, Szent István park 26. fszt. 2.  \n[www.urosystem.com](http://www.urosystem.com), [www.urodapter.com](http://www.urodapter.com)  \n[mail@urosystem.com](mailto:mail@urosystem.com)"
+			],
+			"formIntroParagraphs": [
+				"Please, fill out this form below and leave us a short description of your inquiry or remarks. We will get in touch with you soon."
+			],
 			"legalCheckboxLabel": "I have read and agree to the Privacy Policy"
 		}
 	},

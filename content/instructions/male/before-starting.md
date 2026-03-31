@@ -8,7 +8,7 @@ Residual urine should be checked prior to the first instillation.
 
 **UroDapter should be mounted on a Luer-Lock or Luer-Slip syringe**
 
-The device is ready for use
+The device is ready for use.
 
 ## c
 

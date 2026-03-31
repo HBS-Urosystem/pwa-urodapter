@@ -80,7 +80,7 @@ function parseBeforeStarting(md) {
 		.filter((s) => /^[abc]$/i.test(s.key))
 		.map((s) => ({
 			letter: s.key.toUpperCase(),
-			body: s.body.trim()
+			paragraphs: bodyToParagraphs(s.body.trim())
 		}));
 }
 
@@ -146,7 +146,7 @@ function parseFaq(md) {
 	const re = /^##\s+(.+)$/gm;
 	const matches = [...afterTitle.matchAll(re)];
 	if (matches.length === 0) {
-		return { title, intro: afterTitle, items: [] };
+		return { title, introParagraphs: bodyToParagraphs(afterTitle), items: [] };
 	}
 	const intro = afterTitle.slice(0, matches[0].index).trim();
 	const items = [];
@@ -155,9 +155,9 @@ function parseFaq(md) {
 		const start = matches[i].index + matches[i][0].length;
 		const end = i + 1 < matches.length ? matches[i + 1].index : afterTitle.length;
 		const answer = afterTitle.slice(start, end).trim();
-		items.push({ question, answer });
+		items.push({ question, paragraphs: bodyToParagraphs(answer) });
 	}
-	return { title, intro, items };
+	return { title, introParagraphs: bodyToParagraphs(intro), items };
 }
 
 /** @param {string} md */
@@ -182,7 +182,12 @@ function parseEducationalVideo(md) {
 		if (m) videoId = Number(m[1]);
 		notes = vid.body.replace(/^\s*\d+\s*/, '').trim();
 	}
-	return { title, videoId, poster: toVideoPoster(videoId), notes };
+	return {
+		title,
+		videoId,
+		poster: toVideoPoster(videoId),
+		notesParagraphs: bodyToParagraphs(notes)
+	};
 }
 
 /** @param {string} md */
@@ -193,8 +198,8 @@ function parseContact(md) {
 	const get = (k) => sections.find((s) => s.key === k)?.body.trim() ?? '';
 	return {
 		title,
-		companyMarkdown: get('company'),
-		formIntro: get('formintro'),
+		companyParagraphs: bodyToParagraphs(get('company')),
+		formIntroParagraphs: bodyToParagraphs(get('formintro')),
 		legalCheckboxLabel: get('legalcheckbox')
 	};
 }
@@ -237,7 +242,14 @@ function buildFemale() {
 		beforeStarting,
 		modalButtons,
 		modals,
-		steps: steps.map((step) => ({ ...step, poster: toVideoPoster(step.video) }))
+		steps: steps.map((step) => {
+			const { body, ...rest } = step;
+			return {
+				...rest,
+				paragraphs: bodyToParagraphs(body),
+				poster: toVideoPoster(step.video)
+			};
+		})
 	};
 }
 
@@ -252,7 +264,14 @@ function buildMale() {
 		beforeStarting,
 		modalButtons,
 		modals,
-		steps: steps.map((step) => ({ ...step, poster: toVideoPoster(step.video) }))
+		steps: steps.map((step) => {
+			const { body, ...rest } = step;
+			return {
+				...rest,
+				paragraphs: bodyToParagraphs(body),
+				poster: toVideoPoster(step.video)
+			};
+		})
 	};
 }
 

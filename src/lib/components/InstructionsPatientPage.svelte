@@ -250,9 +250,9 @@
 
 <SeoHead title={`${pack.pageTitle} | Urodapter`} description={seoDescription} path={seoPath} />
 
-<section class="min-h-full bg-base-200/40 px-4 py-6">
+<section class="min-h-full bg-base-200/40 px-4 py-8">
 	<div class="mx-auto max-w-3xl">
-		<h1 class="mb-6 text-2xl font-bold text-base-content">{pack.pageTitle}</h1>
+		<h1 class="mb-6 text-3xl font-bold">{pack.pageTitle}</h1>
 
 		<div role="tablist" class="tabs-box mb-6 tabs w-full" aria-label="Instruction sections">
 			<button
@@ -291,7 +291,7 @@
 			class="card border border-base-300 bg-base-100 shadow-sm"
 		>
 			<div class="card-body gap-6">
-				<h2 class="card-title text-lg">Before starting</h2>
+				<h2 class="text-xl font-semibold">Before starting</h2>
 				{#each pack.beforeStarting as item (item.letter)}
 					<div class="flex gap-4">
 						<div
@@ -300,8 +300,10 @@
 							{item.letter}
 						</div>
 						<div class="min-w-0 flex-1">
-							<div class="prose prose-sm max-w-none text-base-content">
-								<p>{@html formatInlineMarkdown(item.body).replace(/\n/g, '<br/>')}</p>
+							<div class="space-y-2 text-base-content/90">
+								{#each item.paragraphs as para, i (`${item.letter}-${i}`)}
+									<p>{@html formatInlineMarkdown(para).replace(/\n/g, '<br/>')}</p>
+								{/each}
 							</div>
 							{#each pack.modalButtons.filter((b) => b.letter === item.letter) as btn (btn.label)}
 								<button
@@ -387,7 +389,9 @@
 									</video>
 								{/if}
 
-								<p class="whitespace-pre-line text-base-content/90">{s.body.trim()}</p>
+								{#each s.paragraphs as para, pi (`${s.id}-${pi}`)}
+									<p class="text-base-content/90">{@html formatInlineMarkdown(para).replace(/\n/g, '<br/>')}</p>
+								{/each}
 
 								{#if 'plusModalId' in s && s.plusModalId != null}
 									<button
@@ -453,7 +457,7 @@
 		modalTitle = '';
 	}}
 >
-	<div class="modal-box prose prose-sm max-h-[85vh] max-w-lg overflow-y-auto">
+	<div class="modal-box prose max-sm:prose-sm max-h-[85vh] max-w-lg overflow-y-auto text-base-content">
 		{#if modalTitle}
 			<h3 class="modal-title mb-4 text-lg font-bold">{modalTitle}</h3>
 		{/if}

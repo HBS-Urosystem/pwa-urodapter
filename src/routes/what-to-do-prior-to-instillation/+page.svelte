@@ -23,7 +23,7 @@
 						>
 							{s.letter}
 						</div>
-						<div class="prose prose-sm max-w-none flex-1 text-base-content">
+						<div class="prose max-sm:prose-sm max-w-none flex-1 text-base-content">
 							<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 							{@html formatBlockMarkdown(s.body)}
 						</div>

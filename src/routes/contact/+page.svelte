@@ -15,7 +15,7 @@
 
 <svelte:head>
 	<title>{c.title} | Urodapter</title>
-	<meta name="description" content={c.formIntro} />
+	<meta name="description" content={c.formIntroParagraphs.join(' ')} />
 </svelte:head>
 
 <section class="min-h-full bg-base-200/40 px-4 py-8">
@@ -23,16 +23,26 @@
 		<h1 class="mb-8 text-3xl font-bold">{c.title}</h1>
 
 		<div
-			class="prose prose-sm mb-10 max-w-none text-center text-base-content"
+			class="prose max-sm:prose-sm mb-10 max-w-none text-center text-base-content"
 			aria-label="Company details"
 		>
-			<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-			{@html formatInlineMarkdown(c.companyMarkdown).replace(/\n/g, '<br/>')}
+			{#each c.companyParagraphs as para, i (`company-${i}`)}
+				<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+				<p>{@html formatInlineMarkdown(para).replace(/\n/g, '<br/>')}</p>
+			{/each}
 		</div>
 
 		<hr class="mb-10 border-base-300" />
 
-		<h2 class="mb-4 text-xl font-semibold">{c.formIntro}</h2>
+		<div class="mb-4 space-y-2">
+			{#each c.formIntroParagraphs as para, i (`formintro-${i}`)}
+				{#if i === 0}
+					<h2 class="text-xl font-semibold">{para}</h2>
+				{:else}
+					<p class="text-base-content/90">{para}</p>
+				{/if}
+			{/each}
+		</div>
 
 		<form
 			name="contact"
