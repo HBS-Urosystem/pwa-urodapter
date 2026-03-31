@@ -7,4 +7,5 @@
 	storageKey="urodapter-instructions-female-v1"
 	pack={siteContent.femaleInstructions}
 	seoPath="/instructions-for-doctors-on-female-patients"
+	activeGender="female"
 />

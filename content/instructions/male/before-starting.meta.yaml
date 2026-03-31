@@ -1,9 +1,0 @@
-modalButtons:
-  - label: Emptying the bladder
-    modal: emptyingTheBladder
-    placement: afterLetter
-    letter: A
-  - label: The process of disinfection
-    modal: disinfection
-    placement: afterLetter
-    letter: C

@@ -6,6 +6,10 @@ In patients without significant post-void residual urine, drainage of urine prio
 
 In the minority of patients with a significant post-void residual urine intravesical instillations should be performed using a standard catheter.
 
+## disinfection-female
+
+Expose the urethral orifice by parting the labia minora and wipe the urethral orifice area with disinfectant.
+
 ## disinfection-male
 
 Expose the urethral orifice by completely pulling back the foreskin and wipe the urethral orifice area with disinfectant.

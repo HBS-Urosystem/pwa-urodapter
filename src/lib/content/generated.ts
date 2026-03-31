@@ -6,49 +6,13 @@
 export const siteContent = {
 	"femaleInstructions": {
 		"pageTitle": "Instructions for doctors on female patients",
-		"beforeStarting": [
-			{
-				"letter": "A",
-				"paragraphs": [
-					"**The patient should empty the bladder completely**",
-					"Residual urine should be checked prior to the first instillation."
-				]
-			},
-			{
-				"letter": "B",
-				"paragraphs": [
-					"**UroDapter should be mounted on a Luer-Lock or Luer-Slip syringe**",
-					"The device is ready for use."
-				]
-			},
-			{
-				"letter": "C",
-				"paragraphs": [
-					"**The urethral orifice should be disinfected**"
-				]
-			}
-		],
-		"modalButtons": [
-			{
-				"label": "Emptying the bladder",
-				"modal": "emptyingTheBladder",
-				"placement": "afterLetter",
-				"letter": "A"
-			},
-			{
-				"label": "The process of disinfection",
-				"modal": "disinfection",
-				"placement": "afterLetter",
-				"letter": "C"
-			}
-		],
 		"modals": {
 			"emptyingTheBladder": [
 				"Most patients do not have significant residual urine in their bladder after urination. However, since the UroDapter is not suitable to drain urine from the bladder, post-void residual urine should be checked prior to the first instillation (e.g., with ultrasound).",
 				"In patients without significant post-void residual urine, drainage of urine prior to intravesical instillations is not necessary. Patients should be asked to go to the restroom and empty their bladder before instillations. The minimal amount of urine still in the bladder after urination will not cause any significant dilution of the instilled solution.",
 				"In the minority of patients with a significant post-void residual urine intravesical instillations should be performed using a standard catheter."
 			],
-			"disinfection": [
+			"disinfectionFemale": [
 				"Expose the urethral orifice by parting the labia minora and wipe the urethral orifice area with disinfectant."
 			],
 			"plus1": {
@@ -201,50 +165,14 @@ export const siteContent = {
 	},
 	"maleInstructions": {
 		"pageTitle": "Instructions for doctors on male patients",
-		"beforeStarting": [
-			{
-				"letter": "A",
-				"paragraphs": [
-					"**The patient should empty the bladder completely**",
-					"Residual urine should be checked prior to the first instillation."
-				]
-			},
-			{
-				"letter": "B",
-				"paragraphs": [
-					"**UroDapter should be mounted on a Luer-Lock or Luer-Slip syringe**",
-					"The device is ready for use."
-				]
-			},
-			{
-				"letter": "C",
-				"paragraphs": [
-					"**The urethral orifice should be disinfected**"
-				]
-			}
-		],
-		"modalButtons": [
-			{
-				"label": "Emptying the bladder",
-				"modal": "emptyingTheBladder",
-				"placement": "afterLetter",
-				"letter": "A"
-			},
-			{
-				"label": "The process of disinfection",
-				"modal": "disinfection",
-				"placement": "afterLetter",
-				"letter": "C"
-			}
-		],
 		"modals": {
 			"emptyingTheBladder": [
 				"Most patients do not have significant residual urine in their bladder after urination. However, since the UroDapter is not suitable to drain urine from the bladder, post-void residual urine should be checked prior to the first instillation (e.g., with ultrasound).",
 				"In patients without significant post-void residual urine, drainage of urine prior to intravesical instillations is not necessary. Patients should be asked to go to the restroom and empty their bladder before instillations. The minimal amount of urine still in the bladder after urination will not cause any significant dilution of the instilled solution.",
 				"In the minority of patients with a significant post-void residual urine intravesical instillations should be performed using a standard catheter."
 			],
-			"disinfection": [
-				"Expose the urethral orifice by completely pulling back the foreskin and wipe the urethral orifice area with disinfectant"
+			"disinfectionMale": [
+				"Expose the urethral orifice by completely pulling back the foreskin and wipe the urethral orifice area with disinfectant."
 			]
 		},
 		"steps": [
@@ -377,6 +305,63 @@ export const siteContent = {
 					"body": "### Empty bladder\n\nPatient should completely empty bladder before instillation.\n\nMost patients do not have significant residual urine in their bladder after urination. However, since the UroDapter is not suitable to drain urine from the bladder, post-void residual urine should be checked prior to the first instillation (e.g., with ultrasound).\n\nIn patients without significant post-void residual urine, drainage of urine prior to intravesical instillations is not necessary. Patients should be asked to go to the restroom and empty their bladder before instillations. The minimal amount of urine still in the bladder after urination will not cause any significant dilution of the instilled solution.\n\nIn the minority of patients with a significant post-void residual urine intravesical instillations should be performed using a standard catheter."
 				}
 			]
+		},
+		"doctorPriorInstillation": {
+			"beforeStarting": [
+				{
+					"letter": "A",
+					"paragraphs": [
+						"**The patient should empty the bladder completely**",
+						"Residual urine should be checked prior to the first instillation."
+					]
+				},
+				{
+					"letter": "B",
+					"paragraphs": [
+						"**UroDapter should be mounted on a Luer-Lock or Luer-Slip syringe**",
+						"The device is ready for use."
+					]
+				},
+				{
+					"letter": "C",
+					"paragraphs": [
+						"**The urethral orifice should be disinfected**"
+					]
+				}
+			],
+			"modalButtons": [
+				{
+					"label": "Emptying the bladder",
+					"modal": "emptyingTheBladder",
+					"placement": "afterLetter",
+					"letter": "A"
+				},
+				{
+					"label": "The process of disinfection — female patients",
+					"modal": "disinfectionFemale",
+					"placement": "afterLetter",
+					"letter": "C"
+				},
+				{
+					"label": "The process of disinfection — male patients",
+					"modal": "disinfectionMale",
+					"placement": "afterLetter",
+					"letter": "C"
+				}
+			],
+			"modals": {
+				"emptyingTheBladder": [
+					"Most patients do not have significant residual urine in their bladder after urination. However, since the UroDapter is not suitable to drain urine from the bladder, post-void residual urine should be checked prior to the first instillation (e.g., with ultrasound).",
+					"In patients without significant post-void residual urine, drainage of urine prior to intravesical instillations is not necessary. Patients should be asked to go to the restroom and empty their bladder before instillations. The minimal amount of urine still in the bladder after urination will not cause any significant dilution of the instilled solution.",
+					"In the minority of patients with a significant post-void residual urine intravesical instillations should be performed using a standard catheter."
+				],
+				"disinfectionFemale": [
+					"Expose the urethral orifice by parting the labia minora and wipe the urethral orifice area with disinfectant."
+				],
+				"disinfectionMale": [
+					"Expose the urethral orifice by completely pulling back the foreskin and wipe the urethral orifice area with disinfectant."
+				]
+			}
 		},
 		"faq": {
 			"title": "FAQ",

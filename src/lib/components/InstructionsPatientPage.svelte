@@ -1,73 +1,58 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { browser } from '$app/environment';
 	import { tick, onMount } from 'svelte';
 	import type { InstructionPack } from '$lib/content';
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import { formatInlineMarkdown } from '$lib/markdown-inline';
 
+	const femalePath = '/instructions-for-doctors-on-female-patients';
+	const malePath = '/instructions-for-doctors-on-male-patients';
+
 	let {
 		storageKey,
 		pack,
-		seoPath
+		seoPath,
+		activeGender
 	}: {
 		storageKey: string;
 		pack: InstructionPack;
 		seoPath: string;
+		activeGender: 'female' | 'male';
 	} = $props();
 
 	const seoDescription = $derived(
 		`${pack.pageTitle} — Video instructions and tips for bladder instillation using UroDapter® for healthcare professionals.`
 	);
 
-	function readStoredInstructionState(
-		key: string,
-		numSteps: number
-	): { tab: 'before' | 'steps'; stepIndex: number } {
-		if (!browser) return { tab: 'before', stepIndex: 0 };
-		if (numSteps < 1) return { tab: 'before', stepIndex: 0 };
+	function readStoredStepIndex(key: string, numSteps: number): number {
+		if (!browser || numSteps < 1) return 0;
 		try {
 			const maxIdx = numSteps - 1;
-			let stepIndex = 0;
-			let hadStep = false;
 			const raw = localStorage.getItem(key);
-			if (raw != null) {
-				const n = parseInt(raw, 10);
-				if (!Number.isNaN(n)) {
-					stepIndex = Math.min(Math.max(0, n), maxIdx);
-					hadStep = true;
-				}
-			}
-			const tabRaw = localStorage.getItem(`${key}-tab`);
-			if (tabRaw === 'steps' || tabRaw === 'before') {
-				return { tab: tabRaw, stepIndex };
-			}
-			if (hadStep) return { tab: 'steps', stepIndex };
-			return { tab: 'before', stepIndex };
+			if (raw == null) return 0;
+			const n = parseInt(raw, 10);
+			if (Number.isNaN(n)) return 0;
+			return Math.min(Math.max(0, n), maxIdx);
 		} catch {
-			return { tab: 'before', stepIndex: 0 };
+			return 0;
 		}
 	}
 
-	// storageKey / pack are fixed per route instance (female vs male).
 	// svelte-ignore state_referenced_locally
-	const initialUi = readStoredInstructionState(storageKey, pack.steps.length);
+	const initialStepIndex = readStoredStepIndex(storageKey, pack.steps.length);
 
 	const tabScope = $derived(storageKey.replace(/[^a-zA-Z0-9]+/g, '-'));
-	const beforeTabId = $derived(`${tabScope}-tab-before`);
-	const stepsTabId = $derived(`${tabScope}-tab-steps`);
-	const beforePanelId = $derived(`${tabScope}-panel-before`);
-	const stepsPanelId = $derived(`${tabScope}-panel-steps`);
+	const femaleTabId = $derived(`${tabScope}-tab-female`);
+	const maleTabId = $derived(`${tabScope}-tab-male`);
 
-	let tab = $state<'before' | 'steps'>(initialUi.tab);
-	let stepIndex = $state(initialUi.stepIndex);
+	let stepIndex = $state(initialStepIndex);
 	/** false until after mount + tick so prefers-reduced-motion is known */
 	let allowStepAnim = $state(false);
 	let stepsCarouselEl = $state<HTMLDivElement | undefined>(undefined);
 	let carouselWidth = $state(0);
-	let dialogEl = $state<HTMLDialogElement | undefined>(undefined);
-	let activeModal = $state<
-		null | 'emptyingTheBladder' | 'disinfection' | 'plus-1' | 'plus-3' | 'plus-6' | 'plus-9'
-	>(null);
+	let dialogMainEl = $state<HTMLDialogElement | undefined>(undefined);
+	let activeModal = $state<null | 'plus-1' | 'plus-3' | 'plus-6' | 'plus-9'>(null);
 	/** Heading in the dialog: matches the button label that opened it */
 	let modalTitle = $state('');
 
@@ -79,28 +64,9 @@
 		}
 	}
 
-	function persistTab() {
-		try {
-			localStorage.setItem(`${storageKey}-tab`, tab);
-		} catch {
-			/* ignore */
-		}
-	}
-
-	function setTab(next: 'before' | 'steps') {
-		tab = next;
-		persistTab();
-		if (next === 'steps') {
-			persistStep();
-			void tick().then(() => {
-				requestAnimationFrame(() => alignCarouselToStep());
-			});
-		}
-	}
-
 	function alignCarouselToStep() {
 		const el = stepsCarouselEl;
-		if (!el || tab !== 'steps') return;
+		if (!el) return;
 		const w = carouselWidth;
 		if (w <= 0) return;
 		const maxIdx = Math.max(0, pack.steps.length - 1);
@@ -110,7 +76,7 @@
 
 	function syncStepIndexFromCarouselScroll() {
 		const el = stepsCarouselEl;
-		if (!el || tab !== 'steps') return;
+		if (!el) return;
 		const w = carouselWidth;
 		if (w <= 0) return;
 		const i = Math.round(el.scrollLeft / w);
@@ -147,7 +113,6 @@
 		const el = stepsCarouselEl;
 		if (!el) return;
 		const updateWidth = () => {
-			// Cache viewport width to avoid repeated forced-layout reads during scroll/key handlers.
 			carouselWidth = Math.round(el.getBoundingClientRect().width);
 		};
 		updateWidth();
@@ -176,19 +141,19 @@
 	});
 
 	$effect(() => {
-		if (!browser || tab !== 'steps') return;
+		if (!browser) return;
 		const onResize = () => alignCarouselToStep();
 		window.addEventListener('resize', onResize);
 		return () => window.removeEventListener('resize', onResize);
 	});
 
-	function goToInstructions() {
-		setTab('steps');
-	}
-
 	function goNextStep() {
 		if (stepIndex >= pack.steps.length - 1) return;
 		moveToStep(stepIndex + 1);
+	}
+
+	function startOver() {
+		moveToStep(0);
 	}
 
 	function goPrevStep() {
@@ -202,7 +167,7 @@
 		activeModal = kind;
 		modalTitle = title;
 		await tick();
-		dialogEl?.showModal();
+		dialogMainEl?.showModal();
 	}
 
 	function openPlusModal(id: 1 | 3 | 6 | 9, label: string) {
@@ -217,10 +182,8 @@
 		dialog.close();
 	}
 
-	function modalParagraphs(): string[] {
+	function mainModalParagraphs(): string[] {
 		if (!activeModal) return [];
-		if (activeModal === 'emptyingTheBladder') return [...pack.modals.emptyingTheBladder];
-		if (activeModal === 'disinfection') return [...pack.modals.disinfection];
 		if (activeModal === 'plus-1' && 'plus1' in pack.modals && pack.modals.plus1)
 			return [...pack.modals.plus1.paragraphs];
 		if (activeModal === 'plus-3' && 'plus3' in pack.modals && pack.modals.plus3)
@@ -231,7 +194,7 @@
 	}
 
 	$effect(() => {
-		if (typeof window === 'undefined' || tab !== 'steps') return;
+		if (typeof window === 'undefined') return;
 		const onKey = (e: KeyboardEvent) => {
 			if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
 			if (e.key === 'ArrowRight') {
@@ -254,110 +217,35 @@
 	<div class="mx-auto max-w-3xl">
 		<h1 class="mb-6 text-3xl font-bold">{pack.pageTitle}</h1>
 
-		<div role="tablist" class="tabs-box mb-6 tabs w-full" aria-label="Instruction sections">
-			<button
-				type="button"
-				id={beforeTabId}
+		<div role="tablist" class="tabs-box mb-6 tabs w-full" aria-label="Patient type">
+			<a
+				id={femaleTabId}
+				href={resolve(femalePath)}
 				role="tab"
 				class="tab"
-				class:tab-active={tab === 'before'}
-				aria-selected={tab === 'before'}
-				aria-controls={beforePanelId}
-				tabindex={tab === 'before' ? 0 : -1}
-				onclick={() => setTab('before')}
+				class:tab-active={activeGender === 'female'}
+				aria-selected={activeGender === 'female'}
 			>
-				Before starting
-			</button>
-			<button
-				type="button"
-				id={stepsTabId}
+				Female patients
+			</a>
+			<a
+				id={maleTabId}
+				href={resolve(malePath)}
 				role="tab"
 				class="tab"
-				class:tab-active={tab === 'steps'}
-				aria-selected={tab === 'steps'}
-				aria-controls={stepsPanelId}
-				tabindex={tab === 'steps' ? 0 : -1}
-				onclick={() => setTab('steps')}
+				class:tab-active={activeGender === 'male'}
+				aria-selected={activeGender === 'male'}
 			>
-				Instructions
-			</button>
+				Male patients
+			</a>
 		</div>
 
 		<div
-			id={beforePanelId}
-			role="tabpanel"
-			aria-labelledby={beforeTabId}
-			hidden={tab !== 'before'}
 			class="card border border-base-300 bg-base-100 shadow-sm"
+			role="region"
+			aria-label="Instruction step content"
 		>
-			<div class="card-body gap-6">
-				<h2 class="text-xl font-semibold">Before starting</h2>
-				{#each pack.beforeStarting as item (item.letter)}
-					<div class="flex gap-4">
-						<div
-							class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-content"
-						>
-							{item.letter}
-						</div>
-						<div class="min-w-0 flex-1">
-							<div class="space-y-2 text-base-content/90">
-								{#each item.paragraphs as para, i (`${item.letter}-${i}`)}
-									<p class="mb-0">{@html formatInlineMarkdown(para).replace(/\n/g, '<br/>')}</p>
-								{/each}
-							</div>
-							{#each pack.modalButtons.filter((b) => b.letter === item.letter) as btn (btn.label)}
-								<button
-									type="button"
-									class="btn mt-2 gap-1 text-primary btn-ghost btn-sm"
-									onclick={() => void showDialog(btn.modal, btn.label)}
-								>
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke="currentColor"
-										><path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-										/></svg
-									>
-									{btn.label}
-								</button>
-							{/each}
-						</div>
-					</div>
-				{/each}
-
-				<button type="button" class="btn mt-2 btn-primary" onclick={goToInstructions}>
-					Go to Instructions
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-5 w-5"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-						><path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M13 7l5 5m0 0l-5 5m5-5H6"
-						/></svg
-					>
-				</button>
-			</div>
-		</div>
-
-		<div
-			id={stepsPanelId}
-			role="tabpanel"
-			aria-labelledby={stepsTabId}
-			hidden={tab !== 'steps'}
-			class="card border border-base-300 bg-base-100 shadow-sm"
-		>
-			<div role="region" aria-label="Instruction step content" class="card-body gap-4">
+			<div class="card-body gap-4">
 				<div class="flex flex-wrap items-center justify-between gap-2 text-sm opacity-80">
 					<span>Step {stepIndex + 1} / {pack.steps.length}</span>
 					<span class="sm:hidden">Swipe to change steps</span>
@@ -390,7 +278,10 @@
 								{/if}
 
 								{#each s.paragraphs as para, pi (`${s.id}-${pi}`)}
-									<p class="text-base-content/90">{@html formatInlineMarkdown(para).replace(/\n/g, '<br/>')}</p>
+									<p class="text-base-content/90">
+										<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+										{@html formatInlineMarkdown(para).replace(/\n/g, '<br/>')}
+									</p>
 								{/each}
 
 								{#if 'plusModalId' in s && s.plusModalId != null}
@@ -434,14 +325,11 @@
 					>
 						Previous
 					</button>
-					<button
-						type="button"
-						class="btn btn-primary"
-						disabled={stepIndex >= pack.steps.length - 1}
-						onclick={goNextStep}
-					>
-						Next
-					</button>
+					{#if stepIndex >= pack.steps.length - 1}
+						<button type="button" class="btn btn-primary" onclick={startOver}>Start over</button>
+					{:else}
+						<button type="button" class="btn btn-primary" onclick={goNextStep}>Next</button>
+					{/if}
 				</div>
 			</div>
 		</div>
@@ -449,7 +337,7 @@
 </section>
 
 <dialog
-	bind:this={dialogEl}
+	bind:this={dialogMainEl}
 	class="modal"
 	onclick={onModalBackdropClick}
 	onclose={() => {
@@ -457,7 +345,9 @@
 		modalTitle = '';
 	}}
 >
-	<div class="modal-box prose max-sm:prose-sm max-h-[85vh] max-w-lg overflow-y-auto text-base-content">
+	<div
+		class="modal-box prose max-h-[85vh] max-w-lg overflow-y-auto text-base-content max-sm:prose-sm"
+	>
 		{#if modalTitle}
 			<h3 class="modal-title mb-4 text-lg font-bold">{modalTitle}</h3>
 		{/if}
@@ -479,7 +369,7 @@
 				{/each}
 			</div>
 		{:else}
-			{#each modalParagraphs() as p, i (i)}
+			{#each mainModalParagraphs() as p, i (i)}
 				<p>{p}</p>
 			{/each}
 		{/if}

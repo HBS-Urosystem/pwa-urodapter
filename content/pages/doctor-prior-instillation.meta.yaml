@@ -1,0 +1,13 @@
+modalButtons:
+  - label: Emptying the bladder
+    modal: emptyingTheBladder
+    placement: afterLetter
+    letter: A
+  - label: The process of disinfection — female patients
+    modal: disinfectionFemale
+    placement: afterLetter
+    letter: C
+  - label: The process of disinfection — male patients
+    modal: disinfectionMale
+    placement: afterLetter
+    letter: C

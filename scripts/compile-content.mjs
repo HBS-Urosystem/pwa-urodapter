@@ -35,7 +35,7 @@ const ModalButtonsSchema = z.object({
 	modalButtons: z.array(
 		z.object({
 			label: z.string(),
-			modal: z.enum(['emptyingTheBladder', 'disinfection']),
+			modal: z.enum(['emptyingTheBladder', 'disinfectionFemale', 'disinfectionMale']),
 			placement: z.literal('afterLetter'),
 			letter: z.string()
 		})
@@ -114,12 +114,13 @@ function parseModals(md, gender) {
 	}
 
 	const emptyingTheBladder = bodyToParagraphs(flat['emptying-the-bladder'] ?? '');
-	const disinfection = bodyToParagraphs(flat['disinfection'] ?? '');
 
 	if (gender === 'male') {
-		return { emptyingTheBladder, disinfection };
+		const disinfectionMale = bodyToParagraphs(flat['disinfection-male'] ?? '');
+		return { emptyingTheBladder, disinfectionMale };
 	}
 
+	const disinfectionFemale = bodyToParagraphs(flat['disinfection-female'] ?? '');
 	const plus1 = { paragraphs: bodyToParagraphs(flat['plus-1'] ?? '') };
 	const plus3 = { paragraphs: bodyToParagraphs(flat['plus-3'] ?? '') };
 	const plus6 = { paragraphs: bodyToParagraphs(flat['plus-6'] ?? '') };
@@ -127,11 +128,34 @@ function parseModals(md, gender) {
 
 	return {
 		emptyingTheBladder,
-		disinfection,
+		disinfectionFemale,
 		plus1,
 		plus3,
 		plus6,
 		plus9
+	};
+}
+
+/** @param {string} md */
+function parseDoctorPriorModals(md) {
+	const sections = parseH2Sections(md);
+	/** @type {Record<string, string>} */
+	const flat = {};
+	for (const s of sections) {
+		flat[s.key] = s.body;
+	}
+	return {
+		emptyingTheBladder: bodyToParagraphs(flat['emptying-the-bladder'] ?? ''),
+		disinfectionFemale: bodyToParagraphs(flat['disinfection-female'] ?? ''),
+		disinfectionMale: bodyToParagraphs(flat['disinfection-male'] ?? '')
+	};
+}
+
+function buildDoctorPriorInstillation() {
+	return {
+		beforeStarting: parseBeforeStarting(readText('pages/doctor-prior-instillation.md')),
+		modalButtons: assertModalButtons(readYaml('pages/doctor-prior-instillation.meta.yaml')),
+		modals: parseDoctorPriorModals(readText('pages/doctor-prior-instillation-modals.md'))
 	};
 }
 
@@ -232,15 +256,9 @@ function assertModalButtons(meta) {
 function buildFemale() {
 	const stepsRaw = readYaml('instructions/female/steps.yaml');
 	const steps = StepsFileSchema.parse(stepsRaw).steps;
-	const beforeStarting = parseBeforeStarting(readText('instructions/female/before-starting.md'));
-	const modalButtons = assertModalButtons(
-		readYaml('instructions/female/before-starting.meta.yaml')
-	);
 	const modals = parseModals(readText('instructions/female/modals.md'), 'female');
 	return {
 		pageTitle: 'Instructions for doctors on female patients',
-		beforeStarting,
-		modalButtons,
 		modals,
 		steps: steps.map((step) => {
 			const { body, ...rest } = step;
@@ -256,13 +274,9 @@ function buildFemale() {
 function buildMale() {
 	const stepsRaw = readYaml('instructions/male/steps.yaml');
 	const steps = StepsFileSchema.parse(stepsRaw).steps;
-	const beforeStarting = parseBeforeStarting(readText('instructions/male/before-starting.md'));
-	const modalButtons = assertModalButtons(readYaml('instructions/male/before-starting.meta.yaml'));
 	const modals = parseModals(readText('instructions/male/modals.md'), 'male');
 	return {
 		pageTitle: 'Instructions for doctors on male patients',
-		beforeStarting,
-		modalButtons,
 		modals,
 		steps: steps.map((step) => {
 			const { body, ...rest } = step;
@@ -282,6 +296,7 @@ function main() {
 		pageCopy: {
 			educationalVideo: parseEducationalVideo(readText('pages/educational-video.md')),
 			preInstillation: parsePreInstillation(readText('pages/pre-instillation.md')),
+			doctorPriorInstillation: buildDoctorPriorInstillation(),
 			faq: parseFaq(readText('pages/faq.md')),
 			contact: parseContact(readText('pages/contact.md'))
 		},
