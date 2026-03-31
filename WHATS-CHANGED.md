@@ -52,11 +52,11 @@ The original frame-by-frame animation cost a lot of bandwidth and CPU. One 212 K
 | ----------- | ------------------------------------------------- | --------------------------------------- |
 | Header      | Custom Bootstrap navbar + jQuery hamburger toggle | DaisyUI drawer + navbar component       |
 | Mobile menu | jQuery-driven slide panel (`#header-menu-mobile`) | DaisyUI drawer sidebar                  |
-| Footer      | Bootstrap grid with links                         | DaisyUI footer with app version display |
+| Footer      | Bootstrap grid with links                         | DaisyUI footer; **v2.0** label after the wordmark (home link) |
 | Icons       | icomoon icon font                                 | inline SVGs (no icon font)           |
 
 - On the home page, table-of-contents icon handling is now data-driven and normalized to consistent `24x24` inline SVGs, and the `Install App` action appears beside `Share` in the footer action row instead of as a card.
-- The site-wide footer groups **Contact** and **Install App** as two adjacent icon-only links (envelope + download tray, Heroicons-style strokes) with `aria-label`s; Privacy Policy and Cookie Policy stay text links.
+- The site-wide footer groups **Contact** and **Install App** as two adjacent icon-only links (envelope + download tray, Heroicons-style strokes) with `aria-label`s; Privacy Policy and Cookie Policy stay text links. The bottom row shows **v2.0** immediately after the Urodapter wordmark.
 - The home TOC strip uses `bg-accent/20` from theme tokens (no hardcoded `dark:` background). Card icons use `text-accent`. Footer uses `bg-primary` / `dark:bg-base-300` instead of a hardcoded teal OKLCH fill.
 
 ## Pages & Routes

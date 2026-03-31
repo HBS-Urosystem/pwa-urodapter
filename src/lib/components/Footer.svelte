@@ -63,9 +63,12 @@
 				urodapter.com
 			</a>
 		</span>
-		<a href={resolve('/')}>
-			<!-- <img src="/assets/img/logo_white.svg" alt="Urodapter" class="h-4" /> -->
-			<LogoWordmark class="h-4" />
-		</a>
+		<span class="inline-flex items-center gap-1.5">
+			<a href={resolve('/')}>
+				<!-- <img src="/assets/img/logo_white.svg" alt="Urodapter" class="h-4" /> -->
+				<LogoWordmark class="h-4" />
+			</a>
+			<span class="text-xs opacity-90">v2.0</span>
+		</span>
 	</div>
 </footer>
