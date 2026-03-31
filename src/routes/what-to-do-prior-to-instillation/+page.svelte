@@ -19,7 +19,7 @@
 				{#each page.sections as s (s.letter)}
 					<div class="flex gap-4">
 						<div
-							class="flex h-8 w-8 mt-4 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-content"
+							class="flex h-8 w-8 mt-3 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-content"
 						>
 							{s.letter}
 						</div>

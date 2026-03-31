@@ -302,7 +302,7 @@
 						<div class="min-w-0 flex-1">
 							<div class="space-y-2 text-base-content/90">
 								{#each item.paragraphs as para, i (`${item.letter}-${i}`)}
-									<p>{@html formatInlineMarkdown(para).replace(/\n/g, '<br/>')}</p>
+									<p class="mb-0">{@html formatInlineMarkdown(para).replace(/\n/g, '<br/>')}</p>
 								{/each}
 							</div>
 							{#each pack.modalButtons.filter((b) => b.letter === item.letter) as btn (btn.label)}

@@ -22,7 +22,7 @@ export function formatBlockMarkdown(block: string): string {
 	for (const p of parts) {
 		const h = p.match(/^### ([^\n]+)\n([\s\S]*)/);
 		if (h) {
-			out += `<h3 class="text-lg font-semibold mt-4 mb-2">${escapeHtml(h[1])}</h3>`;
+			out += `<h3 class="text-lg font-semibold !mt-4 mb-2">${escapeHtml(h[1])}</h3>`;
 			out += formatListAndParagraphs(h[2]);
 		} else {
 			out += formatListAndParagraphs(p);
