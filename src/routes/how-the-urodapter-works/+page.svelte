@@ -1,7 +1,11 @@
 <script lang="ts">
+	import ContentFlowNav from '$lib/components/ContentFlowNav.svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import VideoPlayer from '$lib/components/VideoPlayer.svelte';
+	import { CONTENT_FLOW_NAV } from '$lib/data/content-flow-nav';
 	import { siteContent } from '$lib/content';
+
+	const flow = CONTENT_FLOW_NAV['/how-the-urodapter-works'];
 
 	const { title, videoId, poster, notesParagraphs } = siteContent.pageCopy.educationalVideo;
 	const pageTitle = `${title} | Urodapter`;
@@ -27,5 +31,6 @@
 			{poster}
 			{title}
 		/>
+		<ContentFlowNav prev={flow.prev} next={flow.next} />
 	</div>
 </section>

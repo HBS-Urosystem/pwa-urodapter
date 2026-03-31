@@ -1,8 +1,12 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import ContentFlowNav from '$lib/components/ContentFlowNav.svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import { CONTENT_FLOW_NAV } from '$lib/data/content-flow-nav';
 	import { siteContent } from '$lib/content';
 	import { formatInlineMarkdown } from '$lib/markdown-inline';
+
+	const flow = CONTENT_FLOW_NAV['/faq'];
 
 	const faq = siteContent.pageCopy.faq;
 	const pageTitle = `${faq.title} | Urodapter`;
@@ -39,5 +43,7 @@
 				</details>
 			{/each}
 		</div>
+
+		<ContentFlowNav prev={flow.prev} next={flow.next} lastInstructionsTabForPrev />
 	</div>
 </section>

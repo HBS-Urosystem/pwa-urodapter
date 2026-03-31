@@ -1,8 +1,17 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import ContentFlowNav from '$lib/components/ContentFlowNav.svelte';
 	import DoctorPriorToInstillationPanel from '$lib/components/DoctorPriorToInstillationPanel.svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import { CONTENT_FLOW_NAV } from '$lib/data/content-flow-nav';
 	import { siteContent } from '$lib/content';
 	import { formatBlockMarkdown } from '$lib/markdown-blocks';
+	import {
+		persistPriorInstillationAudience,
+		readStoredPriorInstillationAudience
+	} from '$lib/prior-instillation-audience-storage';
+
+	const flow = CONTENT_FLOW_NAV['/what-to-do-prior-to-instillation'];
 
 	const page = siteContent.pageCopy.preInstillation;
 	const doctor = siteContent.pageCopy.doctorPriorInstillation;
@@ -11,6 +20,15 @@
 		'Patient preparation before bladder instillation with UroDapter — sexual abstinence, empty bladder, residual urine; doctor preparation (A–C) and disinfection guidance.';
 
 	let audience = $state<'patient' | 'doctor'>('patient');
+
+	onMount(() => {
+		audience = readStoredPriorInstillationAudience();
+	});
+
+	function setAudience(next: 'patient' | 'doctor') {
+		audience = next;
+		persistPriorInstillationAudience(next);
+	}
 </script>
 
 <SeoHead title={pageTitle} {description} path="/what-to-do-prior-to-instillation" />
@@ -27,7 +45,7 @@
 				class:tab-active={audience === 'patient'}
 				aria-selected={audience === 'patient'}
 				tabindex={audience === 'patient' ? 0 : -1}
-				onclick={() => (audience = 'patient')}
+				onclick={() => setAudience('patient')}
 			>
 				Patient
 			</button>
@@ -38,7 +56,7 @@
 				class:tab-active={audience === 'doctor'}
 				aria-selected={audience === 'doctor'}
 				tabindex={audience === 'doctor' ? 0 : -1}
-				onclick={() => (audience = 'doctor')}
+				onclick={() => setAudience('doctor')}
 			>
 				Doctor
 			</button>
@@ -65,5 +83,7 @@
 		{:else}
 			<DoctorPriorToInstillationPanel data={doctor} />
 		{/if}
+
+		<ContentFlowNav prev={flow.prev} next={flow.next} lastInstructionsTabForNext />
 	</div>
 </section>

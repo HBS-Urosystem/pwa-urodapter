@@ -3,7 +3,10 @@
 	import { browser } from '$app/environment';
 	import { tick, onMount } from 'svelte';
 	import type { InstructionPack } from '$lib/content';
+	import ContentFlowNav from '$lib/components/ContentFlowNav.svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import { CONTENT_FLOW_NAV } from '$lib/data/content-flow-nav';
+	import { persistLastInstructionsTab } from '$lib/instructions-tab-storage';
 	import { formatInlineMarkdown } from '$lib/markdown-inline';
 
 	const femalePath = '/instructions-for-doctors-on-female-patients';
@@ -24,6 +27,8 @@
 	const seoDescription = $derived(
 		`${pack.pageTitle} — Video instructions and tips for bladder instillation using UroDapter® for healthcare professionals.`
 	);
+
+	const flow = $derived(CONTENT_FLOW_NAV[seoPath]);
 
 	function readStoredStepIndex(key: string, numSteps: number): number {
 		if (!browser || numSteps < 1) return 0;
@@ -102,6 +107,7 @@
 	}
 
 	onMount(() => {
+		persistLastInstructionsTab(activeGender);
 		void tick().then(() => {
 			allowStepAnim = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 			requestAnimationFrame(() => alignCarouselToStep());
@@ -333,6 +339,10 @@
 				</div>
 			</div>
 		</div>
+
+		{#if flow}
+			<ContentFlowNav prev={flow.prev} next={flow.next} />
+		{/if}
 	</div>
 </section>
 
