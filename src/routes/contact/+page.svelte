@@ -34,16 +34,6 @@
 
 		<hr class="mb-10 border-base-300" />
 
-		<div class="mb-4 space-y-2">
-			{#each c.formIntroParagraphs as para, i (`formintro-${i}`)}
-				{#if i === 0}
-					<h2 class="text-xl font-semibold">{para}</h2>
-				{:else}
-					<p class="text-base-content/90">{para}</p>
-				{/if}
-			{/each}
-		</div>
-
 		<form
 			name="contact"
 			method="POST"
@@ -51,7 +41,14 @@
 			netlify-honeypot="bot-field"
 			class="flex flex-col gap-4"
 		>
-			<input type="hidden" name="form-name" value="contact" />
+			{#each c.formIntroParagraphs as para, i (`formintro-${i}`)}
+			{#if i === 0}
+				<legend class="font-semibold">{para}</legend>
+			{:else}
+				<p class="text-base-content/90">{para}</p>
+			{/if}
+		{/each}
+		<input type="hidden" name="form-name" value="contact" />
 			<p class="hidden">
 				<label>
 					Do not fill this out: <input name="bot-field" />
