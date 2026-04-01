@@ -40,26 +40,26 @@
 </script>
 
 <div class="card border border-base-300 bg-base-100 shadow-sm">
-	<div class="card-body gap-6">
-		<h2 class="text-xl font-semibold">For healthcare professionals</h2>
+	<div class="card-body gap-8">
+		<h3 class="text-lg font-semibold !mt-4 mb-2">For healthcare professionals</h3>
 		{#each data.beforeStarting as item (item.letter)}
 			<div class="flex gap-4">
 				<div
-					class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-content"
+					class="mt-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-content"
 				>
 					{item.letter}
 				</div>
 				<div class="min-w-0 flex-1">
-					<div class="space-y-2 text-base-content/90">
+					<div class="prose max-w-none flex-1 text-base-content max-sm:prose-sm">
 						{#each item.paragraphs as para, i (`${item.letter}-${i}`)}
 							<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-							<p class="mb-0">{@html formatInlineMarkdown(para).replace(/\n/g, '<br/>')}</p>
+							<p>{@html formatInlineMarkdown(para).replace(/\n/g, '<br/>')}</p>
 						{/each}
 					</div>
 					{#each data.modalButtons.filter((b) => b.letter === item.letter) as btn (btn.label)}
 						<button
 							type="button"
-							class="btn mt-2 gap-1 text-primary btn-ghost btn-sm"
+							class="btn mt-2 gap-1 text-primary btn-ghost btn-sm min-h-8 h-auto text-left"
 							onclick={() => void openModal(btn.modal, btn.label)}
 						>
 							<svg

@@ -78,12 +78,12 @@
 					</li>
 					<li>
 						<a href={resolve('/instructions-for-doctors-on-female-patients')} onclick={closeDrawer}
-							>Instructions for female patients</a
+							>Instructions on female patients</a
 						>
 					</li>
 					<li>
 						<a href={resolve('/instructions-for-doctors-on-male-patients')} onclick={closeDrawer}
-							>Instructions for male patients</a
+							>Instructions on male patients</a
 						>
 					</li>
 					<li><a href={resolve('/faq')} onclick={closeDrawer}>FAQ</a></li>

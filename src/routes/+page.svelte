@@ -75,12 +75,12 @@
 			icon: 'gear'
 		},
 		{
-			title: 'Instructions for female patients',
+			title: 'Instructions on female patients',
 			href: '/instructions-for-doctors-on-female-patients',
 			icon: 'female'
 		},
 		{
-			title: 'Instructions for male patients',
+			title: 'Instructions on male patients',
 			href: '/instructions-for-doctors-on-male-patients',
 			icon: 'male'
 		},
@@ -274,19 +274,21 @@
 {/if}
 
 <section class="flex-1 bg-primary/20 py-12">
-	<div class="container mx-auto">
-		<h2 class="mb-8 text-center text-2xl font-bold">Table of Contents</h2>
+	<div class="mx-auto">
+		<h1 class="mb-8 text-center text-3xl font-bold">How to Use</h1>
 
-		<p class="mx-auto mb-8 max-w-2xl border-b pb-4 text-center font-bold">
+		<p class="mx-auto mb-8 max-w-2xl border-b pb-4 px-1 text-center font-bold">
 			This detailed manual entails all the necessary information regarding instructions and the tips
 			and tricks you may need to make the use of the UroDapter® most efficient.
 		</p>
+
+		<h2 class="mb-4 text-center text-lg font-bold">Table of Contents</h2>
 
 		<div class="mx-auto grid max-w-4xl grid-cols-1 gap-4 px-4 sm:grid-cols-2 lg:grid-cols-3">
 			{#each cards as card (card.href)}
 				<a
 					href={resolve(card.href as '/')}
-					class="h-full no-underline sm:last:col-span-full lg:last:col-start-2"
+					class=" aspect--square sm--aspect-auto h-full no-underline sm:last:col-span-full lg:last:col-start-2"
 				>
 					<div
 						class="card h-full items-center bg-base-100 pt-6 shadow-md transition-shadow hover:shadow-lg"
@@ -302,7 +304,7 @@
 			{/each}
 		</div>
 
-		<div class="mt-8 mb-4 text-center">
+		<div class="mt-12 mb-4 text-center">
 			{#if progress >= 100}
 				<p class="font-bold text-success">Downloaded!</p>
 			{:else}

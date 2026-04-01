@@ -37,22 +37,29 @@
 	});
 </script>
 
-<nav
-	class="mt-8 flex flex-col gap-3 border-t border-base-300 pt-8 sm:flex-row sm:items-stretch sm:justify-between sm:gap-4"
-	aria-label="Section navigation"
+<!-- -mx-4 + section px-4: top border spans full section width; sticky opaque bar at viewport bottom -->
+<div
+	class="-mx-4 mt-8 border-t border-base-300 bg-base-100 sticky bottom-0 z-20 pt-4 pb-[max(1rem,env(safe-area-inset-bottom,0px))]"
 >
-	<a
-		href={resolve(prevPathResolved as '/')}
-		class="btn btn-outline shrink-0 justify-start gap-2 sm:max-w-[min(100%,20rem)]"
-	>
-		<span aria-hidden="true">←</span>
-		<span class="min-w-0 text-left">{prev.label}</span>
-	</a>
-	<a
-		href={resolve(nextPathResolved as '/')}
-		class="btn btn-outline shrink-0 justify-end gap-2 sm:max-w-[min(100%,20rem)] sm:ml-auto"
-	>
-		<span class="min-w-0 text-right">{next.label}</span>
-		<span aria-hidden="true">→</span>
-	</a>
-</nav>
+	<div class="mx-auto max-w-3xl">
+		<nav
+			class="mx-4 flex justify-between gap-4"
+			aria-label="Section navigation"
+		>
+			<a
+				href={resolve(prevPathResolved as '/')}
+				class="btn min-h-8 h-auto btn-ghost btn-sm flex-50 shrink justify-start gap-2 w-auto"
+			>
+				<span aria-hidden="true">←</span>
+				<span class="min-w-0 text-left">{prev.label}</span>
+			</a>
+			<a
+				href={resolve(nextPathResolved as '/')}
+				class="btn min-h-8 h-auto btn-ghost btn-sm flex-50 shrink justify-end gap-2 w-auto"
+			>
+				<span class="min-w-0 text-right">{next.label}</span>
+				<span aria-hidden="true">→</span>
+			</a>
+		</nav>
+	</div>
+</div>

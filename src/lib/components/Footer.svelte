@@ -6,15 +6,15 @@
 <footer
 	class="footer footer-center bg-primary dark:bg-base-100 text-neutral-content p-6"
 >
-	<nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-4 text-sm">
+	<nav class="flex flex-wrap items-center justify-center gap-x-6 gap---y-4 text-sm">
 		<span class="inline-flex flex-wrap items-center gap-x-6 gap-y-2 justify-center">
 			<a href={resolve('/privacy-policy')} class="link link-hover">Privacy Policy</a>
 			<a href={resolve('/cookie-policy')} class="link link-hover">Cookie Policy</a>
 		</span>
-		<span class="inline-flex items-center gap-x-2">
+		<span class="inline-flex items-center gap-x-4">
 			<a
 				href={resolve('/contact')}
-				class="link link-hover inline-flex h-10 w-10 items-center justify-center rounded-lg"
+				class="link link-hover inline-flex h-8 w-8 items-center justify-center rounded-lg"
 				aria-label="Contact"
 			>
 				<svg
@@ -35,7 +35,7 @@
 			</a>
 			<a
 				href={resolve('/install')}
-				class="link link-hover inline-flex h-10 w-10 items-center justify-center rounded-lg"
+				class="link link-hover inline-flex h-8 w-8 items-center justify-center rounded-lg"
 				aria-label="Install app"
 			>
 				<svg

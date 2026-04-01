@@ -37,11 +37,11 @@
 	<div class="mx-auto max-w-3xl">
 		<h1 class="mb-6 text-3xl font-bold">{page.title}</h1>
 
-		<div role="tablist" class="tabs-box mb-6 tabs w-full" aria-label="Audience">
+		<div role="tablist" class="tabs-box mb-6 tabs flex w-full" aria-label="Audience">
 			<button
 				type="button"
 				role="tab"
-				class="tab"
+				class="tab flex-1 basis-0"
 				class:tab-active={audience === 'patient'}
 				aria-selected={audience === 'patient'}
 				tabindex={audience === 'patient' ? 0 : -1}
@@ -52,7 +52,7 @@
 			<button
 				type="button"
 				role="tab"
-				class="tab"
+				class="tab flex-1 basis-0"
 				class:tab-active={audience === 'doctor'}
 				aria-selected={audience === 'doctor'}
 				tabindex={audience === 'doctor' ? 0 : -1}
@@ -65,6 +65,7 @@
 		{#if audience === 'patient'}
 			<div class="card border border-base-300 bg-base-100 shadow-sm">
 				<div class="card-body gap-8">
+					<h3 class="text-lg font-semibold !mt-4 mb-2">For patients</h3>
 					{#each page.sections as s (s.letter)}
 						<div class="flex gap-4">
 							<div
@@ -72,9 +73,11 @@
 							>
 								{s.letter}
 							</div>
-							<div class="prose max-w-none flex-1 text-base-content max-sm:prose-sm">
-								<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-								{@html formatBlockMarkdown(s.body)}
+							<div class="min-w-0 flex-1">
+								<div class="prose max-w-none flex-1 text-base-content max-sm:prose-sm">
+									<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+									{@html formatBlockMarkdown(s.body)}
+								</div>
 							</div>
 						</div>
 					{/each}

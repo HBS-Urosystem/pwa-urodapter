@@ -258,7 +258,7 @@ function buildFemale() {
 	const steps = StepsFileSchema.parse(stepsRaw).steps;
 	const modals = parseModals(readText('instructions/female/modals.md'), 'female');
 	return {
-		pageTitle: 'Instructions for doctors on female patients',
+		pageTitle: 'Instructions for doctors',
 		modals,
 		steps: steps.map((step) => {
 			const { body, ...rest } = step;
@@ -276,7 +276,7 @@ function buildMale() {
 	const steps = StepsFileSchema.parse(stepsRaw).steps;
 	const modals = parseModals(readText('instructions/male/modals.md'), 'male');
 	return {
-		pageTitle: 'Instructions for doctors on male patients',
+		pageTitle: 'Instructions for doctors',
 		modals,
 		steps: steps.map((step) => {
 			const { body, ...rest } = step;

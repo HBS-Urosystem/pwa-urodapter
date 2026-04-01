@@ -5,7 +5,7 @@
  */
 export const siteContent = {
 	"femaleInstructions": {
-		"pageTitle": "Instructions for doctors on female patients",
+		"pageTitle": "Instructions for doctors",
 		"modals": {
 			"emptyingTheBladder": [
 				"Most patients do not have significant residual urine in their bladder after urination. However, since the UroDapter is not suitable to drain urine from the bladder, post-void residual urine should be checked prior to the first instillation (e.g., with ultrasound).",
@@ -164,7 +164,7 @@ export const siteContent = {
 		]
 	},
 	"maleInstructions": {
-		"pageTitle": "Instructions for doctors on male patients",
+		"pageTitle": "Instructions for doctors",
 		"modals": {
 			"emptyingTheBladder": [
 				"Most patients do not have significant residual urine in their bladder after urination. However, since the UroDapter is not suitable to drain urine from the bladder, post-void residual urine should be checked prior to the first instillation (e.g., with ultrasound).",

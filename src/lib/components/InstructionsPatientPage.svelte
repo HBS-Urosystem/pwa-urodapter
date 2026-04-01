@@ -223,12 +223,12 @@
 	<div class="mx-auto max-w-3xl">
 		<h1 class="mb-6 text-3xl font-bold">{pack.pageTitle}</h1>
 
-		<div role="tablist" class="tabs-box mb-6 tabs w-full" aria-label="Patient type">
+		<div role="tablist" class="tabs-box mb-6 tabs flex w-full" aria-label="Patient type">
 			<a
 				id={femaleTabId}
 				href={resolve(femalePath)}
 				role="tab"
-				class="tab"
+				class="tab flex-1 basis-0"
 				class:tab-active={activeGender === 'female'}
 				aria-selected={activeGender === 'female'}
 			>
@@ -238,7 +238,7 @@
 				id={maleTabId}
 				href={resolve(malePath)}
 				role="tab"
-				class="tab"
+				class="tab flex-1 basis-0"
 				class:tab-active={activeGender === 'male'}
 				aria-selected={activeGender === 'male'}
 			>
@@ -293,7 +293,7 @@
 								{#if 'plusModalId' in s && s.plusModalId != null}
 									<button
 										type="button"
-										class="btn gap-1 self-start text-primary btn-ghost btn-sm"
+										class="btn gap-1 self-start text-primary btn-ghost btn-sm min-h-8 h-auto text-left"
 										onclick={() => {
 											openPlusModal(
 												s.plusModalId!,
