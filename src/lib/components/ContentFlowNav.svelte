@@ -37,29 +37,24 @@
 	});
 </script>
 
-<!-- -mx-4 + section px-4: top border spans full section width; sticky opaque bar at viewport bottom -->
+<!-- Spacing above the bar lives in the page <section> padding (tinted), not margin on this block -->
 <div
-	class="-mx-4 mt-8 border-t border-base-300 bg-base-100 sticky bottom-0 z-20 pt-4 pb-[max(1rem,env(safe-area-inset-bottom,0px))]"
+	class="w-full border-t border-base-300 bg-base-100 py-1 sticky bottom-0 z-10"
 >
-	<div class="mx-auto max-w-3xl">
-		<nav
-			class="mx-4 flex justify-between gap-4"
-			aria-label="Section navigation"
+	<nav class="flex justify-between gap-4 px-6" aria-label="Section navigation">
+		<a
+			href={resolve(prevPathResolved as '/')}
+			class="btn btn-ghost btn-sm min-h-8 h-auto min-w-0 shrink justify-start gap-2"
 		>
-			<a
-				href={resolve(prevPathResolved as '/')}
-				class="btn min-h-8 h-auto btn-ghost btn-sm flex-50 shrink justify-start gap-2 w-auto"
-			>
-				<span aria-hidden="true">←</span>
-				<span class="min-w-0 text-left">{prev.label}</span>
-			</a>
-			<a
-				href={resolve(nextPathResolved as '/')}
-				class="btn min-h-8 h-auto btn-ghost btn-sm flex-50 shrink justify-end gap-2 w-auto"
-			>
-				<span class="min-w-0 text-right">{next.label}</span>
-				<span aria-hidden="true">→</span>
-			</a>
-		</nav>
-	</div>
+			<span aria-hidden="true">←</span>
+			<span class="min-w-0 text-left">{prev.label}</span>
+		</a>
+		<a
+			href={resolve(nextPathResolved as '/')}
+			class="btn btn-ghost btn-sm min-h-8 h-auto min-w-0 shrink justify-end gap-2"
+		>
+			<span class="min-w-0 text-right">{next.label}</span>
+			<span aria-hidden="true">→</span>
+		</a>
+	</nav>
 </div>

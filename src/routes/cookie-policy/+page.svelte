@@ -12,7 +12,7 @@
 
 <SeoHead title={pageTitle} {description} path="/cookie-policy" />
 
-<section class="min-h-full bg-base-200/40 px-4 py-8">
+<section class="bg-primary/20 px-4 py-8">
 	<div class="mx-auto max-w-3xl">
 		<h1 class="mb-8 text-3xl font-bold">{title}</h1>
 		<div class="card border border-base-300 bg-base-100 shadow-sm">

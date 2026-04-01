@@ -17,10 +17,12 @@
 	<input id="app-drawer" type="checkbox" class="drawer-toggle" />
 	<div class="drawer-content flex min-h-screen flex-col">
 		<Header />
-		<main class="flex flex-1 flex-col">
+		<main class="flex min-h-0 flex-1 flex-col">
 			{@render children()}
+			<div class="w-full shrink-0">
+				<Footer />
+			</div>
 		</main>
-		<Footer />
 	</div>
 	<div class="drawer-side z-50">
 		<label for="app-drawer" aria-label="close sidebar" class="drawer-overlay"></label>

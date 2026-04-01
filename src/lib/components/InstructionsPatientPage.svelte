@@ -219,7 +219,7 @@
 
 <SeoHead title={`${pack.pageTitle} | Urodapter`} description={seoDescription} path={seoPath} />
 
-<section class="min-h-full bg-base-200/40 px-4 py-8">
+<section class="bg-primary/20 px-4 pt-8 pb-10">
 	<div class="mx-auto max-w-3xl">
 		<h1 class="mb-6 text-3xl font-bold">{pack.pageTitle}</h1>
 
@@ -260,7 +260,7 @@
 
 				<div
 					bind:this={stepsCarouselEl}
-					class="carousel w-full carousel-start rounded-lg"
+					class="carousel w-full carousel-start rounded-lg gap-2"
 					aria-label="Instruction video steps"
 				>
 					{#each pack.steps as s (s.id)}
@@ -329,22 +329,21 @@
 						disabled={stepIndex === 0}
 						onclick={goPrevStep}
 					>
-						Previous
+						Step back
 					</button>
 					{#if stepIndex >= pack.steps.length - 1}
 						<button type="button" class="btn btn-primary" onclick={startOver}>Start over</button>
 					{:else}
-						<button type="button" class="btn btn-primary" onclick={goNextStep}>Next</button>
+						<button type="button" class="btn btn-primary" onclick={goNextStep}>Next step</button>
 					{/if}
 				</div>
 			</div>
 		</div>
-
-		{#if flow}
-			<ContentFlowNav prev={flow.prev} next={flow.next} />
-		{/if}
 	</div>
 </section>
+{#if flow}
+	<ContentFlowNav prev={flow.prev} next={flow.next} />
+{/if}
 
 <dialog
 	bind:this={dialogMainEl}

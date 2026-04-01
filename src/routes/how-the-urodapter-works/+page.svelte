@@ -15,7 +15,7 @@
 
 <SeoHead title={pageTitle} {description} path="/how-the-urodapter-works" />
 
-<section class="min-h-full bg-base-200/40 px-4 py-8">
+<section class="bg-primary/20 px-4 pt-8 pb-10">
 	<div class="mx-auto max-w-3xl text-center">
 		<h1 class="mb-4 text-3xl font-bold">{title}</h1>
 		{#if notesParagraphs.length > 0}
@@ -31,6 +31,6 @@
 			{poster}
 			{title}
 		/>
-		<ContentFlowNav prev={flow.prev} next={flow.next} />
 	</div>
 </section>
+<ContentFlowNav prev={flow.prev} next={flow.next} />

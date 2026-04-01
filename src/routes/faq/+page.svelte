@@ -15,7 +15,7 @@
 
 <SeoHead title={pageTitle} description={introPlain} path="/faq" />
 
-<section class="min-h-full bg-base-200/40 px-4 py-8">
+<section class="bg-primary/20 px-4 pt-8 pb-10">
 	<div class="mx-auto max-w-3xl">
 		<h1 class="mb-2 text-center text-3xl font-bold">{faq.title}</h1>
 		<div class="mb-6 space-y-2 text-center text-base-content/80">
@@ -43,7 +43,6 @@
 				</details>
 			{/each}
 		</div>
-
-		<ContentFlowNav prev={flow.prev} next={flow.next} lastInstructionsTabForPrev />
 	</div>
 </section>
+<ContentFlowNav prev={flow.prev} next={flow.next} lastInstructionsTabForPrev />

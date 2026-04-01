@@ -18,7 +18,7 @@
 	<meta name="description" content={c.formIntroParagraphs.join(' ')} />
 </svelte:head>
 
-<section class="min-h-full bg-base-200/40 px-4 py-8">
+<section class="bg-primary/20 px-4 py-8">
 	<div class="mx-auto max-w-xl">
 		<h1 class="mb-8 text-3xl font-bold">{c.title}</h1>
 

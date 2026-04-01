@@ -33,7 +33,7 @@
 
 <SeoHead title={pageTitle} {description} path="/what-to-do-prior-to-instillation" />
 
-<section class="min-h-full bg-base-200/40 px-4 py-8">
+<section class="bg-primary/20 px-4 pt-8 pb-10">
 	<div class="mx-auto max-w-3xl">
 		<h1 class="mb-6 text-3xl font-bold">{page.title}</h1>
 
@@ -86,7 +86,6 @@
 		{:else}
 			<DoctorPriorToInstillationPanel data={doctor} />
 		{/if}
-
-		<ContentFlowNav prev={flow.prev} next={flow.next} lastInstructionsTabForNext />
 	</div>
 </section>
+<ContentFlowNav prev={flow.prev} next={flow.next} lastInstructionsTabForNext />
