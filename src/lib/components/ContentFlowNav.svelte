@@ -39,9 +39,9 @@
 
 <!-- Spacing above the bar lives in the page <section> padding (tinted), not margin on this block -->
 <div
-	class="w-full border-t border-base-300 bg-base-100 py-1 sticky bottom-0 z-10"
+	class="w-full border-y border-base-300 bg-base-100 py-1 sticky bottom-0 z-10"
 >
-	<nav class="flex justify-between gap-4 px-6" aria-label="Section navigation">
+	<nav class="max-w-4xl mx-auto flex justify-between gap-4 px-6" aria-label="Section navigation">
 		<a
 			href={resolve(prevPathResolved as '/')}
 			class="btn btn-ghost btn-sm min-h-8 h-auto min-w-0 shrink justify-start gap-2"
