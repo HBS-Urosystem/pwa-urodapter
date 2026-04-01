@@ -94,19 +94,30 @@
 	}}
 >
 	<div
-		class="modal-box prose max-h-[85vh] max-w-lg overflow-y-auto text-base-content max-sm:prose-sm"
+		class="modal-box prose relative max-h-[85vh] max-w-lg overflow-y-auto text-base-content max-sm:prose-sm"
 	>
+		<form method="dialog" class="not-prose absolute end-2 top-2 z-10">
+			<button type="submit" class="btn btn-square btn-ghost btn-sm" aria-label="Close dialog">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="h-5 w-5"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+					stroke-width="2"
+				>
+					<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+				</svg>
+			</button>
+		</form>
 		{#if modalTitle}
-			<h3 class="modal-title mb-4 text-lg font-bold">{modalTitle}</h3>
+			<h3 class="modal-title mb-4 pe-12 text-lg font-bold">{modalTitle}</h3>
+		{:else}
+			<div class="mb-4 h-10 shrink-0" aria-hidden="true"></div>
 		{/if}
 		{#each modalParagraphs() as p, i (i)}
 			<p>{p}</p>
 		{/each}
-		<div class="modal-action">
-			<form method="dialog">
-				<button type="submit" class="btn">Close</button>
-			</form>
-		</div>
 	</div>
 	<form method="dialog" class="modal-backdrop">
 		<button type="submit" class="hidden">close</button>

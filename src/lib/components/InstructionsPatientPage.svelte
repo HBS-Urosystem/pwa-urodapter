@@ -55,6 +55,8 @@
 	/** false until after mount + tick so prefers-reduced-motion is known */
 	let allowStepAnim = $state(false);
 	let stepsCarouselEl = $state<HTMLDivElement | undefined>(undefined);
+	/** Region with `aria-label="Instruction step content"` — scroll into view on step prev/next */
+	let stepContentRegionEl = $state<HTMLElement | undefined>(undefined);
 	let carouselWidth = $state(0);
 	let dialogMainEl = $state<HTMLDialogElement | undefined>(undefined);
 	let activeModal = $state<null | 'plus-1' | 'plus-3' | 'plus-6' | 'plus-9'>(null);
@@ -153,18 +155,30 @@
 		return () => window.removeEventListener('resize', onResize);
 	});
 
-	function goNextStep() {
+	function scrollInstructionStepContentIntoView() {
+		if (!browser || !stepContentRegionEl) return;
+		stepContentRegionEl.scrollIntoView({
+			block: 'start',
+			behavior: allowStepAnim ? 'smooth' : 'auto'
+		});
+	}
+
+	async function goNextStep() {
 		if (stepIndex >= pack.steps.length - 1) return;
 		moveToStep(stepIndex + 1);
+		await tick();
+		scrollInstructionStepContentIntoView();
 	}
 
 	function startOver() {
 		moveToStep(0);
 	}
 
-	function goPrevStep() {
+	async function goPrevStep() {
 		if (stepIndex <= 0) return;
 		moveToStep(stepIndex - 1);
+		await tick();
+		scrollInstructionStepContentIntoView();
 	}
 
 	type ModalKind = NonNullable<typeof activeModal>;
@@ -247,7 +261,8 @@
 		</div>
 
 		<div
-			class="card border border-base-300 bg-base-100 shadow-sm"
+			bind:this={stepContentRegionEl}
+			class="card scroll-mt-24 border border-base-300 bg-base-100 shadow-sm"
 			role="region"
 			aria-label="Instruction step content"
 		>
@@ -325,16 +340,54 @@
 				<div class="flex justify-between pt-4">
 					<button
 						type="button"
-						class="btn btn-outline"
+						class="btn btn-outline btn-square"
 						disabled={stepIndex === 0}
 						onclick={goPrevStep}
+						aria-label="Step back"
+						title="Step back"
 					>
-						Step back
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="h-5 w-5"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+							stroke-width="2"
+							aria-hidden="true"
+						>
+							<path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+						</svg>
 					</button>
 					{#if stepIndex >= pack.steps.length - 1}
-						<button type="button" class="btn btn-primary" onclick={startOver}>Start over</button>
+						<button
+							type="button"
+							class="btn btn-primary btn-square leading-none"
+							onclick={startOver}
+							aria-label="Start over"
+							title="Start over"
+						>
+							<span class="text-[2.5rem] leading-none" aria-hidden="true">{'\u293A'}</span>
+						</button>
 					{:else}
-						<button type="button" class="btn btn-primary" onclick={goNextStep}>Next step</button>
+						<button
+							type="button"
+							class="btn btn-primary btn-square"
+							onclick={goNextStep}
+							aria-label="Next step"
+							title="Next step"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-5 w-5"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								stroke-width="2"
+								aria-hidden="true"
+							>
+								<path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+							</svg>
+						</button>
 					{/if}
 				</div>
 			</div>
@@ -355,10 +408,26 @@
 	}}
 >
 	<div
-		class="modal-box prose max-h-[85vh] max-w-lg overflow-y-auto text-base-content max-sm:prose-sm"
+		class="modal-box prose relative max-h-[85vh] max-w-lg overflow-y-auto text-base-content max-sm:prose-sm"
 	>
+		<form method="dialog" class="not-prose absolute end-2 top-2 z-10">
+			<button type="submit" class="btn btn-square btn-ghost btn-sm" aria-label="Close dialog">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="h-5 w-5"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+					stroke-width="2"
+				>
+					<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+				</svg>
+			</button>
+		</form>
 		{#if modalTitle}
-			<h3 class="modal-title mb-4 text-lg font-bold">{modalTitle}</h3>
+			<h3 class="modal-title mb-4 pe-12 text-lg font-bold">{modalTitle}</h3>
+		{:else}
+			<div class="mb-4 h-10 shrink-0" aria-hidden="true"></div>
 		{/if}
 		{#if activeModal === 'plus-9' && 'plus9' in pack.modals && pack.modals.plus9}
 			<div class="not-prose flex flex-col gap-4">
@@ -382,11 +451,6 @@
 				<p>{p}</p>
 			{/each}
 		{/if}
-		<div class="modal-action">
-			<form method="dialog">
-				<button type="submit" class="btn">Close</button>
-			</form>
-		</div>
 	</div>
 	<form method="dialog" class="modal-backdrop">
 		<button type="submit" class="hidden">close</button>
