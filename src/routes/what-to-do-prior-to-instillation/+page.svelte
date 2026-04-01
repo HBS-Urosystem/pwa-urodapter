@@ -76,7 +76,9 @@
 							<div class="min-w-0 flex-1">
 								<div class="prose max-w-none flex-1 text-base-content max-sm:prose-sm">
 									<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-									{@html formatBlockMarkdown(s.body)}
+									{@html formatBlockMarkdown(s.body, {
+										h3Class: 'text-lg !mt-4 mb-2'
+									})}
 								</div>
 							</div>
 						</div>

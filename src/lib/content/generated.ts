@@ -318,14 +318,14 @@ export const siteContent = {
 				{
 					"letter": "B",
 					"paragraphs": [
-						"**UroDapter should be mounted on a Luer-Lock or Luer-Slip syringe**",
+						"### UroDapter should be mounted on a Luer-Lock or Luer-Slip syringe",
 						"The device is ready for use."
 					]
 				},
 				{
 					"letter": "C",
 					"paragraphs": [
-						"**The urethral orifice should be disinfected**"
+						"### The urethral orifice should be disinfected"
 					]
 				}
 			],
