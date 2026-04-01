@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { tick } from 'svelte';
 	import type { SiteContent } from '$lib/content';
-	import { formatInlineMarkdown } from '$lib/markdown-inline';
+	import { formatBlockMarkdown } from '$lib/markdown-blocks';
 
 	type DoctorPrior = SiteContent['pageCopy']['doctorPriorInstillation'];
 
@@ -41,7 +41,7 @@
 
 <div class="card border border-base-300 bg-base-100 shadow-sm">
 	<div class="card-body gap-8">
-		<h3 class="text-lg font-semibold !mt-4 mb-2">For healthcare professionals</h3>
+		<h2 class="text-2xl !mt-4 mb-2">For healthcare professionals</h2>
 		{#each data.beforeStarting as item (item.letter)}
 			<div class="flex gap-4">
 				<div
@@ -51,10 +51,10 @@
 				</div>
 				<div class="min-w-0 flex-1">
 					<div class="prose max-w-none flex-1 text-base-content max-sm:prose-sm">
-						{#each item.paragraphs as para, i (`${item.letter}-${i}`)}
-							<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-							<p>{@html formatInlineMarkdown(para).replace(/\n/g, '<br/>')}</p>
-						{/each}
+						<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+						{@html formatBlockMarkdown(item.paragraphs.join('\n\n'), {
+							h3Class: 'text-lg !mt-4 mb-2'
+						})}
 					</div>
 					{#each data.modalButtons.filter((b) => b.letter === item.letter) as btn (btn.label)}
 						<button

@@ -35,7 +35,7 @@
 
 <section class="bg-primary/20 px-4 pt-8 pb-10">
 	<div class="mx-auto max-w-3xl">
-		<h1 class="mb-6 text-3xl font-bold">{page.title}</h1>
+		<h1 class="mb-6 text-3xl">{page.title}</h1>
 
 		<div role="tablist" class="tabs-box mb-6 tabs flex w-full" aria-label="Audience">
 			<button
@@ -65,7 +65,7 @@
 		{#if audience === 'patient'}
 			<div class="card border border-base-300 bg-base-100 shadow-sm">
 				<div class="card-body gap-8">
-					<h3 class="text-lg font-semibold !mt-4 mb-2">For patients</h3>
+					<h2 class="text-2xl !mt-4 mb-2">For patients</h2>
 					{#each page.sections as s (s.letter)}
 						<div class="flex gap-4">
 							<div

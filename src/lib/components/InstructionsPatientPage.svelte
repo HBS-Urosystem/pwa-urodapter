@@ -221,7 +221,7 @@
 
 <section class="bg-primary/20 px-4 pt-8 pb-10">
 	<div class="mx-auto max-w-3xl">
-		<h1 class="mb-6 text-3xl font-bold">{pack.pageTitle}</h1>
+		<h1 class="mb-6 text-3xl">{pack.pageTitle}</h1>
 
 		<div role="tablist" class="tabs-box mb-6 tabs flex w-full" aria-label="Patient type">
 			<a

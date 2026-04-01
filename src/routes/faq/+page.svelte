@@ -17,7 +17,7 @@
 
 <section class="bg-primary/20 px-4 pt-8 pb-10">
 	<div class="mx-auto max-w-3xl">
-		<h1 class="mb-2 text-center text-3xl font-bold">{faq.title}</h1>
+		<h1 class="mb-2 text-center text-3xl">{faq.title}</h1>
 		<div class="mb-6 space-y-2 text-center text-base-content/80">
 			{#each faq.introParagraphs as para, i (`intro-${i}`)}
 				<p>{@html formatInlineMarkdown(para).replace(/\n/g, '<br/>')}</p>

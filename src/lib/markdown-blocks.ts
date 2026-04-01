@@ -15,15 +15,21 @@ export function splitMarkdownH2(md: string): { heading: string; body: string }[]
 	});
 }
 
+export type FormatBlockMarkdownOptions = {
+	/** Tailwind classes for `###` lines (default: semibold section subheads). */
+	h3Class?: string;
+};
+
 /** `###` subheads, single-line `- ` bullets, paragraphs. */
-export function formatBlockMarkdown(block: string): string {
+export function formatBlockMarkdown(block: string, options?: FormatBlockMarkdownOptions): string {
+	const h3Class = options?.h3Class ?? 'text-lg font-semibold !mt-4 mb-2';
 	const parts = block.split(/\n(?=### )/);
 	let out = '';
 	for (const p of parts) {
-		const h = p.match(/^### ([^\n]+)\n([\s\S]*)/);
+		const h = p.trimStart().match(/^### ([^\n]+)(?:\n([\s\S]*))?/);
 		if (h) {
-			out += `<h3 class="text-lg font-semibold !mt-4 mb-2">${escapeHtml(h[1])}</h3>`;
-			out += formatListAndParagraphs(h[2]);
+			out += `<h3 class="${h3Class}">${escapeHtml(h[1].trim())}</h3>`;
+			out += formatListAndParagraphs(h[2] ?? '');
 		} else {
 			out += formatListAndParagraphs(p);
 		}

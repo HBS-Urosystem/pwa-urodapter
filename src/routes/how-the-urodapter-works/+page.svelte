@@ -17,7 +17,7 @@
 
 <section class="bg-primary/20 px-4 pt-8 pb-10">
 	<div class="mx-auto max-w-3xl text-center">
-		<h1 class="mb-4 text-3xl font-bold">{title}</h1>
+		<h1 class="mb-4 text-3xl">{title}</h1>
 		{#if notesParagraphs.length > 0}
 			<div class="mx-auto mb-6 max-w-xl space-y-2 text-base-content/80">
 				{#each notesParagraphs as para, i (`notes-${i}`)}

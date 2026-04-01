@@ -10,7 +10,7 @@
 <SeoHead {title} {description} path="/install" />
 
 <section class="mx-auto max-w-2xl px-4 py-8">
-	<h1 class="mb-4 text-3xl font-bold">Install Urodapter App</h1>
+	<h1 class="mb-4 text-3xl">Install Urodapter App</h1>
 
 	<p class="mb-4">
 		Install the Urodapter app on your device for quick access from your home screen. The app works

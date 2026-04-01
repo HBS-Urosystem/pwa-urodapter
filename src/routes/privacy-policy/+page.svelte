@@ -14,7 +14,7 @@
 
 <section class="bg-primary/20 px-4 py-8">
 	<div class="mx-auto max-w-3xl">
-		<h1 class="mb-8 text-3xl font-bold">{title}</h1>
+		<h1 class="mb-8 text-3xl">{title}</h1>
 		<div class="card border border-base-300 bg-base-100 shadow-sm">
 			<div class="prose max-sm:prose-sm card-body max-w-none text-base-content">
 				{#each chunks as chunk (chunk.heading + chunk.body.slice(0, 40))}

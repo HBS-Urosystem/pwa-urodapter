@@ -311,7 +311,7 @@ export const siteContent = {
 				{
 					"letter": "A",
 					"paragraphs": [
-						"**The patient should empty the bladder completely**",
+						"### The patient should empty the bladder completely",
 						"Residual urine should be checked prior to the first instillation."
 					]
 				},

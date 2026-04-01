@@ -20,7 +20,7 @@
 
 <section class="bg-primary/20 px-4 py-8">
 	<div class="mx-auto max-w-xl">
-		<h1 class="mb-8 text-3xl font-bold">{c.title}</h1>
+		<h1 class="mb-8 text-3xl">{c.title}</h1>
 
 		<div
 			class="prose max-sm:prose-sm mb-10 max-w-none text-center text-base-content"

@@ -213,7 +213,7 @@
 	>
 		<LogoWordmark class="mb-4 w-48" />
 
-		<h1 class="mb-2 text-3xl font-bold text-white">How to Use</h1>
+		<h1 class="mb-2 text-3xl text-white">How to Use</h1>
 
 		<video
 			use:introVideoFetchPriority
@@ -275,7 +275,7 @@
 
 <section class="flex-1 bg-primary/20 py-12">
 	<div class="mx-auto">
-		<h1 class="mb-8 text-center text-3xl font-bold">How to Use</h1>
+		<h1 class="mb-8 text-center text-3xl">How to Use</h1>
 
 		<p class="mx-auto mb-8 max-w-2xl border-b pb-4 px-1 text-center font-bold">
 			This detailed manual entails all the necessary information regarding instructions and the tips
