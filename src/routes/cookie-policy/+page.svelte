@@ -7,7 +7,7 @@
 	const chunks = splitMarkdownH2(body);
 	const pageTitle = `${title} | Urodapter`;
 	const description =
-		'Cookie Policy for the Urodapter PWA — strictly necessary cookies and local storage for offline use.';
+		'Cookie Policy for the Urodapter PWA — the app does not use cookies; PWA cache is separate and covered in the Privacy Policy.';
 </script>
 
 <SeoHead title={pageTitle} {description} path="/cookie-policy" />

@@ -1,6 +1,6 @@
 ## Change Tracking
 
-Whenever you make changes to the codebase that differ from the original scraped version (`scraped/app.urodapter.com/`), you MUST update `WHATS-CHANGED.md` in the project root to reflect those changes. This includes new features, removed features, branding changes, asset changes, policy edits, structural changes, and any other deviation from the scraped original. Keep the file organized by its existing sections and table format, and document only durable scraped-vs-current differences (not iterative implementation history or step-by-step refactor notes).
+Whenever you make changes to the codebase that differ from the original scraped version (`._scraped/app.urodapter.com/`), you MUST update `WHATS-CHANGED.md` in the project root to reflect those changes. This includes new features, removed features, branding changes, asset changes, policy edits, structural changes, and any other deviation from the scraped original. Keep the file organized by its existing sections and table format, and document only durable scraped-vs-current differences (not iterative implementation history or step-by-step refactor notes).
 
 ### Do / Don't
 

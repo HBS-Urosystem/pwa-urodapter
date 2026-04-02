@@ -101,4 +101,4 @@ The Data Controller need not inform the persons who are involved if:
 
 ## Cookies
 
-The Webpage uses strictly necessary cookies for its operation. The data protection information related to cookies can be found in the Cookie Policy.
+The Webpage does **not** use cookies. Further information is in the **Cookie Policy**.

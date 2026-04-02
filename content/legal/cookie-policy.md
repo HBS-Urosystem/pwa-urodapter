@@ -6,21 +6,18 @@
 
 **Webpage:** the app.urodapter.com site delivered as a static / PWA experience (not a webshop).
 
-**Cookies:** small text files stored on your device by the browser when you visit the Webpage.
+**Cookies:** small text files stored on your device by the browser when you visit a site, commonly sent with requests as HTTP cookie headers.
 
 ## Relationship to the Privacy Policy
 
-Personal data that may be collected through forms is described in the **Privacy Policy**. This Cookie Policy describes only cookies and similar technologies used for the operation of the Webpage.
+Personal data that may be collected through forms is described in the **Privacy Policy**. This Cookie Policy states that the Webpage does **not** use cookies. Offline and installable app behaviour may use other browser storage (for example cache APIs), which is **not** cookie-based; see the Privacy Policy for that detail.
 
-## Cookies we use
+## Use of cookies
 
-This Webpage uses **strictly necessary** cookies and storage only, for example:
+This Webpage does **not** set, read, or rely on HTTP cookies.
 
-- Session or preference storage required for basic navigation and form operation where applicable.
-- **PWA / service worker** related storage so that the app shell and optionally videos can work offline after you choose to cache them.
-
-We do **not** use analytics or advertising cookies in this version of the app (Google Analytics and similar third-party trackers have been removed).
+We do **not** use analytics or advertising cookies (Google Analytics and similar third-party trackers are not used).
 
 ## Your choices
 
-You can control or delete cookies through your browser settings. If you block strictly necessary cookies, parts of the Webpage (including offline features) may not work correctly.
+You can manage **site data** (including cached files from the PWA) through your browser or device settings if you want to free space or reset offline content. That is separate from cookies, which this Webpage does not use.
