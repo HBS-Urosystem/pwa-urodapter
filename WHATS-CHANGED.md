@@ -1,4 +1,4 @@
-# What's Changed from the Scraped Version
+# What's Changed
 
 Differences between the original scraped site (`scraped/app.urodapter.com/`) and this app.
 
@@ -12,17 +12,21 @@ The app **follows the device light/dark setting automatically**. **Light** appea
 
 ## Intro Page
 
-| Aspect     | Original                                                                                      | New                                                                                                                                                                                                 |
-| ---------- | ----------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Animation  | JS image sequence (~5.5 MB of PNG frames)                                                       | **~212 KB** looping **video** with a poster frame—far less data and CPU than the original frame sequence.                                                                                          |
+
+| Aspect    | Original                                  | New                                                                     |
+| --------- | ----------------------------------------- | ----------------------------------------------------------------------- |
+| Animation | JS image sequence (~5.5 MB of PNG frames) | **~212 KB** looping **video** with a poster frame—far less data and CPU |
+
 
 ---
 
 ## Navigation & Layout
 
-| Aspect       | Original (scraped)                                                                                                                                      | New                                                                                                                                                                       |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+
+| Aspect       | Original                                                                                                                                               | New                                                                                                                                                                    |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | How you move | **Star-shaped:** the **table of contents** was the hub; **each page was only reachable from there**, with no path that walked you through in sequence. | **Step-by-step** flow between the main sections (easier evaluation-style reading), while the **table of contents stays one click away** for the full overview anytime. |
+
 
 ---
 
@@ -41,11 +45,13 @@ The app **follows the device light/dark setting automatically**. **Light** appea
 
 ## Removed
 
-| Item                     | Original (scraped) | New                                                                                    |
-| ------------------------ | ------------------ | -------------------------------------------------------------------------------------- |
-| Google Analytics         | Yes                | Removed entirely; **can be added back on request**.                                    |
-| Cookie consent banner    | Missing            | Not needed — **no cookies are used**.                                                  |
-| reCAPTCHA (contact form) | Yes                | **Netlify** spam handling instead (invisible to the user).                             |
+
+| Item                     | Original | New                                                        |
+| ------------------------ | -------- | ---------------------------------------------------------- |
+| Google Analytics         | Yes      | Removed entirely; **can be added back on request**.        |
+| Cookie consent banner    | Missing  | Not needed — **no cookies are used**.                      |
+| reCAPTCHA (contact form) | Yes      | **Netlify** spam handling instead (invisible to the user). |
+
 
 ---
 
@@ -63,3 +69,4 @@ The app **follows the device light/dark setting automatically**. **Light** appea
 - Removed redundant preamble (replaced with cross-reference to Privacy Policy)
 - States that **no cookies** are used; PWA/cache storage is not cookie-based and is covered in the Privacy Policy (no analytics)
 - Added "Last Updated" date
+
