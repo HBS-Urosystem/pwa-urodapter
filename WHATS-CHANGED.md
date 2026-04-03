@@ -36,7 +36,7 @@ The app **follows the device light/dark setting automatically**. **Light** appea
 - **Offline video:** Instruction videos can be cached; optional **download all** on the home page for full offline viewing and fewer repeat downloads on poor connections.
 - **Install guide:** `/install` with steps per platform.
 - **Doctor steps:** Carousel remembers **which step** you were on after reload; **arrow keys**, on-screen **back / next / start over**, and scrolling the active step into view; **reduced motion** respected where relevant.
-- **Updates:** Users are **notified** when a new app version is available after deploy or resume.
+- **Updates:** Users are **notified** when a new app version is available.
 - **Share:** Share action for distributing the app (e.g. in clinics).
 - **SEO:** Per-page titles and descriptions, canonical URLs, **Open Graph / Twitter** previews, **sitemap** and **robots.txt**.
 - **Accessibility:** Better structure and keyboard use on key flows (e.g. instruction carousel).
