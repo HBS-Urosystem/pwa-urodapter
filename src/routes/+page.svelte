@@ -284,11 +284,11 @@
 
 		<h2 class="mb-4 text-center text-lg font-bold">Table of Contents</h2>
 
-		<div class="mx-auto grid max-w-4xl grid-cols-1 gap-4 px-4 sm:grid-cols-2 lg:grid-cols-3">
+		<div class="mx-auto grid max-w-4xl grid-cols-1 gap-4 px-4 sm:grid-cols-4 lg:grid-cols-4">
 			{#each cards as card (card.href)}
 				<a
 					href={resolve(card.href as '/')}
-					class=" aspect--square sm--aspect-auto h-full no-underline sm:last:col-span-full lg:last:col-start-2"
+					class="h-full no-underline col-span-2 sm---last:col-span-full sm:last:col-start-2"
 				>
 					<div
 						class="card h-full items-center bg-base-100 pt-6 shadow-md transition-shadow hover:shadow-lg"

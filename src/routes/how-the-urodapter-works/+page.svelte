@@ -15,7 +15,7 @@
 
 <SeoHead title={pageTitle} {description} path="/how-the-urodapter-works" />
 
-<section class="bg-primary/20 px-4 pt-8 pb-10">
+<section class="bg-primary/20 px-4 pt-8 pb-12">
 	<div class="mx-auto max-w-3xl text-center">
 		<h1 class="mb-4 text-3xl">{title}</h1>
 		{#if notesParagraphs.length > 0}

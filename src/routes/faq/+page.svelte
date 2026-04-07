@@ -15,7 +15,7 @@
 
 <SeoHead title={pageTitle} description={introPlain} path="/faq" />
 
-<section class="bg-primary/20 px-4 pt-8 pb-10">
+<section class="bg-primary/20 px-4 pt-8 pb-12">
 	<div class="mx-auto max-w-3xl">
 		<h1 class="mb-2 text-center text-3xl">{faq.title}</h1>
 		<div class="mb-6 space-y-2 text-center text-base-content/80">

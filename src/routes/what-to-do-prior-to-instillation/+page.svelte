@@ -26,18 +26,20 @@
 	});
 
 	function setAudience(next: 'patient' | 'doctor') {
+		if (next === audience) return;
 		audience = next;
 		persistPriorInstillationAudience(next);
+		window.scrollTo({ top: 0, behavior: 'smooth' });
 	}
 </script>
 
 <SeoHead title={pageTitle} {description} path="/what-to-do-prior-to-instillation" />
 
-<section class="bg-primary/20 px-4 pt-8 pb-10">
+<section class="bg-primary/20 px-4 pt-8 pb-12">
 	<div class="mx-auto max-w-3xl">
 		<h1 class="mb-6 text-3xl">{page.title}</h1>
 
-		<div role="tablist" class="tabs-box mb-6 tabs flex w-full" aria-label="Audience">
+		<div role="tablist" class="tabs-box mb-6 tabs flex w-full sticky top-16 z-10" aria-label="Audience">
 			<button
 				type="button"
 				role="tab"

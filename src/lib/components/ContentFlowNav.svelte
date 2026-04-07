@@ -44,14 +44,14 @@
 	<nav class="max-w-4xl mx-auto flex justify-between gap-4 px-6" aria-label="Section navigation">
 		<a
 			href={resolve(prevPathResolved as '/')}
-			class="btn btn-ghost btn-sm min-h-8 h-auto min-w-0 shrink justify-start gap-2"
+			class="btn btn-ghost min-h-10 h-auto min-w-0 shrink justify-start gap-2"
 		>
 			<span aria-hidden="true">←</span>
 			<span class="min-w-0 text-left">{prev.label}</span>
 		</a>
 		<a
 			href={resolve(nextPathResolved as '/')}
-			class="btn btn-ghost btn-sm min-h-8 h-auto min-w-0 shrink justify-end gap-2"
+			class="btn btn-ghost min-h-10 h-auto min-w-0 shrink justify-end gap-2"
 		>
 			<span class="min-w-0 text-right">{next.label}</span>
 			<span aria-hidden="true">→</span>

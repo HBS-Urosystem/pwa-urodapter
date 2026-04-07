@@ -90,6 +90,10 @@
 	--color-neutral-light: oklch(90% 0.025 195);
 	--font-heading: 'Josefin Sans', sans-serif;
 }
+.tab.tab-active {
+	--tab-bg: var(--color-primary);
+	color: var(--color-primary-content);
+}
 
 h1, h2, h3, h4, h5, h6 {
 	font-family: var(--font-heading);

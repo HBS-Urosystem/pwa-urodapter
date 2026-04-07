@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { browser } from '$app/environment';
 	import { tick, onMount } from 'svelte';
@@ -163,6 +164,23 @@
 		});
 	}
 
+	/** Match prior-instillation Patient/Doctor tabs: smooth scroll to top after gender tab navigation */
+	async function onGenderTabClick(
+		e: MouseEvent & { currentTarget: HTMLAnchorElement },
+		href: string,
+		isCurrentTab: boolean
+	) {
+		if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+		if (isCurrentTab) {
+			e.preventDefault();
+			return;
+		}
+		e.preventDefault();
+		await goto(href, { noScroll: true });
+		await tick();
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+	}
+
 	async function goNextStep() {
 		if (stepIndex >= pack.steps.length - 1) return;
 		moveToStep(stepIndex + 1);
@@ -235,11 +253,11 @@
 
 <SeoHead title={`${pack.pageTitle} | Urodapter`} description={seoDescription} path={seoPath} />
 
-<section class="bg-primary/20 px-4 pt-8 pb-10">
+<section class="bg-primary/20 px-4 pt-8 pb-12">
 	<div class="mx-auto max-w-3xl">
 		<h1 class="mb-6 text-3xl">{pack.pageTitle}</h1>
 
-		<div role="tablist" class="tabs-box mb-6 tabs flex w-full" aria-label="Patient type">
+		<div role="tablist" class="tabs-box mb-6 tabs flex w-full sticky top-16 z-10" aria-label="Patient type">
 			<a
 				id={femaleTabId}
 				href={resolve(femalePath)}
@@ -247,6 +265,7 @@
 				class="tab flex-1 basis-0"
 				class:tab-active={activeGender === 'female'}
 				aria-selected={activeGender === 'female'}
+				onclick={(e) => onGenderTabClick(e, resolve(femalePath), activeGender === 'female')}
 			>
 				Female patients
 			</a>
@@ -257,6 +276,7 @@
 				class="tab flex-1 basis-0"
 				class:tab-active={activeGender === 'male'}
 				aria-selected={activeGender === 'male'}
+				onclick={(e) => onGenderTabClick(e, resolve(malePath), activeGender === 'male')}
 			>
 				Male patients
 			</a>
