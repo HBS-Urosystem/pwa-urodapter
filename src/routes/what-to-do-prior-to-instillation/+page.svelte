@@ -44,23 +44,23 @@
 				type="button"
 				role="tab"
 				class="tab flex-1 basis-0"
-				class:tab-active={audience === 'patient'}
-				aria-selected={audience === 'patient'}
-				tabindex={audience === 'patient' ? 0 : -1}
-				onclick={() => setAudience('patient')}
-			>
-				Patient
-			</button>
-			<button
-				type="button"
-				role="tab"
-				class="tab flex-1 basis-0"
 				class:tab-active={audience === 'doctor'}
 				aria-selected={audience === 'doctor'}
 				tabindex={audience === 'doctor' ? 0 : -1}
 				onclick={() => setAudience('doctor')}
 			>
 				Doctor
+			</button>
+			<button
+				type="button"
+				role="tab"
+				class="tab flex-1 basis-0"
+				class:tab-active={audience === 'patient'}
+				aria-selected={audience === 'patient'}
+				tabindex={audience === 'patient' ? 0 : -1}
+				onclick={() => setAudience('patient')}
+			>
+				Patient
 			</button>
 		</div>
 

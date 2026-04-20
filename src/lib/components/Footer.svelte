@@ -68,7 +68,7 @@
 				<!-- <img src="/assets/img/logo_white.svg" alt="Urodapter" class="h-4" /> -->
 				<LogoWordmark class="h-4" />
 			</a>
-			<span class="text-xs opacity-90">v2.1</span>
+			<span class="text-xs opacity-90">v2.0</span>
 		</span>
 	</div>
 </footer>
