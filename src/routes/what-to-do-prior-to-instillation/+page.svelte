@@ -17,9 +17,9 @@
 	const doctor = siteContent.pageCopy.doctorPriorInstillation;
 	const pageTitle = `${page.title} | Urodapter`;
 	const description =
-		'Patient preparation before bladder instillation with UroDapter — sexual abstinence, empty bladder, residual urine; doctor preparation (A–C) and disinfection guidance.';
+		'Patient preparation before bladder instillation with UroDapter — sexual abstinence, empty bladder, residual urine; doctor preparation and disinfection guidance.';
 
-	let audience = $state<'patient' | 'doctor'>('patient');
+	let audience = $state<'patient' | 'doctor'>('doctor');
 
 	onMount(() => {
 		audience = readStoredPriorInstillationAudience();
