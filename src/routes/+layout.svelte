@@ -94,6 +94,15 @@
 					<li><a href={resolve('/privacy-policy')} onclick={closeDrawer}>Privacy Policy</a></li>
 					<li><a href={resolve('/cookie-policy')} onclick={closeDrawer}>Cookie Policy</a></li>
 					<li><a href={resolve('/contact')} onclick={closeDrawer}>Contact</a></li>
+					<li>
+						<a
+							href="https://www.urosystem.com/sample?app"
+							target="_blank"
+							rel="noopener noreferrer"
+							onclick={closeDrawer}
+							>Sample order</a
+						>
+					</li>
 				</ul>
 			</nav>
 		</div>
