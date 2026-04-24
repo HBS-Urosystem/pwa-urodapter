@@ -7,12 +7,19 @@ export function escapeHtml(s: string): string {
 		.replace(/"/g, '&quot;');
 }
 
-export function formatInlineMarkdown(s: string): string {
+/**
+ * @param linkClass - Tailwind classes for `[text](url)` links. Use a strong contrast (e.g. `!text-base-content`) on pale surfaces such as `alert-info`.
+ */
+export function formatInlineMarkdown(
+	s: string,
+	linkClass = 'link link-primary underline'
+): string {
 	let t = escapeHtml(s);
 	t = t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 	t = t.replace(
 		/\[([^\]]+)\]\(([^)]+)\)/g,
-		'<a href="$2" class="link link-primary underline">$1</a>'
+		(_m, text: string, href: string) =>
+			`<a href="${href}" class="${escapeHtml(linkClass)}">${text}</a>`
 	);
 	return t;
 }
