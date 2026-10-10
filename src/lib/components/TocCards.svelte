@@ -79,18 +79,43 @@
 		<!-- An odd last card is centred on the 2-column layout. -->
 		<a
 			href={resolve(section.path as '/')}
-			class="h-full no-underline col-span-2 sm---last:col-span-full sm:odd:last:col-start-2"
+			class="sm---last:col-span-full col-span-2 h-full no-underline sm:odd:last:col-start-2"
 		>
-			<div
-				class="card h-full items-center bg-base-100 pt-6 shadow-md transition-shadow hover:shadow-lg"
-			>
-				<figure class="m-0 text-primary">
-					{@render icon(section.icon)}
-				</figure>
-				<div class="card-body items-center p-4 text-center">
-					<h3 class="card-title">{section.title}</h3>
+			{#if section.image}
+				<div
+					class="card h-full overflow-hidden bg-base-100 shadow-md transition-shadow hover:shadow-lg"
+				>
+					<figure class="m-0">
+						<img
+							src={section.image}
+							alt={section.imageAlt ?? ''}
+							width="384"
+							height="308"
+							loading="lazy"
+							class="aspect-[384/308] h-auto w-full object-cover"
+						/>
+					</figure>
+					<div class="card-body items-center gap-1 p-4 text-center">
+						<h3 class="card-title">{section.title}</h3>
+						{#if section.description}
+							<p class="text-sm text-base-content/80">{section.description}</p>
+						{/if}
+					</div>
 				</div>
-			</div>
+			{:else}
+				<div
+					class="card h-full items-center bg-base-100 pt-6 shadow-md transition-shadow hover:shadow-lg"
+				>
+					<figure class="m-0 text-primary">
+						{#if section.icon}
+							{@render icon(section.icon)}
+						{/if}
+					</figure>
+					<div class="card-body items-center p-4 text-center">
+						<h3 class="card-title">{section.title}</h3>
+					</div>
+				</div>
+			{/if}
 		</a>
 	{/each}
 </div>

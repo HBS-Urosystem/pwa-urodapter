@@ -10,3 +10,4 @@ bun.lockb
 
 # Codegen output (tabs/format from compile script)
 src/lib/content/generated.ts
+src/lib/content/generated-patient-nav.ts

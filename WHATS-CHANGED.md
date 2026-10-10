@@ -16,7 +16,7 @@ The app **follows the device light/dark setting automatically**. **Light** appea
 | Aspect    | Original                                  | New                                                                     |
 | --------- | ----------------------------------------- | ----------------------------------------------------------------------- |
 | Animation | JS image sequence (~5.5 MB of PNG frames) | **~212 KB** looping **video** with a poster frame—far less data and CPU |
-| Entry     | Single **Enter** button into the manual    | Two entry buttons: **For Clinicians** opens the existing manual (its Table of Contents); **Self instillation** opens the **patient journey** with its own Table of Contents (`/self-instillation`) and menu — in preparation: no entries yet, `noindex`, not in sitemap |
+| Entry     | Single **Enter** button into the manual    | Two entry buttons: **For Clinicians** opens the existing manual (its Table of Contents); **Self instillation** opens the **patient journey** (bladder instillation at home) with its own Table of Contents (`/self-instillation`) and menu. Not yet in search results (`noindex`) or the sitemap until the content is approved |
 
 
 ---
@@ -43,6 +43,7 @@ The app **follows the device light/dark setting automatically**. **Light** appea
 - **Share:** Share action for distributing the app (e.g. in clinics).
 - **SEO:** Per-page titles and descriptions, canonical URLs, **Open Graph / Twitter** previews, **sitemap** and **robots.txt**.
 - **Accessibility:** Better structure and keyboard use on key flows (e.g. instruction carousel).
+- **Patient journey (Self instillation):** guidance for bladder instillation at home in three approaches – lying or semi-reclined, standing in the shower, partner-assisted. Each approach has a **one-page summary** (8 numbered steps) and **detailed instructions** with one page per step (step links 1–8, previous / next bar, breadcrumb). The anatomical figure opens on request; the app remembers the last opened step per approach (“Continue at step n”). All patient pages are prerendered and work offline after the first visit.
 
 ---
 

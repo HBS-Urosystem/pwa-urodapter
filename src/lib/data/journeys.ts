@@ -8,13 +8,25 @@
  * they show the menu of the journey the user was last in (see `$lib/stores/journey.svelte`).
  */
 
+import { patientNav } from '$lib/content/generated-patient-nav';
+
 export type JourneyId = 'clinician' | 'patient';
 
 /** Icon names drawn by `TocCards.svelte`. */
 export type TocIconName = 'tool' | 'gear' | 'female' | 'male' | 'help' | 'download';
 
-/** One Table of Contents entry. The journey's menu lists the same entries in the same order. */
-export type JourneySection = { title: string; path: string; icon: TocIconName };
+/**
+ * One Table of Contents entry. The journey's menu lists the same entries in the same order.
+ * A card shows either an `icon` (clinician journey) or an `image` with a `description` (patient journey).
+ */
+export type JourneySection = {
+	title: string;
+	path: string;
+	icon?: TocIconName;
+	image?: string;
+	imageAlt?: string;
+	description?: string;
+};
 
 /** Menu link below the divider. `external` links open in a new tab. */
 export type MenuLink = { label: string; path: string; external?: boolean };
@@ -23,6 +35,8 @@ export type Journey = {
 	id: JourneyId;
 	/** Table of Contents page of the journey (header button, menu, drawer icon point here). */
 	tocPath: string;
+	/** First menu item; the same text as the heading of the `tocPath` page. */
+	tocLabel: string;
 	/** Table of Contents entries, in order. */
 	sections: readonly JourneySection[];
 	/** Menu links below the divider. */
@@ -43,6 +57,7 @@ export const JOURNEYS: Record<JourneyId, Journey> = {
 	clinician: {
 		id: 'clinician',
 		tocPath: '/',
+		tocLabel: 'Table of Contents',
 		sections: [
 			{ title: 'Educational Video', path: '/how-the-urodapter-works', icon: 'tool' },
 			{
@@ -70,8 +85,15 @@ export const JOURNEYS: Record<JourneyId, Journey> = {
 	patient: {
 		id: 'patient',
 		tocPath: PATIENT_ROOT,
-		/** Add the journey's pages here (routes under `/self-instillation/...`). */
-		sections: [],
+		tocLabel: 'Self instillation',
+		/** The three approaches, from `content/patient/*.yaml` (via `generated-patient-nav.ts`). */
+		sections: patientNav.map((a) => ({
+			title: a.label,
+			path: `${PATIENT_ROOT}/${a.id}`,
+			image: a.image,
+			imageAlt: a.imageAlt,
+			description: a.description
+		})),
 		moreLinks: [
 			...SHARED_MORE_LINKS,
 			{ label: 'Shop', path: 'https://www.urosystem.com/shop?app', external: true }

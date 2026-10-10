@@ -1,0 +1,158 @@
+# Generated from the patient docx (tracked changes accepted); text is verbatim except the fixes in _workfiles/patient-source/corrections.yaml.
+# Edit here, then run `npm run content:build`.
+id: shower
+label: Standing in the shower
+seoTitle: Self-instillation while standing in the shower
+image: /assets/patient/approach-shower.webp
+imageAlt: A woman wrapped in a towel, standing in a shower
+intro: |
+  In this approach, you carry out the instillation on your own while standing in the shower. A slightly bent-knee position can improve access and reach, and the urethral opening is usually located by touch rather than with a mirror. The goal is to find a stable position that allows you to place the UroDapter correctly and control the syringe comfortably.
+safety: If you experience significant pain, persistent resistance, or are unable to establish a comfortable position and smooth flow after repositioning, stop the procedure and seek advice from your healthcare professional before trying again.
+steps:
+- id: prepare
+  label: Prepare equipment and shower area
+  title: Prepare the equipment and shower area
+  summary: Empty your bladder and keep everything within reach. Keep the assembled syringe and UroDapter clean and dry, protected from unclean surfaces.
+  body: |
+    Empty your bladder before preparing for the instillation.
+
+    Before you begin, prepare everything you will need so you can complete the instillation without interrupting the procedure.
+
+    Prepare before the instillation:
+
+    - the syringe containing the prescribed bladder instillation solution, with the UroDapter already attached to it;
+    - liquid soap for washing your hands and the external genital area;
+    - povidone-iodine (Betadine) swabs or another suitable disinfectant material, prepared and within reach;
+    - a clean towel or other clean surface for items that need to remain dry and protected;
+    - tissues or another absorbent material if needed after the procedure.
+
+    Keep the assembled syringe with the UroDapter in a clean, dry place until you are ready to use it. Keep the UroDapter tip away from touching the shower floor, wall, shelf, or other unclean surfaces, and prevent exposing it unnecessarily to running shower water.
+
+    Arrange the equipment so that everything can be reached easily from your standing position without having to leave the shower or interrupt the procedure.
+- id: position
+  label: Choose your standing position
+  title: Choose your standing position
+  summary: Stand with your feet comfortably apart and your knees slightly bent so you can reach the urethral area and control the UroDapter and the syringe without straining. Adjust your posture to stay stable and comfortable throughout the instillation.
+  body: |
+    Stand in a stable position that gives you comfortable access to the urethral area while you can still control the UroDapter and syringe.
+
+    For finding the right position:
+
+    - stand with your feet comfortably apart;
+    - bend your knees slightly;
+    - turn your feet outward a little, if this improves access and balance;
+    - keep enough space between your legs to reach the urethral area easily;
+    - and make sure you can move your hands freely while maintaining a steady posture.
+
+    There is no single correct foot or knee angle. The aim is to find a position that gives you good access, enough reach, and sufficient control of the syringe without straining.
+
+    You may need a few attempts to find the posture that works best for you. Small changes in how deep you bend your knees, how far apart your feet are, or how much you turn your feet outward can make the procedure easier.
+
+    Before proceeding, make sure you feel stable and can comfortably maintain the position for the full instillation.
+- id: disinfect
+  label: Wash and disinfect the area
+  title: Wash and disinfect the area
+  summary: Wash your hands and external genital area with mild soap and water; rinse well. Gently separate the labia and disinfect the urethral opening and surrounding area. Keep the cleaned area and UroDapter tip away from unclean surfaces.
+  body: |
+    Wash your hands thoroughly first.
+
+    Then clean the external genital area with water and a mild liquid soap, including the pubic and perivaginal area. Rinse well.
+
+    Next, gently part the labia minora with one hand to expose the urethral area. With the other hand, wipe the urethral opening and the surrounding area carefully with povidone-iodine (Betadine) swabs or another suitable disinfectant material. Do not use povidone-iodine if you have a known allergy or sensitivity to povidone-iodine or any of its ingredients.
+
+    If the fingers of the hand holding the labia apart remain close to the cleaned area during the process, disinfect your fingers, too, before proceeding.
+
+    After disinfection, keep the labia apart if possible and avoid unnecessary touching of the cleaned urethral area. Do not allow the UroDapter tip to touch any non-clean surface before placement.
+- id: locate
+  label: Locate the urethral opening by touch
+  title: Locate the urethral opening by touch
+  summary: Gently keep the labia apart and use a clean finger to trace up or down the midline between the clitoris and the vaginal opening until you find the urethral orifice . This usually becomes easier with practice.
+  body: |
+    Keep the labia minora gently separated with one hand.
+
+    With a clean finger, use the midline of the vulva and the surrounding structures to orient yourself. There are two practical ways to locate the urethral opening:
+
+    - start near the vaginal opening and move your finger gently upward in the midline toward the clitoris; or
+    - start higher, near the clitoral area, and move downward along the midline.
+
+    The urethral opening lies between the clitoris and the vaginal opening. Some women find that differences in the touch of the tissues help them recognize the correct area.
+
+    Take your time and keep the labia apart while locating the opening. With practice, the position usually becomes easier to recognize by touch.
+
+    [[figure:anatomy]]
+- id: place
+  label: Place and align the UroDapter
+  title: Place and align the UroDapter
+  summary: Keep the labia gently apart and slide the UroDapter down the midline until the tip reaches the urethral opening. Align the syringe with the natural direction of the urethra and use gentle, controlled pressure rather than forcing it.
+  body: |
+    Once you have located the urethral opening by touch, prepare the UroDapter tip for application.
+
+    If the tip feels dry, lightly moisten it by:
+
+    - gently pushing out a single drop of the bladder instillation solution through the UroDapter, or
+    - moistening the tip with a small amount of the povidone-iodine (Betadine) that you used for disinfection.
+
+    Then apply the UroDapter in four simple steps:
+
+    1. **Keep the labia gently separated** with one hand.
+    2. **Bring the UroDapter to the midline**, slightly above the urethral opening, near the clitoral area.
+    3. **Slide it gently downward along the midline** while applying steady inward pressure until the tip reaches and enters the urethral opening.
+    4. **Once the tip is in the opening, align the syringe with the natural direction of the urethra** and continue with gentle, controlled pressure.
+
+    A small scooping or “spooning” movement may help the UroDapter settle into the correct position beneath the pubic bone.
+
+    Do not force the UroDapter against resistance. If it does not move into position easily, reduce the pressure, adjust the angle slightly, and try again.
+- id: seal
+  label: Create and maintain the seal
+  title: Create and maintain the seal
+  summary: Relax your pelvic area and gently advance the UroDapter until the collar seals the urethral opening fully. Keep it aligned with steady inward pressure, without excessive force, and maintain a stable position.
+  body: |
+    Before starting the instillation, take a slow, deep breath and consciously relax your pelvic area and your urinary sphincter.
+
+    Once relaxed, gently but steadily introduce the UroDapter into the urethral opening until the sealing collar sits fully against the opening and makes even contact all the way around. This requires only a short advancement - typically about 6–8 mm - until the sealing collar makes full contact.
+
+    [[figure:sealing]]
+
+    Maintain steady, controlled inward pressure so the collar stays in full contact with the urethral opening and forms a watertight seal. The pressure should be firm enough to keep the UroDapter securely in position and prevent leakage, but it should not require excessive force or cause significant discomfort.
+
+    Keep the syringe aligned with the natural direction of the urethra while maintaining the pressure. Make sure your standing position remains stable, and your knees slightly bent if this helps you maintain access and control.
+
+    Once the seal feels stable, keep the UroDapter in the same position and maintain the pressure as you prepare to begin the instillation.
+- id: instill
+  label: Instill the solution
+  title: Instill the solution
+  summary: Keep your pelvic area relaxed and maintain the sealing of the collar, the alignment, and the steady inward pressure while slowly pressing the plunger at a controlled pace. If you notice leakage or increased resistance, pause and adjust before continuing.
+  body: |
+    Once the UroDapter is correctly positioned and the seal is stable, keep your pelvic area relaxed and maintain the same alignment and steady inward pressure on the adapter.
+
+    Keep your knees slightly bent and consciously maintain the inward pressure during the instillation. This helps keep the UroDapter securely in position and prevents the seal from loosening or the adapter from slipping outward.
+
+    Slowly press the syringe plunger and instill the solution at a slow-to-moderate, controlled pace.
+
+    The fluid should flow smoothly as you are pressing the plunger. Some pressure is normally needed, but it should not require forceful pushing. With practice, you will become familiar with the amount of pressure needed and you will be able to recognize better when resistance increases.
+
+    Continue at a pace that allows you to maintain the position, alignment, and sealing during the instillation until the prescribed volume has been delivered.
+
+    Once the prescribed volume has been delivered, gently remove the UroDapter. A few drops of solution may leak out after removal; this is usually insignificant and does not necessarily mean that the instillation was unsuccessful.
+
+    If you experience leakage or increasing resistance during instillation, pause and use the guidance in the next section to adjust the position and alignment before continuing.
+- id: feedback
+  label: Use leakage or resistance as feedback
+  title: Use leakage or resistance as feedback
+  summary: Leakage usually means the sealing, the pressure, or the angle needs adjustment, while resistance means you should pause rather than push harder. Relax, slightly reduce the pressure if needed, and apply small changes in your position or in the angle of the syringe until the seal is stable and the solution flows more smoothly.
+  body: |
+    Leakage and resistance are useful signs that the position or alignment of the UroDapter may need a small adjustment. With practice, these small adjustments usually become easier to recognize and to perform.
+
+    ### If fluid leaks around the UroDapter:
+
+    - Pause the instillation.
+    - Keep the pelvic area relaxed and check that the UroDapter has not slipped outward.
+    - Re-establish full contact of the sealing collar with the urethral opening, and slightly adjust the position or angle if needed before continuing.
+
+    ### If the solution does not flow easily or you feel resistance:
+
+    - Do not force the syringe plunger.
+    - Use enough inward pressure to maintain the seal, but do not keep increasing the pressure if the solution does not flow. Excessive pressure can distort the urethra and make the flow more difficult.
+    - If resistance increases, reduce the pressure slightly, relax your pelvic area and urinary sphincter, and reassess the angle of the syringe.
+    - Because the angle of the urethra varies from woman to woman, you may need to make small changes to the syringe angle while maintaining gentle inward pressure. Move the syringe slightly until you find the direction in which the solution begins to flow more easily. A better-aligned position is usually indicated when the solution begins to flow more smoothly.
+    - If needed, stop, remove the UroDapter, and reposition it before trying again.

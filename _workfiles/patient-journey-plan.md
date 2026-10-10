@@ -1,7 +1,7 @@
 # Páciens journey (Self instillation) – terv
 
 Forrás: `1_UroDapter_self-treatment_FULL_KA.docx` (a teljes páciens-tartalom, 2026-10-10).
-Állapot: terv; a 3 nyitott kérdés eldöntve (11. fejezet). Kód még nem készült hozzá.
+Állapot: **megvalósítva 2026-10-10** (a 9. fejezet 1–4. lépése; az eltéréseket a 12. fejezet sorolja fel). A tartalom még az orvosi ellenőrzésre vár (10. fejezet), addig a journey `noindex`.
 Felhasznált szempontrendszerek: site-architecture (oldalfa, URL-ek, navigáció, ellenőrzések), intent:organize (szerkezet, címkék, tájékozódás), frontend-design (képernyők, vizuális irány).
 
 ---
@@ -38,7 +38,7 @@ Felhasznált szempontrendszerek: site-architecture (oldalfa, URL-ek, navigáció
 | 7 | `instill` | Instill the solution | Instill the solution | Instill the solution |
 | 8 | `feedback` | Use leakage or resistance as feedback | Use leakage or resistance as feedback | Use leakage or resistance as feedback |
 
-A táblázat a javasolt egységes címeket mutatja. Döntés (2026-10-10): a szöveg szó szerint marad az orvosi ellenőrzésig, ezért egyelőre az összefoglaló sorai a lépéscím-képek szövegét, a lépésoldalak a részletes fejezetek címét kapják; az eltéréseket a 10. fejezet sorolja fel.
+A táblázat a javasolt egységes címeket mutatja. Az összefoglaló sorai a lépéscím-képek szövegét, a lépésoldalak a részletes fejezetek címét kapják. A 6. lépés címe és a Shower 3. összefoglaló-sora 2026-10-10-én egységesítve lett; a többi eltérést (a képek szövegéből hiányzó „the”) a 10. fejezet és az L-04 sor tartja nyilván.
 
 ### Közös és egyedi elemek
 
@@ -177,7 +177,7 @@ Note on U-12: the external links "Sample order" (`https://www.urosystem.com/samp
 | L-01 | pass | "One-page summary" and "Detailed instructions" name what is inside | – |
 | L-02 | pass | – | – |
 | L-03 | **fail** | "urethral orifice" in 3 summary rows (Lying 3, Lying 4, Shower 4) and in one Partner tip (step 6); everywhere else the text says "urethral opening" | use "urethral opening" – deferred: the text stays verbatim until medical review (chapter 10) |
-| L-04 | **fail** | (a) the patient menu's first item says "Table of Contents", the page heading is "Self instillation"; (b) Shower step 3: summary label "Clean and disinfect the area", heading "Wash and disinfect the area"; (c) step 6: label "…the seal", heading "…the sealing" (all 3); (d) the label images drop "the" ("Prepare equipment and environment") | (a) now: the patient menu's first item becomes "Self instillation" (a per-journey `tocLabel` field in `journeys.ts`); (b)–(d) deferred until medical review: then one title per step for the summary row, the step heading, the step strip and the prev/next labels |
+| L-04 | **fail** | (a) the patient menu's first item says "Table of Contents", the page heading is "Self instillation"; (b) Shower step 3: summary label "Clean and disinfect the area", heading "Wash and disinfect the area"; (c) step 6: label "…the seal", heading "…the sealing" (all 3); (d) the label images drop "the" ("Prepare equipment and environment") | (a), (b), (c) fixed on 2026-10-10 (menu item "Self instillation"; Shower step 3 label "Wash and disinfect the area"; step 6 title "Create and maintain the seal"); (d) deferred until medical review |
 | L-05 | pass | – | – |
 | L-06 | pass | Install App, legal, Contact and Shop are below the divider (utility layer) | – |
 | L-07 | **fail** | The journey: "Self instillation" (splash, page heading) vs "Self-instillation" (docx headings). The approaches: illustration captions "Instillation in lying position" / "Instillation in the shower" vs docx headings "…lying or semi-reclined position" / "…while standing in the shower". | One name per item everywhere. The captions become live text under the illustration; the text baked into the images has been cropped off (done: `static/assets/patient/approach-*.webp`). |
@@ -445,26 +445,27 @@ Offline: a tartalom a JavaScript csomagba kerül (`generated.ts`), így az alkal
 
 ## 10. Nyelvi javítások és tartalmi kiegészítés – az orvosi ellenőrzéshez
 
+**A docx állapota:** a dokumentumban 112 beszúrás és 93 törlés van követett változásként, még elfogadatlanul. Az alkalmazás szövege az **összes változás elfogadásával** készült. Ezen felül Kéri András 4 nyitott megjegyzése van benne:
+
+| Hol | A megjegyzés helye | Megjegyzés |
+|---|---|---|
+| Lying, összefoglaló 3 | „Gently separate the labia and disinfect the urethral orifice and the surrounding area…” | „Ezt csak a többi hasonló leírásból tippeltem, hogy mi akart lenni.” |
+| Lying, összefoglaló 6 | „Relax your pelvic area and gently advance the UroDapter until the collar seals…” | „Ezt sem teljesen értem.” |
+| Lying, 3. lépés | „If the fingers of the hand holding the labia apart remain close to the cleaned area…” | „Remélem, ezt akartad írni” |
+| Lying, 5. lépés utolsó bekezdése | „Once the UroDapter is correctly aligned, keep it firm for ensuring the sealing, and starting the instillation.” | „Ezt sem teljesen értettem, mi akart lenni.” |
+
+Ha az ellenőrzés után új docx érkezik, a `_workfiles/patient-source/` szkriptjeivel a tartalomfájlok újra előállíthatók, és ellenőrizhető, hogy minden bekezdés átkerült.
+
 Döntés (2026-10-10): a szöveg szó szerint kerül be. Az alábbi lista az orvosi ellenőrzéshez készült; a javítások csak az ellenőrzés után kerülnek be. Az utolsó sor nem javítás, hanem a docx-ből hiányzó tartalom a klinikusi oldalról.
+
+**Bekerült (2026-10-10):** 12 nyelvi javítás (elírások, a „seal” cím és a Shower 3. összefoglaló-sorának címe). A lista a `_workfiles/patient-source/corrections.yaml` fájlban van; az átalakító minden új docx-importnál újra alkalmazza őket.
 
 Kivétel: a fejezetcímek végén álló „.”, „..”, „ .” jelek nem kerülnek be. Ezek a Word belső hivatkozásaihoz kellettek (a három megközelítés azonos című fejezeteit különböztetik meg), a weben nincs szerepük.
 
 | Hol | docx | Javaslat |
 |---|---|---|
-| Bevezető | many women has also been able | many women have also been able |
-| Lying, 1. lépés | withinreach | within reach |
-| Lying, összefoglaló 2 | Lay down or recline | Lie down or recline |
-| Lying, összefoglaló 8 | Relax, slightly, reduce the pressure | Relax, slightly reduce the pressure |
-| Shower, összefoglaló 2 | Stand with holding your feet comfortably apart | Stand with your feet comfortably apart |
-| Shower, 2. lépés | how fare your feet are from each other, , | how far apart your feet are |
-| Shower, 3. lépés | disinfect you fingers | disinfect your fingers |
-| Partner, összefoglaló 8 | needs to be adjuste | needs to be adjusted |
-| Partner, 4. lépés | it is possible that it not immediately visible | it may not be immediately visible |
-| 5. lépés (mindhárom) | (Betadine), having used for disinfection | (Betadine) that you used for disinfection |
 | Fejezetcímek | záró „.”, „..”, „ .” | eltávolítva |
 | Összefoglaló (Lying 3, Lying 4, Shower 4), Partner 6. lépés tipp | urethral orifice | urethral opening |
-| 6. lépés címe | Create and maintain the sealing / the seal | Create and maintain the seal |
-| Shower, összefoglaló 3 címe | Clean and disinfect the area | Wash and disinfect the area |
 | Új tartalom: a nyitóoldal tájékoztató doboza (vagy mindhárom megközelítés 1. lépése – az ellenőrzés dönti el) | nem szerepel | Avoid sexual intercourse within 24 hours before the instillation to decrease the risk of urinary tract infection. (A klinikusi „What to do prior to instillation” oldal A pontja alapján: „Patients should be advised to avoid sexual intercourse within 24 hours prior to instillation to decrease the risk of urinary tract infection.”) |
 
 ---
@@ -486,3 +487,17 @@ Kivétel: a fejezetcímek végén álló „.”, „..”, „ .” jelek nem k
 1. A részletes útmutató lépésenként külön oldal (24 lépésoldal).
 2. A szöveg szó szerint marad az orvosi ellenőrzésig; a 10. fejezet listája az ellenőrzéshez készült.
 3. A 4. lépés anatómiai ábrája (külső nemi szervek) lenyitható blokkban jelenik meg, alapból zárva. A 6. lépés metszetrajza a szövegben, nyitva jelenik meg.
+
+---
+
+## 12. Megvalósítás – mi készült el és miben tér el a tervtől
+
+**Elkészült:** a nyitóoldal, a 3 megközelítés-oldal és a 24 lépésoldal (mind előre generált HTML); a menü és a fejléc a páciens journey-t követi; „Continue at step n”; a 4. lépés ábrája lenyitható blokkban; a docx mind a 275 bekezdése és táblázatcellája megvan a tartalomfájlokban (a 3 „Detailed instructions: …” sort a felület adja). Ellenőrizve: svelte-check, ESLint, Svelte autofixer, éles build, böngészős próba mind a 27 aloldalon telefon- és asztali méretben, világos és sötét módban, offline navigáció a service workerrel; a klinikusi tartalomjegyzék és menü változatlan.
+
+**Eltérések a tervtől:**
+- **Számjelvény és elsődleges gomb színe:** a `#02979d` helyett a szövegszín inverze (világos módban mélyteal alapon fehér, sötét módban halványkék alapon navy). Így minden méretben legalább 7:1 a kontraszt; a `#02979d` fehér számmal csak nagy betűnél lett volna elég.
+- **Tájékoztató dobozok** (gyakorlási tanács, Partner-tippek): halvány kék háttér a téma szövegszínével, mert a daisyUI `alert-info` színeivel a kontraszt 4.5:1 alatt volt. A figyelmeztetés (`alert-warning`) marad, csak a szövegszíne lett beállítva.
+- **Megközelítés-fülek:** az aktív fül fehér (sötét módban navy) kiemelt háttérrel és félkövér betűvel jelölve, nem a klinikusi oldal teal kitöltésével (ott a fehér szöveg kontrasztja 1.94:1).
+- **Oktatóvideó-link a nyitóoldalon:** kimaradt. A videóoldal a klinikusi journey része, ezért a link a menüt is klinikusira váltaná.
+- **„Keep screen on” kapcsoló:** nem készült el (opcionális volt).
+- **Billentyűzet és képernyőolvasó:** minden vezérlő natív link, gomb vagy `<details>`, de képernyőolvasóval külön nem próbáltam ki.

@@ -84,7 +84,7 @@
 			<!-- Menu of the current journey: Table of Contents + its entries, then links below the divider ($lib/data/journeys.ts). -->
 			<nav class="menu p-4">
 				<ul>
-					<li><a href={resolve(journey.tocPath as '/')} onclick={closeDrawer}>Table of Contents</a></li>
+					<li><a href={resolve(journey.tocPath as '/')} onclick={closeDrawer}>{journey.tocLabel}</a></li>
 					{#each journey.sections as section (section.path)}
 						<li><a href={resolve(section.path as '/')} onclick={closeDrawer}>{section.title}</a></li>
 					{/each}
@@ -92,6 +92,8 @@
 					{#each journey.moreLinks as link (link.path)}
 						<li>
 							{#if link.external}
+								<!-- External site: resolve() applies to app routes only -->
+								<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
 								<a href={link.path} target="_blank" rel="noopener noreferrer" onclick={closeDrawer}
 									>{link.label}</a
 								>

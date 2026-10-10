@@ -11,3 +11,8 @@ export type MaleInstructionPack = SiteContent['maleInstructions'];
 export type InstructionPack = FemaleInstructionPack | MaleInstructionPack;
 
 export type InstructionStep = FemaleInstructionPack['steps'][number];
+
+export type PatientContent = SiteContent['patient'];
+export type PatientApproach = PatientContent['approaches'][number];
+export type PatientStep = PatientApproach['steps'][number];
+export type PatientFigureId = keyof PatientContent['figures'];

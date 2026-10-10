@@ -1,0 +1,34 @@
+# Approved language fixes (2026-10-10). The docx text is otherwise copied verbatim.
+# build.py applies these after reading the docx; check.py applies them before comparing.
+# Optional scope: approach (lying | shower | partner), step (step id), field (label | title | summary | body).
+# A fix that matches nothing stops the build, so a new docx version cannot silently drop one.
+- find: many women has also been able
+  replace: many women have also been able
+- find: withinreach
+  replace: within reach
+- find: Lay down or recline
+  replace: Lie down or recline
+- find: Relax, slightly, reduce the pressure
+  replace: Relax, slightly reduce the pressure
+- find: Stand with holding your feet comfortably apart
+  replace: Stand with your feet comfortably apart
+- find: how fare your feet are from each other, ,
+  replace: how far apart your feet are,
+- find: disinfect you fingers
+  replace: disinfect your fingers
+- find: needs to be adjuste,
+  replace: needs to be adjusted,
+- find: it is possible that it not immediately visible
+  replace: it may not be immediately visible
+- find: (Betadine), having used for disinfection
+  replace: (Betadine) that you used for disinfection
+- find: (Betadine) having used for disinfection
+  replace: (Betadine) that you used for disinfection
+- find: Create and maintain the sealing
+  replace: Create and maintain the seal
+  field: title
+- find: Clean and disinfect the area
+  replace: Wash and disinfect the area
+  approach: shower
+  step: disinfect
+  field: label

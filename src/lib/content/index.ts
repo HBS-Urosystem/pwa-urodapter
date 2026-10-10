@@ -4,5 +4,9 @@ export type {
 	FemaleInstructionPack,
 	MaleInstructionPack,
 	InstructionPack,
-	InstructionStep
+	InstructionStep,
+	PatientContent,
+	PatientApproach,
+	PatientStep,
+	PatientFigureId
 } from './schema';
