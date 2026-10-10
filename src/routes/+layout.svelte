@@ -10,7 +10,7 @@
 	import LogoMark from '$lib/components/LogoMark.svelte';
 	import { JOURNEYS, journeyForPath } from '$lib/data/journeys';
 	import { lastJourney, rememberJourney, restoreJourney } from '$lib/stores/journey.svelte';
-	import { resetIntro } from '$lib/stores/intro.svelte';
+	import { markIntroSeen, resetIntro } from '$lib/stores/intro.svelte';
 
 	let { children } = $props();
 
@@ -23,6 +23,8 @@
 
 	/** Journey pages use their own journey; shared pages (Contact, Install App, legal) keep the last one. */
 	const journey = $derived(JOURNEYS[journeyForPath(page.url.pathname) ?? lastJourney.id]);
+	/** The journey the menu can switch to (For Clinicians / Self instillation). */
+	const otherJourneys = $derived(Object.values(JOURNEYS).filter((j) => j.id !== journey.id));
 
 	function closeDrawer() {
 		const el = document.getElementById('app-drawer');
@@ -31,6 +33,12 @@
 
 	function goToSplash() {
 		resetIntro();
+		closeDrawer();
+	}
+
+	/** Opens the other journey's Table of Contents directly, without the splash screen. */
+	function switchJourney() {
+		markIntroSeen();
 		closeDrawer();
 	}
 </script>
@@ -97,12 +105,18 @@
 					</svg>
 				</label>
 			</div>
-			<!-- Menu of the current journey: Table of Contents + its entries, then links below the divider ($lib/data/journeys.ts). -->
+			<!-- Menu of the current journey: Table of Contents + its entries, then the other journey between two dividers, then the app links ($lib/data/journeys.ts). -->
 			<nav class="menu p-4">
 				<ul>
 					<li><a href={resolve(journey.tocPath as '/')} onclick={closeDrawer}>{journey.tocLabel}</a></li>
 					{#each journey.sections as section (section.path)}
 						<li><a href={resolve(section.path as '/')} onclick={closeDrawer}>{section.title}</a></li>
+					{/each}
+					<div class="divider"></div>
+					{#each otherJourneys as other (other.id)}
+						<li>
+							<a href={resolve(other.tocPath as '/')} onclick={switchJourney}>{other.entryLabel}</a>
+						</li>
 					{/each}
 					<div class="divider"></div>
 					{#each journey.moreLinks as link (link.path)}

@@ -37,6 +37,8 @@ export type Journey = {
 	tocPath: string;
 	/** First menu item; the same text as the heading of the `tocPath` page. */
 	tocLabel: string;
+	/** Label of the splash button that starts this journey; the other journey's menu links here with it. */
+	entryLabel: string;
 	/** Table of Contents entries, in order. */
 	sections: readonly JourneySection[];
 	/** Menu links below the divider. */
@@ -58,6 +60,7 @@ export const JOURNEYS: Record<JourneyId, Journey> = {
 		id: 'clinician',
 		tocPath: '/',
 		tocLabel: 'Table of Contents',
+		entryLabel: 'For Clinicians',
 		sections: [
 			{ title: 'Educational Video', path: '/how-the-urodapter-works', icon: 'tool' },
 			{
@@ -86,6 +89,7 @@ export const JOURNEYS: Record<JourneyId, Journey> = {
 		id: 'patient',
 		tocPath: PATIENT_ROOT,
 		tocLabel: 'Self instillation',
+		entryLabel: 'Self instillation',
 		/** The three approaches, from `content/patient/*.yaml` (via `generated-patient-nav.ts`). */
 		sections: patientNav.map((a) => ({
 			title: a.label,
