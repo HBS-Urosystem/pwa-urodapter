@@ -109,3 +109,12 @@ video.instruction-step-video::-webkit-media-controls-volume-slider {
 video.instruction-step-video::-webkit-media-controls-volume-slider-container {
 	display: none !important;
 }
+
+/*
+ * Opaque equivalent of `bg-primary/20` over the page background (base-100).
+ * For sticky elements with rounded corners on `bg-primary/20` sections,
+ * so the content scrolling behind them does not show through the corners.
+ */
+@utility bg-primary-20-opaque {
+	background-color: color-mix(in srgb, var(--color-primary) 20%, var(--color-base-100));
+}

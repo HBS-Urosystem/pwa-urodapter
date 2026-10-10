@@ -31,7 +31,11 @@
 
 <section class="bg-primary/20 px-4 pt-6 pb-12">
 	<div class="mx-auto max-w-2xl">
-		<nav aria-label="Approaches" class="sticky top-16 z-10 mb-6">
+		<!-- Opaque page background behind the sticky tabs: covers the content scrolling under their rounded corners and in the 4px gap below the header (pt-1; -mt-1 keeps the unscrolled position). -mx-2 px-2 also covers the shadow of the content beside the tabs. -->
+		<nav
+			aria-label="Approaches"
+			class="sticky top-16 z-10 -mx-2 -mt-1 mb-6 bg-primary-20-opaque px-2 pt-1"
+		>
 			<ul class="tabs-box tabs flex w-full flex-nowrap">
 				{#each data.approaches as a (a.id)}
 					{@const current = a.id === approach.id}

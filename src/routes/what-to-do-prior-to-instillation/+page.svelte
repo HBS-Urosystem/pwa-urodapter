@@ -39,29 +39,32 @@
 	<div class="mx-auto max-w-3xl">
 		<h1 class="mb-6 text-3xl">{page.title}</h1>
 
-		<div role="tablist" class="tabs-box mb-6 tabs flex w-full sticky top-16 z-10" aria-label="Audience">
-			<button
-				type="button"
-				role="tab"
-				class="tab flex-1 basis-0"
-				class:tab-active={audience === 'doctor'}
-				aria-selected={audience === 'doctor'}
-				tabindex={audience === 'doctor' ? 0 : -1}
-				onclick={() => setAudience('doctor')}
-			>
-				Doctor
-			</button>
-			<button
-				type="button"
-				role="tab"
-				class="tab flex-1 basis-0"
-				class:tab-active={audience === 'patient'}
-				aria-selected={audience === 'patient'}
-				tabindex={audience === 'patient' ? 0 : -1}
-				onclick={() => setAudience('patient')}
-			>
-				Patient
-			</button>
+		<!-- Opaque page background behind the sticky tabs: covers the content scrolling under their rounded corners and in the 4px gap below the header (pt-1; -mt-1 keeps the unscrolled position). -mx-2 px-2 also covers the shadow of the content beside the tabs. -->
+		<div class="sticky top-16 z-10 -mx-2 -mt-1 mb-6 bg-primary-20-opaque px-2 pt-1">
+			<div role="tablist" class="tabs-box tabs flex w-full" aria-label="Audience">
+				<button
+					type="button"
+					role="tab"
+					class="tab flex-1 basis-0"
+					class:tab-active={audience === 'doctor'}
+					aria-selected={audience === 'doctor'}
+					tabindex={audience === 'doctor' ? 0 : -1}
+					onclick={() => setAudience('doctor')}
+				>
+					Doctor
+				</button>
+				<button
+					type="button"
+					role="tab"
+					class="tab flex-1 basis-0"
+					class:tab-active={audience === 'patient'}
+					aria-selected={audience === 'patient'}
+					tabindex={audience === 'patient' ? 0 : -1}
+					onclick={() => setAudience('patient')}
+				>
+					Patient
+				</button>
+			</div>
 		</div>
 
 		{#if audience === 'patient'}
