@@ -7,8 +7,10 @@
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import UpdateToast from '$lib/components/UpdateToast.svelte';
+	import LogoMark from '$lib/components/LogoMark.svelte';
 	import { JOURNEYS, journeyForPath } from '$lib/data/journeys';
 	import { lastJourney, rememberJourney, restoreJourney } from '$lib/stores/journey.svelte';
+	import { resetIntro } from '$lib/stores/intro.svelte';
 
 	let { children } = $props();
 
@@ -25,6 +27,11 @@
 	function closeDrawer() {
 		const el = document.getElementById('app-drawer');
 		if (el) (el as HTMLInputElement).checked = false;
+	}
+
+	function goToSplash() {
+		resetIntro();
+		closeDrawer();
 	}
 </script>
 
@@ -47,6 +54,15 @@
 			<div
 				class="sticky top-0 z-10 flex h-16 shrink-0 items-center justify-end gap-1 bg-base-100 px-4 pt-2 pb-2 shadow-sm"
 			>
+				<!-- U+ logo brings back the splash screen (journey choice), like the header logo. -->
+				<a
+					href={resolve('/')}
+					class="btn me-auto btn-square text-primary btn-ghost"
+					aria-label="Home"
+					onclick={goToSplash}
+				>
+					<LogoMark class="h-7" />
+				</a>
 				<a
 					href={resolve(journey.tocPath as '/')}
 					class="btn btn-square btn-ghost"
