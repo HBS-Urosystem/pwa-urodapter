@@ -17,12 +17,12 @@
 	const hub = JOURNEYS.patient;
 	const approachPath = $derived(`/self-instillation/${approach.id}`);
 
-	/** Previous / next step; the summary page before step 1 and after the last step. */
+	/** Previous / next step with its number ("2. Choose …"); the summary page before step 1 and after the last step. */
 	const prev = $derived(
 		index > 0
 			? {
 					path: `${approachPath}/${approach.steps[index - 1].id}`,
-					label: approach.steps[index - 1].title
+					label: `${index}. ${approach.steps[index - 1].title}`
 				}
 			: { path: approachPath, label: 'One-page summary' }
 	);
@@ -30,7 +30,7 @@
 		index < approach.steps.length - 1
 			? {
 					path: `${approachPath}/${approach.steps[index + 1].id}`,
-					label: approach.steps[index + 1].title
+					label: `${index + 2}. ${approach.steps[index + 1].title}`
 				}
 			: { path: approachPath, label: 'One-page summary' }
 	);

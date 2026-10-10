@@ -119,6 +119,6 @@
 	prev={{ path: hub.tocPath, label: hub.tocLabel }}
 	next={{
 		path: `/self-instillation/${approach.id}/${approach.steps[0].id}`,
-		label: approach.steps[0].title
+		label: `1. ${approach.steps[0].title}`
 	}}
 />
