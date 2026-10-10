@@ -80,8 +80,13 @@
 			}
 		};
 
+		// On the first visit clients.claim() gives the page its first controller.
+		// That is not an update, so only a change from an existing controller counts.
+		let controlled = !!navigator.serviceWorker.controller;
+
 		const onControllerChange = () => {
-			showUpdate = true;
+			if (controlled) showUpdate = true;
+			controlled = true;
 			detectControllerChange();
 		};
 
