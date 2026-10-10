@@ -1,13 +1,21 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import LogoWordmark from '$lib/components/LogoWordmark.svelte';
+	import { resetIntro } from '$lib/stores/intro.svelte';
+
+	let {
+		/** Table of Contents of the current journey. */
+		tocPath = '/'
+	}: { tocPath?: string } = $props();
 </script>
 
 <nav class="navbar bg-base-100 shadow-sm px-4 sticky top-0 z-40">
 	<div class="flex-1">
+		<!-- Logo brings back the splash screen (journey choice). -->
 		<!-- svelte-ignore a11y_consider_explicit_label -->
 		<a
 			href={resolve('/')}
+			onclick={resetIntro}
 			class="btn btn-ghost hover:bg-transparent hover:bg-transparent hover:border-transparent hover:shadow-none text-primary"
 			aria-label="Home"
 		>
@@ -16,7 +24,7 @@
 		</a>
 	</div>
 	<div class="flex-none gap-1">
-		<a href={resolve('/')} class="btn btn-ghost btn-square" aria-label="Table of Contents">
+		<a href={resolve(tocPath as '/')} class="btn btn-ghost btn-square" aria-label="Table of Contents">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="h-6 w-6"

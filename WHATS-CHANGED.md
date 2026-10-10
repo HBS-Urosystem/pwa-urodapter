@@ -16,6 +16,7 @@ The app **follows the device light/dark setting automatically**. **Light** appea
 | Aspect    | Original                                  | New                                                                     |
 | --------- | ----------------------------------------- | ----------------------------------------------------------------------- |
 | Animation | JS image sequence (~5.5 MB of PNG frames) | **~212 KB** looping **video** with a poster frame—far less data and CPU |
+| Entry     | Single **Enter** button into the manual    | Two entry buttons: **For Clinicians** opens the existing manual (its Table of Contents); **Self instillation** opens the **patient journey** with its own Table of Contents (`/self-instillation`) and menu — in preparation: no entries yet, `noindex`, not in sitemap |
 
 
 ---
@@ -26,6 +27,8 @@ The app **follows the device light/dark setting automatically**. **Light** appea
 | Aspect       | Original                                                                                                                                               | New                                                                                                                                                                    |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | How you move | **Star-shaped:** the **table of contents** was the hub; **each page was only reachable from there**, with no path that walked you through in sequence. | **Step-by-step** flow between the main sections (easier evaluation-style reading), while the **table of contents stays one click away** for the full overview anytime. |
+| Logo         | Header and footer logo link to the Table of Contents | Header and footer logo bring back the **splash screen**, where the user chooses a journey again |
+| Menu         | One menu for the whole site | The menu and the header's Table of Contents button belong to the current journey (clinician manual or patient journey). Shared pages (Contact, Install App, Privacy / Cookie Policy) keep the menu of the journey the user came from. The clinician menu links to **Sample order**, the patient menu to the **Shop** (urosystem.com/shop?app) |
 
 
 ---

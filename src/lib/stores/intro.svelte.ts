@@ -50,3 +50,14 @@ export function markIntroSeen(): void {
 		/* private mode / quota */
 	}
 }
+
+/** Show the splash screen again (header and footer logo). */
+export function resetIntro(): void {
+	introPlayed.seen = false;
+	if (!browser) return;
+	try {
+		sessionStorage.removeItem(STORAGE_KEY);
+	} catch {
+		/* private mode / quota */
+	}
+}

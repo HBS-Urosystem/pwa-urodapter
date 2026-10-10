@@ -1,11 +1,26 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { afterNavigate } from '$app/navigation';
 	import { resolve } from '$app/paths';
+	import { page } from '$app/state';
 	import './layout.css';
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import UpdateToast from '$lib/components/UpdateToast.svelte';
+	import { JOURNEYS, journeyForPath } from '$lib/data/journeys';
+	import { lastJourney, rememberJourney, restoreJourney } from '$lib/stores/journey.svelte';
 
 	let { children } = $props();
+
+	onMount(restoreJourney);
+
+	afterNavigate(({ to }) => {
+		const id = to ? journeyForPath(to.url.pathname) : null;
+		if (id) rememberJourney(id);
+	});
+
+	/** Journey pages use their own journey; shared pages (Contact, Install App, legal) keep the last one. */
+	const journey = $derived(JOURNEYS[journeyForPath(page.url.pathname) ?? lastJourney.id]);
 
 	function closeDrawer() {
 		const el = document.getElementById('app-drawer');
@@ -16,7 +31,7 @@
 <div class="drawer drawer-end">
 	<input id="app-drawer" type="checkbox" class="drawer-toggle" />
 	<div class="drawer-content flex min-h-screen flex-col">
-		<Header />
+		<Header tocPath={journey.tocPath} />
 		<main class="flex min-h-0 flex-1 flex-col">
 			{@render children()}
 			<div class="w-full shrink-0">
@@ -33,9 +48,9 @@
 				class="sticky top-0 z-10 flex h-16 shrink-0 items-center justify-end gap-1 bg-base-100 px-4 pt-2 pb-2 shadow-sm"
 			>
 				<a
-					href={resolve('/')}
+					href={resolve(journey.tocPath as '/')}
 					class="btn btn-square btn-ghost"
-					aria-label="Home"
+					aria-label="Table of Contents"
 					onclick={closeDrawer}
 				>
 					<svg
@@ -66,43 +81,25 @@
 					</svg>
 				</label>
 			</div>
+			<!-- Menu of the current journey: Table of Contents + its entries, then links below the divider ($lib/data/journeys.ts). -->
 			<nav class="menu p-4">
 				<ul>
-					<li><a href={resolve('/')} onclick={closeDrawer}>Table of Contents</a></li>
-					<li>
-						<a href={resolve('/how-the-urodapter-works')} onclick={closeDrawer}>Educational Video</a
-						>
-					</li>
-					<li>
-						<a href={resolve('/what-to-do-prior-to-instillation')} onclick={closeDrawer}
-							>What to do prior to instillation</a
-						>
-					</li>
-					<li>
-						<a href={resolve('/instructions-for-doctors-on-female-patients')} onclick={closeDrawer}
-							>Instructions on female patients</a
-						>
-					</li>
-					<li>
-						<a href={resolve('/instructions-for-doctors-on-male-patients')} onclick={closeDrawer}
-							>Instructions on male patients</a
-						>
-					</li>
-					<li><a href={resolve('/faq')} onclick={closeDrawer}>FAQ</a></li>
+					<li><a href={resolve(journey.tocPath as '/')} onclick={closeDrawer}>Table of Contents</a></li>
+					{#each journey.sections as section (section.path)}
+						<li><a href={resolve(section.path as '/')} onclick={closeDrawer}>{section.title}</a></li>
+					{/each}
 					<div class="divider"></div>
-					<li><a href={resolve('/install')} onclick={closeDrawer}>Install App</a></li>
-					<li><a href={resolve('/privacy-policy')} onclick={closeDrawer}>Privacy Policy</a></li>
-					<li><a href={resolve('/cookie-policy')} onclick={closeDrawer}>Cookie Policy</a></li>
-					<li><a href={resolve('/contact')} onclick={closeDrawer}>Contact</a></li>
-					<li>
-						<a
-							href="https://www.urosystem.com/sample?app"
-							target="_blank"
-							rel="noopener noreferrer"
-							onclick={closeDrawer}
-							>Sample order</a
-						>
-					</li>
+					{#each journey.moreLinks as link (link.path)}
+						<li>
+							{#if link.external}
+								<a href={link.path} target="_blank" rel="noopener noreferrer" onclick={closeDrawer}
+									>{link.label}</a
+								>
+							{:else}
+								<a href={resolve(link.path as '/')} onclick={closeDrawer}>{link.label}</a>
+							{/if}
+						</li>
+					{/each}
 				</ul>
 			</nav>
 		</div>

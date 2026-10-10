@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import LogoWordmark from '$lib/components/LogoWordmark.svelte';
+	import { resetIntro } from '$lib/stores/intro.svelte';
 </script>
 
 <footer
@@ -64,7 +65,8 @@
 			</a>
 		</span>
 		<span class="inline-flex items-center gap-1.5">
-			<a href={resolve('/')}>
+			<!-- Logo brings back the splash screen (journey choice), same as the header logo. -->
+			<a href={resolve('/')} onclick={resetIntro}>
 				<!-- <img src="/assets/img/logo_white.svg" alt="Urodapter" class="h-4" /> -->
 				<LogoWordmark class="h-4" />
 			</a>
