@@ -35,19 +35,17 @@ sw.addEventListener('install', (event) => {
 
 sw.addEventListener('activate', (event) => {
 	event.waitUntil(
-		caches
-			.keys()
-			.then((keys) =>
-				Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
-			)
-			.then(() => sw.clients.claim())
-			.then(() =>
-				sw.clients.matchAll({ type: 'window' }).then((clients) => {
-					for (const client of clients) {
-						client.postMessage({ type: 'SW_UPDATED' });
-					}
-				})
-			)
+		(async () => {
+			const oldKeys = (await caches.keys()).filter((k) => k !== CACHE_NAME);
+			await Promise.all(oldKeys.map((k) => caches.delete(k)));
+			await sw.clients.claim();
+			// No older cache means this is the first install on this origin, not an update.
+			if (oldKeys.length === 0) return;
+			const clients = await sw.clients.matchAll({ type: 'window' });
+			for (const client of clients) {
+				client.postMessage({ type: 'SW_UPDATED' });
+			}
+		})()
 	);
 });
 
