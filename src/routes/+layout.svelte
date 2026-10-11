@@ -8,6 +8,7 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import UpdateToast from '$lib/components/UpdateToast.svelte';
 	import LogoMark from '$lib/components/LogoMark.svelte';
+	import MirrorLayer from '$lib/mirror/MirrorLayer.svelte';
 	import { JOURNEYS, journeyForPath } from '$lib/data/journeys';
 	import { lastJourney, rememberJourney, restoreJourney } from '$lib/stores/journey.svelte';
 	import { markIntroSeen, resetIntro } from '$lib/stores/intro.svelte';
@@ -138,3 +139,4 @@
 	</div>
 </div>
 <UpdateToast />
+<MirrorLayer />

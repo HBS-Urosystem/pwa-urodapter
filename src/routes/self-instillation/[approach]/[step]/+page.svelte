@@ -6,6 +6,7 @@
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import StepStrip from '$lib/components/StepStrip.svelte';
 	import { JOURNEYS } from '$lib/data/journeys';
+	import MirrorText from '$lib/mirror/MirrorText.svelte';
 	import { formatBlockMarkdown } from '$lib/markdown-blocks';
 	import { rememberPatientStep } from '$lib/patient-progress-storage';
 
@@ -103,7 +104,7 @@
 					<h2 class="mb-2 text-lg font-semibold">{step.tips.title}</h2>
 					<ul class="list-disc space-y-1 pl-5">
 						{#each step.tips.items as item (item)}
-							<li>{item}</li>
+							<li><MirrorText text={item} class="!text-base-content" /></li>
 						{/each}
 					</ul>
 				</div>
@@ -128,7 +129,7 @@
 							d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
 						/>
 					</svg>
-					<p>{approach.safety}</p>
+					<p><MirrorText text={approach.safety} class="!text-base-content" /></p>
 				</div>
 			{/if}
 		</article>

@@ -20,7 +20,7 @@
 <section class="flex-1 bg-primary/20 py-12">
 	<div class="mx-auto max-w-2xl px-4">
 		<h1 class="text-center text-3xl">{journey.tocLabel}</h1>
-		<p class="mt-2 mb-8 text-center text-lg text-base-content/80">{overview.title}</p>
+		<h2 class="mt-10 mb-2 text-center text-xl font-bold">{overview.title}</h2>
 
 		<div class="prose max-w-none text-base-content">
 			<!-- eslint-disable-next-line svelte/no-at-html-tags -->

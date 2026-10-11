@@ -1,4 +1,5 @@
 import { escapeHtml, formatInlineMarkdown } from './markdown-inline';
+import { addMirrorOpeners } from './mirror/openers';
 
 /** Splits main body on `## ` headings (at line start). */
 export function splitMarkdownH2(md: string): { heading: string; body: string }[] {
@@ -31,7 +32,7 @@ export function formatBlockMarkdown(block: string, options?: FormatBlockMarkdown
 	for (const p of parts) {
 		const h = p.trimStart().match(/^### ([^\n]+)(?:\n([\s\S]*))?/);
 		if (h) {
-			out += `<h3 class="${h3Class}">${escapeHtml(h[1].trim())}</h3>`;
+			out += `<h3 class="${h3Class}">${addMirrorOpeners(escapeHtml(h[1].trim()))}</h3>`;
 			out += formatListAndParagraphs(h[2] ?? '', ordered);
 		} else {
 			out += formatListAndParagraphs(p, ordered);

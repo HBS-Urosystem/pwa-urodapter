@@ -1,3 +1,5 @@
+import { addMirrorOpeners } from './mirror/openers';
+
 /** Trusted editorial markdown: **bold** and [text](url). */
 export function escapeHtml(s: string): string {
 	return s
@@ -8,12 +10,10 @@ export function escapeHtml(s: string): string {
 }
 
 /**
+ * Every "mirror" in the text becomes a camera mirror opener ($lib/mirror/openers.ts).
  * @param linkClass - Tailwind classes for `[text](url)` links. Use a strong contrast (e.g. `!text-base-content`) on pale surfaces such as `alert-info`.
  */
-export function formatInlineMarkdown(
-	s: string,
-	linkClass = 'link link-primary underline'
-): string {
+export function formatInlineMarkdown(s: string, linkClass = 'link link-primary underline'): string {
 	let t = escapeHtml(s);
 	t = t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 	t = t.replace(
@@ -21,5 +21,5 @@ export function formatInlineMarkdown(
 		(_m, text: string, href: string) =>
 			`<a href="${href}" class="${escapeHtml(linkClass)}">${text}</a>`
 	);
-	return t;
+	return addMirrorOpeners(t);
 }

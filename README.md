@@ -29,6 +29,8 @@ npm run dev
 npm run dev -- --open
 ```
 
+The camera mirror (`src/lib/mirror`) needs HTTPS on a phone. `npm run dev:https` serves the dev server over the local network with a self-signed certificate: open the printed `https://192.168.x.x:5173` address on the phone and accept the certificate warning. The address has to be typed with `https://`.
+
 ## Building
 
 To create a production version of your app:

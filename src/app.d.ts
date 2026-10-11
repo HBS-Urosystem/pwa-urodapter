@@ -5,7 +5,10 @@ declare global {
 		// interface Error {}
 		// interface Locals {}
 		// interface PageData {}
-		// interface PageState {}
+		interface PageState {
+			/** The camera mirror layer is open ($lib/mirror/MirrorLayer.svelte). */
+			mirror?: boolean;
+		}
 		// interface Platform {}
 	}
 }

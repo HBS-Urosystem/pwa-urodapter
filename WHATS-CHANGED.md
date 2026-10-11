@@ -44,6 +44,7 @@ The app **follows the device light/dark setting automatically**. **Light** appea
 - **SEO:** Per-page titles and descriptions, canonical URLs, **Open Graph / Twitter** previews, **sitemap** and **robots.txt**.
 - **Accessibility:** Better structure and keyboard use on key flows (e.g. instruction carousel).
 - **Patient journey (Self instillation):** guidance for bladder instillation at home in three approaches – lying or semi-reclined, standing in the shower, partner-assisted. Each approach has a **one-page summary** (8 numbered steps) and **detailed instructions** with one page per step (step links 1–8, previous / next bar, breadcrumb). The anatomical figure opens on request; the app remembers the last opened step per approach (“Continue at step n”). All patient pages are prerendered and work offline after the first visit.
+- **Camera mirror:** every "mirror" in the text is a button that opens the front camera as a full-screen lighted mirror: the live picture, mirrored; magnification up to 5× (pinch, mouse wheel or trackpad, `+` / `-`); dragging or the arrow keys move the magnified picture; a white light frame around the edge of the screen (off / soft / bright; starts at soft); the screen stays on. Until the page is reloaded, the mirror opens again with the light, magnification and position last chosen. Exit, Escape or the browser's Back closes it and returns to the same place on the page. Nothing is recorded, stored or sent.
 
 ---
 
