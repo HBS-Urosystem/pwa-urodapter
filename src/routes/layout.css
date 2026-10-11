@@ -110,6 +110,11 @@ video.instruction-step-video::-webkit-media-controls-volume-slider-container {
 	display: none !important;
 }
 
+/* Splash already passed in this tab: hide the prerendered splash before the app starts (see app.html). */
+html[data-intro-seen] .intro-splash {
+	display: none;
+}
+
 /*
  * Opaque equivalent of `bg-primary/20` over the page background (base-100).
  * For sticky elements with rounded corners on `bg-primary/20` sections,

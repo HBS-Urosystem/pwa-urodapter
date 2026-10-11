@@ -17,6 +17,9 @@
 
 	onMount(restoreJourney);
 
+	/** The pre-paint hint from app.html only covers the prerendered splash; from here on `introPlayed` decides. */
+	onMount(() => document.documentElement.removeAttribute('data-intro-seen'));
+
 	afterNavigate(({ to }) => {
 		const id = to ? journeyForPath(to.url.pathname) : null;
 		if (id) rememberJourney(id);

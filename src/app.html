@@ -29,6 +29,17 @@
 				crossorigin="anonymous"
 			/>
 		</noscript>
+		<script>
+			// Splash screen before the first paint. The prerendered home page always contains the splash;
+			// hide it when it was already passed in this tab and this load is not a reload.
+			// Same rule as readSeenFromStorage() in src/lib/stores/intro.svelte.ts (keep the two in sync).
+			try {
+				var nav = performance.getEntriesByType('navigation')[0];
+				if (sessionStorage.getItem('urodapter-intro-seen') === '1' && !(nav && nav.type === 'reload')) {
+					document.documentElement.setAttribute('data-intro-seen', '');
+				}
+			} catch (e) {}
+		</script>
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">

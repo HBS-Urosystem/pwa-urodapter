@@ -7,8 +7,13 @@
 	import { videoFiles } from '$lib/data/video-manifest';
 	import { introPlayed, markIntroSeen } from '$lib/stores/intro.svelte';
 
-	/** Splash only on the client so SSR/hydration match after the user has dismissed it (stored in session). */
-	const showIntro = $derived(!import.meta.env.SSR && !introPlayed.seen);
+	/**
+	 * The splash is in the prerendered HTML too, so it covers the page from the first paint
+	 * (the Table of Contents no longer flashes before the app starts). When the splash was already
+	 * passed in this tab and the load is not a reload, the script in `app.html` hides it before the
+	 * first paint; after hydration `introPlayed.seen` decides.
+	 */
+	const showIntro = $derived(!introPlayed.seen);
 	let downloading = $state(false);
 	let progress = $state(0);
 	let copied = $state(false);
@@ -139,7 +144,7 @@
 
 {#if showIntro}
 	<div
-		class="fixed inset-0 z-40 flex touch-none flex-col items-center justify-center overscroll-none bg-[radial-gradient(circle,#2a6d8c_0%,#0b3b54_61%,#072c3f_100%)] text-primary"
+		class="intro-splash fixed inset-0 z-40 flex touch-none flex-col items-center justify-center overscroll-none bg-[radial-gradient(circle,#2a6d8c_0%,#0b3b54_61%,#072c3f_100%)] text-primary"
 	>
 		<LogoWordmark class="mb-4 w-48" />
 

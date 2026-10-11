@@ -22,6 +22,7 @@ function isFullPageReload(): boolean {
 	}
 }
 
+/** The inline script in src/app.html applies the same rule before the first paint (keep the two in sync). */
 function readSeenFromStorage(): boolean {
 	if (!browser) return false;
 	if (isFullPageReload()) {
