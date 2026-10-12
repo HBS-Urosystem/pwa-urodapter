@@ -1,137 +1,35 @@
 <script>
 	import { fly } from 'svelte/transition';
-
-	let showUpdate = $state(false);
-	const CONTROLLER_KEY = 'sw-controller-url';
+	import { updated } from '$app/state';
 
 	/**
-	 * iOS standalone may suspend the app and drop SW message timing.
-	 * Persist and compare controller script URL to surface updates after resume.
-	 * (Path is stable across deploys, so this only helps when the SW script URL changes.)
+	 * Show the refresh prompt only when the running app is not the latest deployed build.
+	 * `updated.current` compares the build version baked into this page with the server's
+	 * `/_app/version.json`. A freshly loaded page (including one served by an already
+	 * auto-updated service worker) matches, so no prompt appears. A stale page, such as an
+	 * installed PWA resumed from the background, does not match, so the prompt appears.
 	 */
-	function detectControllerChange() {
-		const current = navigator.serviceWorker?.controller?.scriptURL ?? '';
-		const previous = sessionStorage.getItem(CONTROLLER_KEY) ?? '';
-		if (current && previous && current !== previous) {
-			showUpdate = true;
-		}
-		if (current) sessionStorage.setItem(CONTROLLER_KEY, current);
-	}
+	let dismissed = $state(false);
+	const showUpdate = $derived(updated.current && !dismissed);
 
 	$effect(() => {
-		if (typeof navigator === 'undefined' || !navigator.serviceWorker) return;
-
-		/** @type {WeakSet<ServiceWorker>} */
-		const wiredInstalling = new WeakSet();
-
-		/** @param {ServiceWorker} worker */
-		function watchInstallingWorker(worker) {
-			if (wiredInstalling.has(worker)) return;
-			wiredInstalling.add(worker);
-			worker.addEventListener('statechange', () => {
-				// skipWaiting can move through installed quickly; cover both.
-				if (worker.state === 'installed' || worker.state === 'activated') {
-					showUpdate = true;
-				}
-			});
-		}
-
-		/** @param {ServiceWorkerRegistration} registration */
-		function onUpdateFound(registration) {
-			const worker = registration.installing;
-			if (worker) watchInstallingWorker(worker);
-		}
-
-		/** @param {ServiceWorkerRegistration | undefined} registration */
-		async function checkForUpdateNow(registration) {
-			if (!navigator.serviceWorker) return;
-			try {
-				const reg =
-					registration ??
-					(await navigator.serviceWorker.ready) ??
-					(await navigator.serviceWorker.getRegistration());
-				if (!reg) return;
-
-				if (reg.waiting) {
-					showUpdate = true;
-				}
-				if (reg.installing) {
-					watchInstallingWorker(reg.installing);
-				}
-
-				await reg.update();
-
-				if (reg.waiting) {
-					showUpdate = true;
-				}
-				if (reg.installing) {
-					watchInstallingWorker(reg.installing);
-				}
-			} catch {
-				// ignore transient update check failures
-			}
-			detectControllerChange();
-		}
-
-		/** @param {MessageEvent} event */
-		const handler = (event) => {
-			if (event.data?.type === 'SW_UPDATED') {
-				showUpdate = true;
-			}
+		const check = () => {
+			if (document.visibilityState === 'visible') void updated.check();
 		};
 
-		// On the first visit clients.claim() gives the page its first controller.
-		// That is not an update, so only a change from an existing controller counts.
-		let controlled = !!navigator.serviceWorker.controller;
+		check();
 
-		const onControllerChange = () => {
-			if (controlled) showUpdate = true;
-			controlled = true;
-			detectControllerChange();
-		};
-
-		const onResume = () => {
-			void checkForUpdateNow(undefined);
-		};
-
-		const onVisibilityChange = () => {
-			if (document.visibilityState === 'visible') onResume();
-		};
-
-		/** @type {ServiceWorkerRegistration | null} */
-		let reg = null;
-		/** @type {(() => void) | null} */
-		let updateFoundHandler = null;
-
-		navigator.serviceWorker.addEventListener('message', handler);
-		navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
-		window.addEventListener('pageshow', onResume);
-		window.addEventListener('focus', onResume);
-		document.addEventListener('visibilitychange', onVisibilityChange);
-
-		void navigator.serviceWorker.ready.then((registration) => {
-			reg = registration;
-			updateFoundHandler = () => onUpdateFound(registration);
-			registration.addEventListener('updatefound', updateFoundHandler);
-			onUpdateFound(registration);
-
-			if (registration.waiting) {
-				showUpdate = true;
-			}
-
-			detectControllerChange();
-			void checkForUpdateNow(registration);
-		});
+		window.addEventListener('pageshow', check);
+		window.addEventListener('focus', check);
+		document.addEventListener('visibilitychange', check);
+		// A new service worker taking control means the server version may have just changed.
+		navigator.serviceWorker?.addEventListener('controllerchange', check);
 
 		return () => {
-			if (reg && updateFoundHandler) {
-				reg.removeEventListener('updatefound', updateFoundHandler);
-			}
-			navigator.serviceWorker.removeEventListener('message', handler);
-			navigator.serviceWorker.removeEventListener('controllerchange', onControllerChange);
-			window.removeEventListener('pageshow', onResume);
-			window.removeEventListener('focus', onResume);
-			document.removeEventListener('visibilitychange', onVisibilityChange);
+			window.removeEventListener('pageshow', check);
+			window.removeEventListener('focus', check);
+			document.removeEventListener('visibilitychange', check);
+			navigator.serviceWorker?.removeEventListener('controllerchange', check);
 		};
 	});
 </script>
@@ -144,7 +42,7 @@
 				<button class="btn btn-sm btn-secondary" onclick={() => window.location.reload()}>
 					Refresh
 				</button>
-				<button class="btn btn-sm btn-ghost" onclick={() => (showUpdate = false)}>
+				<button class="btn btn-sm btn-ghost" onclick={() => (dismissed = true)}>
 					✕
 				</button>
 			</div>

@@ -56,6 +56,10 @@ sw.addEventListener('fetch', (event) => {
 
 	if (url.origin !== location.origin) return;
 
+	// Always let the browser hit the network for the version file, so the page can detect
+	// that it is running an outdated build (SvelteKit `updated` store).
+	if (url.pathname === '/_app/version.json') return;
+
 	const isVideo = url.pathname.startsWith('/assets/video/');
 
 	if (isVideo) {
