@@ -2,7 +2,7 @@
 
 Copied from **app.urostill** (`src/lib`, commit `4f0f78d`): the front camera shown live and mirrored, with magnification, moving the picture, the white light frame around the edge of the screen (the "halo"), the control pill, and the screen kept awake. Nothing else from app.urostill was copied.
 
-Every "mirror" or "mirrors" in the site's text opens it.
+Every "mirror" or "mirrors" in a heading opens it.
 
 ## Files
 
@@ -23,7 +23,7 @@ Comments that mention a "phase", "PLAN" or a "hard rule" refer to app.urostill's
 
 ## How it opens and closes
 
-- An opener is a `<button data-mirror-opener>`. `addMirrorOpeners()` adds them to HTML strings (`formatInlineMarkdown()` and the `###` headings of `formatBlockMarkdown()` call it), and `MirrorText.svelte` to plain text (step summaries, tips, safety notes). Text inside links is left alone.
+- An opener is a `<button data-mirror-opener>`. `addMirrorOpeners()` adds them to HTML strings; only the `###` headings of `formatBlockMarkdown()` call it, so paragraphs, lists, step summaries, tips and safety notes carry no openers. Text inside links is left alone.
 - One click listener on the document, in `MirrorLayer.svelte`, opens the layer for every opener.
 - Opening adds a history entry (SvelteKit shallow routing, `page.state.mirror`), so Back closes the layer instead of leaving the page. Exit and Escape go back in history too.
 - The camera stops whenever the layer closes or the page is hidden, and starts again when the page is shown.

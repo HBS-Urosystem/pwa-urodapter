@@ -27,7 +27,7 @@
 
 	/** Journey pages use their own journey; shared pages (Contact, Install App, legal) keep the last one. */
 	const journey = $derived(JOURNEYS[journeyForPath(page.url.pathname) ?? lastJourney.id]);
-	/** The journey the menu can switch to (For Clinicians / Self instillation). */
+	/** The journey the menu can switch to (For Clinicians / Self-instillation). */
 	const otherJourneys = $derived(Object.values(JOURNEYS).filter((j) => j.id !== journey.id));
 
 	function closeDrawer() {

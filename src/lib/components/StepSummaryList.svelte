@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import NumberBadge from '$lib/components/NumberBadge.svelte';
-	import MirrorText from '$lib/mirror/MirrorText.svelte';
 
-	/** One-page summary of an approach: numbered rows, each opening its detailed step. */
+	/** Short summary of an approach: numbered rows, each opening its detailed step. */
 	let {
 		approachId,
 		steps
@@ -23,7 +22,7 @@
 					aria-hidden="true"
 				></span>
 			{/if}
-			<!-- The whole row opens the step: the link's ::after covers it. The mirror openers in the summary sit above that cover (z-1), so they work without being nested in the link. -->
+			<!-- The whole row opens the step: the link's ::after covers it. -->
 			<div
 				class="group relative flex gap-4 rounded-box p-3 transition-colors hover:bg-base-100/70 has-[a:focus-visible]:bg-base-100/70"
 			>
@@ -37,9 +36,7 @@
 						class="block [font-family:var(--font-heading)] text-lg leading-snug font-semibold no-underline after:absolute after:inset-0 after:rounded-box focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-base-content"
 						>{step.label}</a
 					>
-					<span class="mt-1 block text-base-content/80"
-						><MirrorText text={step.summary} class="relative z-1" /></span
-					>
+					<span class="mt-1 block text-base-content/80">{step.summary}</span>
 				</span>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"

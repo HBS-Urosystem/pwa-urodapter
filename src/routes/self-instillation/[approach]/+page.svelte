@@ -5,7 +5,6 @@
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import StepSummaryList from '$lib/components/StepSummaryList.svelte';
 	import { JOURNEYS } from '$lib/data/journeys';
-	import MirrorText from '$lib/mirror/MirrorText.svelte';
 	import { formatBlockMarkdown } from '$lib/markdown-blocks';
 	import { readPatientProgress, type PatientProgress } from '$lib/patient-progress-storage';
 
@@ -91,7 +90,7 @@
 			{/if}
 		</div>
 
-		<h2 class="mt-10 mb-3 text-2xl">One-page summary</h2>
+		<h2 class="mt-10 mb-3 text-2xl">Short summary</h2>
 		<StepSummaryList approachId={approach.id} steps={approach.steps} />
 
 		<div
@@ -112,7 +111,7 @@
 					d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
 				/>
 			</svg>
-			<p><MirrorText text={approach.safety} class="!text-base-content" /></p>
+			<p>{approach.safety}</p>
 		</div>
 	</div>
 </section>

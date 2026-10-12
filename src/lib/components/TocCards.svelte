@@ -2,8 +2,15 @@
 	import { resolve } from '$app/paths';
 	import type { JourneySection, TocIconName } from '$lib/data/journeys';
 
-	/** Table of Contents cards of one journey (entries come from `$lib/data/journeys.ts`). */
-	let { sections }: { sections: readonly JourneySection[] } = $props();
+	/**
+	 * Table of Contents cards of one journey (entries come from `$lib/data/journeys.ts`).
+	 * With `sideBySide`, all cards share one row from the `lg` breakpoint up (2 + 1 centred on tablets) (used for the three
+	 * image cards of the patient journey); otherwise they are laid out two per row.
+	 */
+	let {
+		sections,
+		sideBySide = false
+	}: { sections: readonly JourneySection[]; sideBySide?: boolean } = $props();
 </script>
 
 {#snippet icon(name: TocIconName)}
@@ -74,12 +81,22 @@
 	{/if}
 {/snippet}
 
-<div class="mx-auto grid max-w-4xl grid-cols-1 gap-4 px-4 sm:grid-cols-4 lg:grid-cols-4">
+<div
+	class={[
+		'mx-auto grid max-w-4xl grid-cols-1 gap-4 px-4',
+		sideBySide ? 'sm:grid-cols-4 lg:grid-cols-3' : 'sm:grid-cols-4 lg:grid-cols-4'
+	]}
+>
 	{#each sections as section (section.path)}
 		<!-- An odd last card is centred on the 2-column layout. -->
 		<a
 			href={resolve(section.path as '/')}
-			class="sm---last:col-span-full col-span-2 h-full no-underline sm:odd:last:col-start-2"
+			class={[
+				'h-full no-underline',
+				sideBySide
+					? 'sm:col-span-2 sm:odd:last:col-start-2 lg:col-span-1 lg:odd:last:col-start-auto'
+					: 'col-span-2 sm:odd:last:col-start-2'
+			]}
 		>
 			{#if section.image}
 				<div

@@ -306,7 +306,7 @@ const PATIENT_FIGURES = /** @type {const} */ (['anatomy', 'sealing']);
 
 const PatientStepSchema = z.object({
 	id: z.enum(PATIENT_STEP_IDS),
-	/** Text of the step label in the one-page summary. */
+	/** Text of the step label in the short summary. */
 	label: z.string().min(1),
 	/** Heading of the detailed step. */
 	title: z.string().min(1),
@@ -319,7 +319,7 @@ const PatientApproachSchema = z.object({
 	id: z.enum(PATIENT_APPROACH_IDS),
 	label: z.string().min(1),
 	seoTitle: z.string().min(1),
-	/** Title and description on the approach card of the Self instillation page. */
+	/** Title and description on the approach card of the Self-instillation page. */
 	cardTitle: z.string().min(1),
 	cardDescription: z.string().min(1),
 	image: z.string().startsWith('/assets/patient/'),

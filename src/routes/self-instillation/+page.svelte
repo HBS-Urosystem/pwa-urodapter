@@ -9,14 +9,14 @@
 	const journey = JOURNEYS.patient;
 	const overview = siteContent.patient.overview;
 
-	const title = 'Self instillation | Urodapter';
+	const title = 'Self-instillation | Urodapter';
 	const description =
 		'Using UroDapter for bladder instillation at home: lying or semi-reclined, standing in the shower, or with the help of a partner.';
 </script>
 
 <SeoHead {title} {description} path={journey.tocPath} />
 
-<!-- Table of Contents of the patient journey (started by the "Self instillation" button on the splash screen). -->
+<!-- Table of Contents of the patient journey (started by the "Self-instillation" button on the splash screen). -->
 <section class="flex-1 bg-primary/20 py-12">
 	<div class="mx-auto max-w-2xl px-4">
 		<h1 class="text-center text-3xl">{journey.tocLabel}</h1>
@@ -61,5 +61,5 @@
 		</div>
 	</div>
 
-	<TocCards sections={journey.sections} />
+	<TocCards sections={journey.sections} sideBySide />
 </section>

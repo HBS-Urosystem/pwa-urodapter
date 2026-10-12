@@ -22,4 +22,4 @@ Not every woman will be able to perform UroDapter instillation successfully at h
 
 ## how-to-use
 
-**Select an image below to choose your approach.** Before your first use, read the detailed instructions for that approach. Then use the one-page summary as a reminder. Select any step label in the summary to open its detailed explanation.
+**Select an image below to choose your approach.** Before your first use, read the detailed instructions for that approach. Then use the short summary as a reminder. Select any step label in the summary to open its detailed explanation.

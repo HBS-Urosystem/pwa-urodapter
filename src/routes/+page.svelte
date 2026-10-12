@@ -190,7 +190,7 @@
 			the catheter in the field of Bladder Instillation
 		</p>
 
-		<!-- Journey choice: clinicians stay on this page (their Table of Contents); Self instillation starts the patient journey (its own Table of Contents). -->
+		<!-- Journey choice: clinicians stay on this page (their Table of Contents); Self-instillation starts the patient journey (its own Table of Contents). -->
 		<div class="mt-6 grid gap-3 sm:grid-cols-2">
 			<button
 				type="button"
@@ -205,7 +205,7 @@
 				class="btn--lg btn rounded-full text-neutral-content btn-primary"
 				onclick={markIntroSeen}
 			>
-				Self instillation
+				Self-instillation
 				{@render splashArrow()}
 			</a>
 		</div>

@@ -1,8 +1,8 @@
 /**
  * The app has two journeys. The user picks one on the splash screen (`/`):
  * - `clinician`: the manual for doctors. Its Table of Contents is `/`.
- * - `patient`: the patient journey (self instillation), with its own Table of Contents and menu.
- *   Started by the "Self instillation" button. All of its pages live under `/self-instillation`.
+ * - `patient`: the patient journey (self-instillation), with its own Table of Contents and menu.
+ *   Started by the "Self-instillation" button. All of its pages live under `/self-instillation`.
  *
  * Pages that belong to neither journey (Contact, Install App, Privacy / Cookie Policy) are shared:
  * they show the menu of the journey the user was last in (see `$lib/stores/journey.svelte`).
@@ -90,8 +90,8 @@ export const JOURNEYS: Record<JourneyId, Journey> = {
 	patient: {
 		id: 'patient',
 		tocPath: PATIENT_ROOT,
-		tocLabel: 'Self instillation',
-		entryLabel: 'Self instillation',
+		tocLabel: 'Self-instillation',
+		entryLabel: 'Self-instillation',
 		/** The three approaches, from `content/patient/*.yaml` (via `generated-patient-nav.ts`). */
 		sections: patientNav.map((a) => ({
 			title: a.label,
