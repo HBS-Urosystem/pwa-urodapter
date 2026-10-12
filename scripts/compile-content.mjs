@@ -319,6 +319,9 @@ const PatientApproachSchema = z.object({
 	id: z.enum(PATIENT_APPROACH_IDS),
 	label: z.string().min(1),
 	seoTitle: z.string().min(1),
+	/** Title and description on the approach card of the Self instillation page. */
+	cardTitle: z.string().min(1),
+	cardDescription: z.string().min(1),
 	image: z.string().startsWith('/assets/patient/'),
 	imageAlt: z.string().min(1),
 	intro: z.string().min(1),
@@ -459,8 +462,8 @@ function main() {
 		label: a.label,
 		image: a.image,
 		imageAlt: a.imageAlt,
-		/** First sentence of the approach intro. */
-		description: (a.intro.split('\n')[0].match(/^.*?\.(?=\s|$)/) ?? [a.intro.split('\n')[0]])[0]
+		cardTitle: a.cardTitle,
+		description: a.cardDescription
 	}));
 	const navFile = join(outDir, 'generated-patient-nav.ts');
 	writeFileSync(

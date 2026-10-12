@@ -96,7 +96,7 @@
 						/>
 					</figure>
 					<div class="card-body items-center gap-1 p-4 text-center">
-						<h3 class="card-title">{section.title}</h3>
+						<h3 class="card-title">{section.cardTitle ?? section.title}</h3>
 						{#if section.description}
 							<p class="text-sm text-base-content/80">{section.description}</p>
 						{/if}

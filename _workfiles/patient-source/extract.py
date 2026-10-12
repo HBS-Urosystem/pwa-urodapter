@@ -11,7 +11,7 @@ z = zipfile.ZipFile(SRC)
 doc = etree.fromstring(z.read('word/document.xml'))
 rels = {r.get('Id'): r.get('Target') for r in etree.fromstring(z.read('word/_rels/document.xml.rels'))}
 
-BOLD_STYLES = {'Ershivatkozs', 'Kiemels2', 'MegjegyzstrgyaChar'}
+BOLD_STYLES = {'Ershivatkozs', 'Kiemels2', 'MegjegyzstrgyaChar', 'Strong'}
 ITALIC_STYLES = {'Cmsor4Char', 'Cmsor6Char', 'Cmsor8Char', 'IdzetChar', 'Erskiemels', 'KiemeltidzetChar'}
 
 numfmt = {}
@@ -109,6 +109,8 @@ def pinfo(p):
             numid = ni.get(f'{{{W}}}val') if ni is not None else None
             lvl = il.get(f'{{{W}}}val') if il is not None else '0'
     imgs = [rels[b.get(f'{{{R}}}embed')].split('/')[-1] for b in p.iter(f'{{{A}}}blip')]
+    # The final docx uses English style ids; map them to the Hungarian ids build.py expects.
+    style = {'Title': 'Cm', 'Heading1': 'Cmsor1', 'Heading2': 'Cmsor2', 'NormalWeb': 'NormlWeb'}.get(style, style)
     return style, numid, lvl, imgs
 
 def block(p):

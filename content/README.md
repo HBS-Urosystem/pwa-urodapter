@@ -21,7 +21,7 @@ Human-editable copy for the SvelteKit app. After changing files here, run `npm r
 | `/contact`                                     | `pages/contact.md`                                                                                                                                                       |
 | `/privacy-policy`                              | `legal/privacy-policy.md`                                                                                                                                                |
 | `/cookie-policy`                               | `legal/cookie-policy.md`                                                                                                                                                 |
-| `/self-instillation`                           | `patient/overview.md` (approach cards: `label`, `image`, `imageAlt` and the first sentence of `intro` in `patient/*.yaml`)                                               |
+| `/self-instillation`                           | `patient/overview.md` (approach cards: `cardTitle`, `cardDescription`, `image`, `imageAlt` in `patient/*.yaml`; the menu uses `label`)                                   |
 | `/self-instillation/{lying,shower,partner}`    | `patient/{id}.yaml` (`intro`, step `label` + `summary`, `safety`)                                                                                                        |
 | `/self-instillation/{approach}/{step}`         | `patient/{approach}.yaml` (step `title`, `body`, `tips`; `safety` on the last step); figures in `static/assets/patient/`                                                 |
 

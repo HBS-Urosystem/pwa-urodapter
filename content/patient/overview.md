@@ -2,11 +2,11 @@
 
 ## intro
 
-UroDapter allows bladder instillation without inserting a catheter into the bladder. It was originally designed for use by healthcare professionals, but many women have also been able to use it successfully at home, either on their own or with the help of a partner.
+UroDapter allows bladder instillation without inserting a catheter into the bladder. It was originally designed for use by healthcare professionals, but many women have also been able to use it successfully at home, either by themselves or with the help of a partner.
 
 Although the basic principle is simple, successful home use depends on understanding the key elements of the technique and learning a few practical skills. Finding the urethral opening, choosing a suitable position, and learning the correct placement, direction and pressure can all take some practice. The first attempts may therefore take more time, but the technique usually becomes easier with experience.
 
-There is no single method that is the best for everyone. You may need to try different positions and approaches before finding what works best for you. Based on feedback from women using UroDapter for self-treatment at home, the three most commonly successful settings are:
+There is no single method that works best for everyone. You may need to try different positions and approaches before finding what works best for you. Based on feedback from women using UroDapter for self-treatment at home, the three most commonly successful settings are:
 
 - self-instillation while lying or semi-reclined;
 - self-instillation while standing in the shower;
@@ -22,4 +22,4 @@ Not every woman will be able to perform UroDapter instillation successfully at h
 
 ## how-to-use
 
-**Select an image below to choose your approach.** Before your first use, read the detailed instructions for the corresponding approach. Next, use the one-page summary as a reminder. Select any step label in the summary to open its detailed explanation.
+**Select an image below to choose your approach.** Before your first use, read the detailed instructions for that approach. Then use the one-page summary as a reminder. Select any step label in the summary to open its detailed explanation.

@@ -41,13 +41,17 @@ LABEL_IMAGES = {
     'image16.png': 'Choose your standing position',
     'image17.png': 'Locate the urethral opening by touch',
 }
+# cardDescription: the line under the card title on the Self instillation page (not in the docx; given by the content owner).
 APPROACHES = [
     {'id': 'lying', 'label': 'Lying or semi-reclined',
-     'imageAlt': 'A woman reclining in bed, supported by pillows'},
+     'imageAlt': 'A woman reclining in bed, supported by pillows',
+     'cardDescription': 'You perform the instillation yourself while lying down or semi-reclined.'},
     {'id': 'shower', 'label': 'Standing in the shower',
-     'imageAlt': 'A woman wrapped in a towel, standing in a shower'},
+     'imageAlt': 'A woman wrapped in a towel, standing in a shower',
+     'cardDescription': 'You perform the instillation yourself while standing with your knees slightly bent.'},
     {'id': 'partner', 'label': 'Partner-assisted',
-     'imageAlt': 'A woman lying in bed with her partner sitting beside her'},
+     'imageAlt': 'A woman lying in bed with her partner sitting beside her',
+     'cardDescription': 'You remain lying or slightly semi-reclined while your partner performs the instillation.'},
 ]
 SAFETY_START = 'If you experience significant pain'
 TIPS_TITLE = 'Practical tips from experienced users'
@@ -177,6 +181,8 @@ for a, (start, end) in zip(APPROACHES, zip(bounds, bounds[1:])):
         'id': a['id'],
         'label': a['label'],
         'seoTitle': seo_title,
+        'cardTitle': seo_title,  # card title on the Self instillation page = the approach heading in the docx
+        'cardDescription': a['cardDescription'],
         'image': f"/assets/patient/approach-{a['id']}.webp",
         'imageAlt': a['imageAlt'],
         'intro': Lit(fix('\n\n'.join(intro), a['id'], None, 'body') + '\n'),

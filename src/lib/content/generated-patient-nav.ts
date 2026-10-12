@@ -9,20 +9,23 @@ export const patientNav = [
 		"label": "Lying or semi-reclined",
 		"image": "/assets/patient/approach-lying.webp",
 		"imageAlt": "A woman reclining in bed, supported by pillows",
-		"description": "In this approach, you carry out the instillation by yourself lying down, or in a semi-reclined position."
+		"cardTitle": "Self-instillation in a lying or semi-reclined position",
+		"description": "You perform the instillation yourself while lying down or semi-reclined."
 	},
 	{
 		"id": "shower",
 		"label": "Standing in the shower",
 		"image": "/assets/patient/approach-shower.webp",
 		"imageAlt": "A woman wrapped in a towel, standing in a shower",
-		"description": "In this approach, you carry out the instillation on your own while standing in the shower."
+		"cardTitle": "Self-instillation while standing in the shower",
+		"description": "You perform the instillation yourself while standing with your knees slightly bent."
 	},
 	{
 		"id": "partner",
 		"label": "Partner-assisted",
 		"image": "/assets/patient/approach-partner.webp",
 		"imageAlt": "A woman lying in bed with her partner sitting beside her",
-		"description": "You remain lying or semi-reclined while your partner performs the instillation."
+		"cardTitle": "Partner-assisted instillation",
+		"description": "You remain lying or slightly semi-reclined while your partner performs the instillation."
 	}
 ] as const;

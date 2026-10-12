@@ -25,6 +25,8 @@ export type JourneySection = {
 	icon?: TocIconName;
 	image?: string;
 	imageAlt?: string;
+	/** Card title when it differs from the (shorter) menu `title`. */
+	cardTitle?: string;
 	description?: string;
 };
 
@@ -96,6 +98,7 @@ export const JOURNEYS: Record<JourneyId, Journey> = {
 			path: `${PATIENT_ROOT}/${a.id}`,
 			image: a.image,
 			imageAlt: a.imageAlt,
+			cardTitle: a.cardTitle,
 			description: a.description
 		})),
 		moreLinks: [
