@@ -330,12 +330,33 @@ const PatientApproachSchema = z.object({
 });
 
 /**
- * Splits a step body at `[[figure:id]]` lines.
+ * Clinician videos the patient steps may show, by video id. The title and poster come from the
+ * clinician step (female instructions) that uses the same video.
+ * @returns {Map<number, { id: number, title: string, src: string, poster: string }>}
+ */
+function patientVideoCatalog() {
+	const steps = StepsFileSchema.parse(readYaml('instructions/female/steps.yaml')).steps;
+	const map = new Map();
+	for (const s of steps) {
+		if (s.video == null) continue;
+		map.set(s.video, {
+			id: s.video,
+			title: s.title,
+			src: `/assets/video/${s.video}.mp4`,
+			poster: /** @type {string} */ (toVideoPoster(s.video))
+		});
+	}
+	return map;
+}
+
+/**
+ * Splits a step body at `[[figure:id]]` and `[[video:id]]` lines.
  * @param {string} body
  * @param {string} where
+ * @param {ReturnType<typeof patientVideoCatalog>} videos
  */
-function toPatientSegments(body, where) {
-	/** @type {({ kind: 'md', text: string } | { kind: 'figure', id: string })[]} */
+function toPatientSegments(body, where, videos) {
+	/** @type {({ kind: 'md', text: string } | { kind: 'figure', id: string } | { kind: 'video', id: number, title: string, src: string, poster: string })[]} */
 	const segments = [];
 	/** @type {string[]} */
 	let buf = [];
@@ -354,6 +375,24 @@ function toPatientSegments(body, where) {
 			}
 			flush();
 			segments.push({ kind: 'figure', id: m[1] });
+			continue;
+		}
+		const v = line.trim().match(/^\[\[video:(\d+)\]\]$/);
+		if (v) {
+			const video = videos.get(Number(v[1]));
+			if (!video) {
+				throw new Error(
+					`${where}: unknown video "${v[1]}" (allowed: the video ids in instructions/female/steps.yaml)`
+				);
+			}
+			if (
+				!existsSync(join(root, 'static', video.src)) ||
+				!existsSync(join(root, 'static', video.poster))
+			) {
+				throw new Error(`${where}: ${video.src} or its poster not found in static/`);
+			}
+			flush();
+			segments.push({ kind: 'video', ...video });
 		} else {
 			if (line.includes('[['))
 				throw new Error(`${where}: malformed marker in line "${line.trim()}"`);
@@ -364,8 +403,11 @@ function toPatientSegments(body, where) {
 	return segments;
 }
 
-/** @param {string} id */
-function buildPatientApproach(id) {
+/**
+ * @param {string} id
+ * @param {ReturnType<typeof patientVideoCatalog>} videos
+ */
+function buildPatientApproach(id, videos) {
 	const data = PatientApproachSchema.parse(readYaml(`patient/${id}.yaml`));
 	if (data.id !== id) throw new Error(`patient/${id}.yaml: id is "${data.id}"`);
 	data.steps.forEach((s, i) => {
@@ -383,12 +425,13 @@ function buildPatientApproach(id) {
 		intro: data.intro.trim(),
 		steps: data.steps.map((s) => {
 			const { body, ...rest } = s;
-			return { ...rest, segments: toPatientSegments(body, `patient/${id}.yaml#${s.id}`) };
+			return { ...rest, segments: toPatientSegments(body, `patient/${id}.yaml#${s.id}`, videos) };
 		})
 	};
 }
 
 function buildPatient() {
+	const videos = patientVideoCatalog();
 	const md = readText('patient/overview.md');
 	const titleMatch = md.match(/^#\s+(.+)$/m);
 	if (!titleMatch) throw new Error('patient/overview.md: missing "# title"');
@@ -420,7 +463,7 @@ function buildPatient() {
 				alt: 'Cross-section drawing: the UroDapter, attached to a syringe, sits in the urethral opening with its sealing collar pressed against the opening.'
 			}
 		},
-		approaches: PATIENT_APPROACH_IDS.map((id) => buildPatientApproach(id))
+		approaches: PATIENT_APPROACH_IDS.map((id) => buildPatientApproach(id, videos))
 	};
 }
 

@@ -4,6 +4,7 @@
 	import { browser } from '$app/environment';
 	import { tick, onMount } from 'svelte';
 	import type { InstructionPack } from '$lib/content';
+	import ClipVideo from '$lib/components/ClipVideo.svelte';
 	import ContentFlowNav from '$lib/components/ContentFlowNav.svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import { CONTENT_FLOW_NAV } from '$lib/data/content-flow-nav';
@@ -300,7 +301,7 @@
 
 				<div
 					bind:this={stepsCarouselEl}
-					class="carousel w-full carousel-start rounded-lg gap-2"
+					class="carousel w-full carousel-start gap-2 rounded-lg"
 					aria-label="Instruction video steps"
 				>
 					{#each pack.steps as s (s.id)}
@@ -309,18 +310,12 @@
 								<h2 class="text-xl font-semibold">{s.title}</h2>
 
 								{#if s.video != null}
-									<video
+									<ClipVideo
 										class="instruction-step-video aspect-video w-full rounded-lg bg-black"
-										controls
-										muted
-										playsinline
-										loop
-										preload="none"
-										poster={s.poster ?? undefined}
-										aria-label={s.title}
-									>
-										<source src="/assets/video/{s.video}.mp4" type="video/mp4" />
-									</video>
+										src={`/assets/video/${s.video}.mp4`}
+										poster={s.poster}
+										title={s.title}
+									/>
 								{/if}
 
 								{#each s.paragraphs as para, pi (`${s.id}-${pi}`)}
@@ -333,7 +328,7 @@
 								{#if 'plusModalId' in s && s.plusModalId != null}
 									<button
 										type="button"
-										class="btn gap-1 self-start text-primary btn-ghost btn-sm min-h-8 h-auto text-left"
+										class="btn h-auto min-h-8 gap-1 self-start text-left text-primary btn-ghost btn-sm"
 										onclick={() => {
 											openPlusModal(
 												s.plusModalId!,
@@ -365,7 +360,7 @@
 				<div class="flex justify-between pt-4">
 					<button
 						type="button"
-						class="btn btn-outline btn-square"
+						class="btn btn-square btn-outline"
 						disabled={stepIndex === 0}
 						onclick={goPrevStep}
 						aria-label="Step back"
@@ -386,7 +381,7 @@
 					{#if stepIndex >= pack.steps.length - 1}
 						<button
 							type="button"
-							class="btn btn-primary btn-square"
+							class="btn btn-square btn-primary"
 							onclick={() => void startOver()}
 							aria-label="Start over"
 							title="Start over"
@@ -412,7 +407,7 @@
 					{:else}
 						<button
 							type="button"
-							class="btn btn-primary btn-square"
+							class="btn btn-square btn-primary"
 							onclick={goNextStep}
 							aria-label="Next step"
 							title="Next step"
@@ -449,7 +444,7 @@
 	}}
 >
 	<div
-		class="modal-box prose relative max-h-[85vh] max-w-lg overflow-y-auto text-base-content max-sm:prose-sm"
+		class="relative modal-box prose max-h-[85vh] max-w-lg overflow-y-auto text-base-content max-sm:prose-sm"
 	>
 		<form method="dialog" class="not-prose absolute end-2 top-2 z-10">
 			<button type="submit" class="btn btn-square btn-ghost btn-sm" aria-label="Close dialog">

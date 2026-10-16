@@ -23,7 +23,10 @@ export type FormatBlockMarkdownOptions = {
 	orderedLists?: boolean;
 };
 
-/** `###` subheads, single-line `- ` bullets, optional `1. ` ordered lists, paragraphs. */
+/**
+ * `###` subheads, single-line `- ` bullets, optional `1. ` ordered lists, paragraphs.
+ * A line indented by two or more spaces right after a list item (blank lines allowed) is a further paragraph of that item.
+ */
 export function formatBlockMarkdown(block: string, options?: FormatBlockMarkdownOptions): string {
 	const h3Class = options?.h3Class ?? 'text-lg font-semibold !mt-4 mb-2';
 	const ordered = options?.orderedLists ?? false;
@@ -45,7 +48,14 @@ function formatListAndParagraphs(s: string, ordered: boolean): string {
 	const lines = s.trim().split('\n');
 	let html = '';
 	let list: 'ul' | 'ol' | null = null;
+	/** An open `<li>`: indented lines that follow its bullet become further paragraphs in it. */
+	let itemOpen = false;
+	const closeItem = () => {
+		if (itemOpen) html += '</li>';
+		itemOpen = false;
+	};
 	const closeList = () => {
+		closeItem();
 		if (list) html += `</${list}>`;
 		list = null;
 	};
@@ -64,7 +74,12 @@ function formatListAndParagraphs(s: string, ordered: boolean): string {
 						: '<ol class="list-decimal pl-5 my-2 space-y-1">';
 				list = kind;
 			}
-			html += `<li>${formatInlineMarkdown(item[1])}</li>`;
+			closeItem();
+			html += `<li>${formatInlineMarkdown(item[1])}`;
+			itemOpen = true;
+		} else if (itemOpen && /^\s{2,}\S/.test(line)) {
+			// Indented line under a list item: a new paragraph inside the same item.
+			html += `<p class="mt-2 mb-0">${formatInlineMarkdown(line.trim())}</p>`;
 		} else {
 			closeList();
 			html += `<p class="my-2">${formatInlineMarkdown(line)}</p>`;

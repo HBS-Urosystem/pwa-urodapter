@@ -72,15 +72,25 @@
 		<article
 			class="prose mt-6 max-w-none rounded-box border border-base-300 bg-base-100 p-5 text-[1.0625rem] leading-relaxed text-base-content shadow-sm sm:p-8 sm:text-lg"
 		>
-			{#each step.segments as segment, i (i)}
+			{#each step.segments as segment, i (`${approach.id}/${step.id}/${i}`)}
 				{#if segment.kind === 'md'}
 					<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 					{@html formatBlockMarkdown(segment.text, {
 						orderedLists: true,
 						h3Class: 'text-xl !mt-8 mb-2'
 					})}
+				{:else if segment.kind === 'video'}
+					<FigureDisclosure
+						key={`${approach.id}/${step.id}/${i}`}
+						label={`Video: ${segment.title}`}
+						video={segment}
+					/>
 				{:else if segment.id === 'anatomy'}
-					<FigureDisclosure label="Anatomical figure" figure={data.figures.anatomy} />
+					<FigureDisclosure
+						key={`${approach.id}/${step.id}/${i}`}
+						label="Anatomical figure"
+						figure={data.figures.anatomy}
+					/>
 				{:else}
 					<figure class="not-prose my-6">
 						<img
