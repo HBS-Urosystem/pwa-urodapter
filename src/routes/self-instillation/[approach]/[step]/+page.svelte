@@ -65,7 +65,7 @@
 		</div>
 
 		<div class="mt-6 flex items-center gap-4">
-			<NumberBadge value={index + 1} size="lg" />
+			<NumberBadge value={index + 1} size="lg" light />
 			<h1 class="text-2xl leading-tight sm:text-3xl">{step.title}</h1>
 		</div>
 
