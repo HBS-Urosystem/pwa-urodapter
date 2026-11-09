@@ -350,13 +350,15 @@ function patientVideoCatalog() {
 }
 
 /**
- * Splits a step body at `[[figure:id]]` and `[[video:id]]` lines.
+ * Splits a step body at `[[figure:id]]` and `[[video:id]]` lines. A video marker may carry its own
+ * section title (`[[video:id|Title]]`) instead of the clinician step's title, and may be followed by
+ * lines like `(A) text` that are shown with the video inside its section.
  * @param {string} body
  * @param {string} where
  * @param {ReturnType<typeof patientVideoCatalog>} videos
  */
 function toPatientSegments(body, where, videos) {
-	/** @type {({ kind: 'md', text: string } | { kind: 'figure', id: string } | { kind: 'video', id: number, title: string, src: string, poster: string })[]} */
+	/** @type {({ kind: 'md', text: string } | { kind: 'figure', id: string } | { kind: 'video', id: number, title: string, src: string, poster: string, notes: { letter: string, text: string }[] })[]} */
 	const segments = [];
 	/** @type {string[]} */
 	let buf = [];
@@ -365,7 +367,9 @@ function toPatientSegments(body, where, videos) {
 		if (text) segments.push({ kind: 'md', text });
 		buf = [];
 	};
-	for (const line of body.split('\n')) {
+	const lines = body.split('\n');
+	for (let i = 0; i < lines.length; i++) {
+		const line = lines[i];
 		const m = line.trim().match(/^\[\[figure:([\w-]+)\]\]$/);
 		if (m) {
 			if (!PATIENT_FIGURES.includes(/** @type {any} */ (m[1]))) {
@@ -377,7 +381,7 @@ function toPatientSegments(body, where, videos) {
 			segments.push({ kind: 'figure', id: m[1] });
 			continue;
 		}
-		const v = line.trim().match(/^\[\[video:(\d+)\]\]$/);
+		const v = line.trim().match(/^\[\[video:(\d+)(?:\|([^\]]+))?\]\]$/);
 		if (v) {
 			const video = videos.get(Number(v[1]));
 			if (!video) {
@@ -392,7 +396,14 @@ function toPatientSegments(body, where, videos) {
 				throw new Error(`${where}: ${video.src} or its poster not found in static/`);
 			}
 			flush();
-			segments.push({ kind: 'video', ...video });
+			/** @type {{ letter: string, text: string }[]} */
+			const notes = [];
+			for (let n = lines[i + 1]?.trim().match(/^\(([A-Z])\)\s+(.+)$/); n; ) {
+				notes.push({ letter: n[1], text: n[2] });
+				i++;
+				n = lines[i + 1]?.trim().match(/^\(([A-Z])\)\s+(.+)$/);
+			}
+			segments.push({ kind: 'video', ...video, title: v[2]?.trim() || video.title, notes });
 		} else {
 			if (line.includes('[['))
 				throw new Error(`${where}: malformed marker in line "${line.trim()}"`);

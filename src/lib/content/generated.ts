@@ -540,7 +540,8 @@ export const siteContent = {
 								"id": 158,
 								"title": "Spooning",
 								"src": "/assets/video/158.mp4",
-								"poster": "/assets/video/158.jpg"
+								"poster": "/assets/video/158.jpg",
+								"notes": []
 							},
 							{
 								"kind": "md",
@@ -563,7 +564,8 @@ export const siteContent = {
 								"id": 160,
 								"title": "Relaxation of pelvic muscles",
 								"src": "/assets/video/160.mp4",
-								"poster": "/assets/video/160.jpg"
+								"poster": "/assets/video/160.jpg",
+								"notes": []
 							},
 							{
 								"kind": "md",
@@ -574,7 +576,8 @@ export const siteContent = {
 								"id": 161,
 								"title": "Sealing",
 								"src": "/assets/video/161.mp4",
-								"poster": "/assets/video/161.jpg"
+								"poster": "/assets/video/161.jpg",
+								"notes": []
 							},
 							{
 								"kind": "md",
@@ -585,7 +588,7 @@ export const siteContent = {
 					{
 						"id": "instill",
 						"label": "Instill the solution",
-						"title": "Instill the solution",
+						"title": "Instilling the solution",
 						"summary": "Keep the UroDapter steady and maintain the seal while slowly pressing the plunger of the syringe at a controlled pace. The solution should flow with steady pressure; if you feel marked resistance or notice leakage, pause and adjust before proceeding.",
 						"segments": [
 							{
@@ -597,7 +600,8 @@ export const siteContent = {
 								"id": 163,
 								"title": "Opening of the sphincter",
 								"src": "/assets/video/163.mp4",
-								"poster": "/assets/video/163.jpg"
+								"poster": "/assets/video/163.jpg",
+								"notes": []
 							},
 							{
 								"kind": "md",
@@ -620,7 +624,21 @@ export const siteContent = {
 								"id": 165,
 								"title": "Leakage during instillation",
 								"src": "/assets/video/165.mp4",
-								"poster": "/assets/video/165.jpg"
+								"poster": "/assets/video/165.jpg",
+								"notes": [
+									{
+										"letter": "A",
+										"text": "Check the syringe angle and adjust it slightly if needed."
+									},
+									{
+										"letter": "B",
+										"text": "Relax your pelvic muscles and avoid tightening around the urethra."
+									},
+									{
+										"letter": "C",
+										"text": "Check that the UroDapter has not slipped outward."
+									}
+								]
 							},
 							{
 								"kind": "md",
@@ -629,9 +647,10 @@ export const siteContent = {
 							{
 								"kind": "video",
 								"id": 170,
-								"title": "Sphincter contraction",
+								"title": "Relaxing the sphincter",
 								"src": "/assets/video/170.mp4",
-								"poster": "/assets/video/170.jpg"
+								"poster": "/assets/video/170.jpg",
+								"notes": []
 							},
 							{
 								"kind": "md",
@@ -640,9 +659,10 @@ export const siteContent = {
 							{
 								"kind": "video",
 								"id": 162,
-								"title": "Instillation speed",
+								"title": "Adjusting the angle",
 								"src": "/assets/video/162.mp4",
-								"poster": "/assets/video/162.jpg"
+								"poster": "/assets/video/162.jpg",
+								"notes": []
 							},
 							{
 								"kind": "md",

@@ -14,7 +14,13 @@
 	 * Each section remembers whether it is open by its `key` (unique per page and position) until the page is reloaded.
 	 */
 	type Figure = { src: string; alt: string; width: number; height: number };
-	type Video = { src: string; poster: string; title: string };
+	type Video = {
+		src: string;
+		poster: string;
+		title: string;
+		/** Lettered points that belong to the video, shown under it. */
+		notes?: readonly { letter: string; text: string }[];
+	};
 
 	let {
 		key,
@@ -52,6 +58,16 @@
 				poster={video.poster}
 				title={video.title}
 			/>
+			{#if video.notes?.length}
+				<ul class="mt-4 space-y-2">
+					{#each video.notes as note (note.letter)}
+						<li class="flex gap-2">
+							<span class="font-semibold">({note.letter})</span>
+							<span>{note.text}</span>
+						</li>
+					{/each}
+				</ul>
+			{/if}
 		{:else if figure}
 			<button
 				type="button"
