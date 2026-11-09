@@ -18,6 +18,7 @@ export const videoFiles = [
 	'/assets/video/162.mp4',
 	'/assets/video/163.mp4',
 	'/assets/video/165.mp4',
+	'/assets/video/165-patient.mp4',
 	'/assets/video/168.mp4',
 	'/assets/video/169.mp4',
 	'/assets/video/170.mp4',

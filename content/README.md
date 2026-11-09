@@ -31,4 +31,4 @@ Human-editable copy for the SvelteKit app. After changing files here, run `npm r
 
 ## Video assets
 
-Instruction step `video` IDs must match files under `static/assets/video/*.mp4`. The checklist in `src/lib/data/video-manifest.ts` should stay in sync with all `video` values used in `steps.yaml` (including the educational video id in `pages/educational-video.md`).
+Instruction step `video` IDs must match files under `static/assets/video/*.mp4`. If `<id>-patient.mp4` exists (a shortened copy, e.g. `165-patient.mp4`, the first 14 s of video 165), the patient journey plays it instead of `<id>.mp4`; the clinician manual keeps the full video. The checklist in `src/lib/data/video-manifest.ts` should stay in sync with all `video` values used in `steps.yaml` (including the educational video id in `pages/educational-video.md`).

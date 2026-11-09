@@ -396,6 +396,9 @@ function toPatientSegments(body, where, videos) {
 				throw new Error(`${where}: ${video.src} or its poster not found in static/`);
 			}
 			flush();
+			// A shortened copy `<id>-patient.mp4` replaces the clinician video in the patient journey.
+			const patientSrc = `/assets/video/${video.id}-patient.mp4`;
+			const src = existsSync(join(root, 'static', patientSrc)) ? patientSrc : video.src;
 			/** @type {{ letter: string, text: string }[]} */
 			const notes = [];
 			for (let n = lines[i + 1]?.trim().match(/^\(([A-Z])\)\s+(.+)$/); n; ) {
@@ -403,7 +406,7 @@ function toPatientSegments(body, where, videos) {
 				i++;
 				n = lines[i + 1]?.trim().match(/^\(([A-Z])\)\s+(.+)$/);
 			}
-			segments.push({ kind: 'video', ...video, title: v[2]?.trim() || video.title, notes });
+			segments.push({ kind: 'video', ...video, src, title: v[2]?.trim() || video.title, notes });
 		} else {
 			if (line.includes('[['))
 				throw new Error(`${where}: malformed marker in line "${line.trim()}"`);
