@@ -17,6 +17,24 @@ function canStoreInCache(response: Response): boolean {
 	return true;
 }
 
+/**
+ * The clinician instruction steps share one client-rendered page; only the step in the address differs
+ * (`/instructions-for-doctors-on-female-patients/<step>`). Offline, a step address that was never loaded
+ * from the network is served with any cached address of the same page, which then shows the right step.
+ */
+const STEP_PAGE = /^\/instructions-for-doctors-on-(?:female|male)-patients(?=\/|$)/;
+
+async function cachedStepPage(url: URL): Promise<Response | undefined> {
+	const base = STEP_PAGE.exec(url.pathname)?.[0];
+	if (!base) return undefined;
+	const cache = await caches.open(CACHE_NAME);
+	const key = (await cache.keys()).find((k) => {
+		const path = new URL(k.url).pathname;
+		return path === base || path.startsWith(`${base}/`);
+	});
+	return key ? cache.match(key) : undefined;
+}
+
 const PRECACHE_ASSETS = [
 	...build,
 	...files.filter(
@@ -91,7 +109,11 @@ sw.addEventListener('fetch', (event) => {
 						}
 						return response;
 					})
-					.catch(() => cached || new Response('Offline', { status: 503 }))
+					.catch(async () => {
+						const stepPage =
+							event.request.mode === 'navigate' ? await cachedStepPage(url) : undefined;
+						return stepPage || new Response('Offline', { status: 503 });
+					})
 		)
 	);
 });

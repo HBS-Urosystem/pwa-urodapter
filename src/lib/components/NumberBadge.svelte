@@ -1,6 +1,6 @@
 <script lang="ts">
 	/**
-	 * Round step number (or letter) used across the patient journey: summary list, step heading.
+	 * Round step number (or letter) used in the self-instillation summary list and in the step headings of both instruction flows.
 	 * Inverse of the text colour (same contrast as body text in both themes), or white with `light`.
 	 */
 	let {

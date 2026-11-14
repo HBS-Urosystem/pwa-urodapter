@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import InstructionsPatientPage from '$lib/components/InstructionsPatientPage.svelte';
 	import { siteContent } from '$lib/content';
 </script>
@@ -8,4 +9,5 @@
 	pack={siteContent.femaleInstructions}
 	seoPath="/instructions-for-doctors-on-female-patients"
 	activeGender="female"
+	stepId={page.params.step}
 />

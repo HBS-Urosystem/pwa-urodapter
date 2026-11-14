@@ -1,6 +1,7 @@
 import { browser } from '$app/environment';
 
 const STORAGE_KEY = 'urodapter-patient-progress-v1';
+const APPROACH_KEY = 'urodapter-patient-approach-v1';
 
 export type PatientProgress = Record<string, string>;
 
@@ -16,8 +17,28 @@ export function readPatientProgress(): PatientProgress {
 	}
 }
 
+/** Id of the approach the reader last opened (its tab or one of its steps), or `null`. */
+export function readLastPatientApproach(): string | null {
+	if (!browser) return null;
+	try {
+		return localStorage.getItem(APPROACH_KEY);
+	} catch {
+		return null;
+	}
+}
+
+export function rememberPatientApproach(approachId: string): void {
+	if (!browser) return;
+	try {
+		localStorage.setItem(APPROACH_KEY, approachId);
+	} catch {
+		/* private mode / quota */
+	}
+}
+
 export function rememberPatientStep(approachId: string, stepId: string): void {
 	if (!browser) return;
+	rememberPatientApproach(approachId);
 	try {
 		localStorage.setItem(
 			STORAGE_KEY,

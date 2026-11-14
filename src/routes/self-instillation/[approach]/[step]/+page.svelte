@@ -5,7 +5,7 @@
 	import NumberBadge from '$lib/components/NumberBadge.svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import StepStrip from '$lib/components/StepStrip.svelte';
-	import { JOURNEYS } from '$lib/data/journeys';
+	import { TOC_LABEL } from '$lib/data/site-nav';
 	import { formatBlockMarkdown } from '$lib/markdown-blocks';
 	import { rememberPatientStep } from '$lib/patient-progress-storage';
 
@@ -14,7 +14,6 @@
 	const approach = $derived(data.approach);
 	const index = $derived(data.index);
 	const step = $derived(approach.steps[index]);
-	const hub = JOURNEYS.patient;
 	const approachPath = $derived(`/self-instillation/${approach.id}`);
 
 	/** Previous / next step with its number ("2. Choose …"); the summary page before step 1 and after the last step. */
@@ -50,7 +49,7 @@
 	<div class="mx-auto max-w-2xl">
 		<div class="breadcrumbs text-sm">
 			<ul>
-				<li><a href={resolve('/self-instillation')}>{hub.tocLabel}</a></li>
+				<li><a href={resolve('/')}>{TOC_LABEL}</a></li>
 				<li>
 					<a href={resolve('/self-instillation/[approach]', { approach: approach.id })}
 						>{approach.label}</a

@@ -3,7 +3,7 @@
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import LogoWordmark from '$lib/components/LogoWordmark.svelte';
 	import TocCards from '$lib/components/TocCards.svelte';
-	import { JOURNEYS } from '$lib/data/journeys';
+	import { TOC_GROUPS } from '$lib/data/site-nav';
 	import { videoFiles } from '$lib/data/video-manifest';
 	import { introPlayed, markIntroSeen } from '$lib/stores/intro.svelte';
 
@@ -190,25 +190,18 @@
 			the catheter in the field of Bladder Instillation
 		</p>
 
-		<!-- Journey choice: clinicians stay on this page (their Table of Contents); Self-instillation starts the patient journey (its own Table of Contents). -->
-		<div class="mt-6 grid gap-3 sm:grid-cols-2">
-			<button
-				type="button"
-				class="btn--lg btn rounded-full text-neutral-content btn-primary"
-				onclick={markIntroSeen}
-			>
-				For Clinicians
-				{@render splashArrow()}
-			</button>
-			<a
-				href={resolve('/self-instillation')}
-				class="btn--lg btn rounded-full text-neutral-content btn-primary"
-				onclick={markIntroSeen}
-			>
-				Self-instillation
-				{@render splashArrow()}
-			</a>
-		</div>
+		<!-- One entry: the Table of Contents below lists the content for clinicians and for self-instillation. -->
+		<button
+			type="button"
+			class="btn--lg btn mt-6 rounded-full px-9 text-[#072c3f] btn-primary"
+			onclick={markIntroSeen}
+		>
+			Enter
+			{@render splashArrow()}
+		</button>
+		<p class="mt-4 max-w-xs px-4 text-center text-sm text-white/80">
+			For clinicians and for people who perform bladder instillation at home
+		</p>
 	</div>
 {/if}
 
@@ -216,14 +209,14 @@
 	<div class="mx-auto">
 		<h1 class="mb-8 text-center text-3xl">How to Use</h1>
 
-		<p class="mx-auto mb-8 max-w-2xl border-b pb-4 px-1 text-center font-bold">
+		<p class="mx-auto mb-8 max-w-2xl border-b px-1 pb-4 text-center font-bold">
 			This detailed manual entails all the necessary information regarding instructions and the tips
 			and tricks you may need to make the use of the UroDapter® most efficient.
 		</p>
 
 		<h2 class="mb-4 text-center text-lg font-bold">Table of Contents</h2>
 
-		<TocCards sections={JOURNEYS.clinician.sections} />
+		<TocCards groups={TOC_GROUPS} />
 
 		<div class="mt-12 mb-4 text-center">
 			{#if progress >= 100}

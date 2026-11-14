@@ -1,2 +1,2 @@
-/** Static content only: render the patient journey's Table of Contents at build time. */
+/** Static content only: render the entry page of self-instillation at build time. */
 export const prerender = true;

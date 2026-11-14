@@ -2,7 +2,10 @@
 	import { resolve } from '$app/paths';
 	import { onMount } from 'svelte';
 	import type { ContentFlowNavEnd } from '$lib/data/content-flow-nav';
-	import { INSTRUCTIONS_FEMALE_PATH, readLastInstructionsPath } from '$lib/instructions-tab-storage';
+	import {
+		INSTRUCTIONS_FEMALE_PATH,
+		readLastInstructionsPath
+	} from '$lib/instructions-tab-storage';
 
 	let {
 		prev,
@@ -18,40 +21,30 @@
 		lastInstructionsTabForNext?: boolean;
 	} = $props();
 
-	/** Client-only: replaces SSR default female path when linking to last-viewed instructions tab */
-	let instructionsPrevFromStorage = $state<string | null>(null);
-	let instructionsNextFromStorage = $state<string | null>(null);
+	/** Client-only: the last-viewed female/male instructions page; the female page until it is read after mount. */
+	let lastInstructionsPath = $state(INSTRUCTIONS_FEMALE_PATH);
 
-	const prevPathResolved = $derived(
-		instructionsPrevFromStorage ??
-			(lastInstructionsTabForPrev ? INSTRUCTIONS_FEMALE_PATH : prev.path)
-	);
-	const nextPathResolved = $derived(
-		instructionsNextFromStorage ??
-			(lastInstructionsTabForNext ? INSTRUCTIONS_FEMALE_PATH : next.path)
-	);
+	const prevPathResolved = $derived(lastInstructionsTabForPrev ? lastInstructionsPath : prev.path);
+	const nextPathResolved = $derived(lastInstructionsTabForNext ? lastInstructionsPath : next.path);
 
 	onMount(() => {
-		if (lastInstructionsTabForPrev) instructionsPrevFromStorage = readLastInstructionsPath();
-		if (lastInstructionsTabForNext) instructionsNextFromStorage = readLastInstructionsPath();
+		lastInstructionsPath = readLastInstructionsPath();
 	});
 </script>
 
 <!-- Spacing above the bar lives in the page <section> padding (tinted), not margin on this block -->
-<div
-	class="w-full border-y border-base-300 bg-base-100 py-1 sticky bottom-0 z-10"
->
-	<nav class="max-w-4xl mx-auto flex justify-between gap-4 px-6" aria-label="Section navigation">
+<div class="sticky bottom-0 z-10 w-full border-y border-base-300 bg-base-100 py-1">
+	<nav class="mx-auto flex max-w-4xl justify-between gap-4 px-6" aria-label="Section navigation">
 		<a
 			href={resolve(prevPathResolved as '/')}
-			class="btn btn-ghost min-h-10 h-auto min-w-0 shrink justify-start gap-2"
+			class="btn h-auto min-h-10 min-w-0 shrink justify-start gap-2 btn-ghost"
 		>
 			<span aria-hidden="true">←</span>
 			<span class="min-w-0 text-left">{prev.label}</span>
 		</a>
 		<a
 			href={resolve(nextPathResolved as '/')}
-			class="btn btn-ghost min-h-10 h-auto min-w-0 shrink justify-end gap-2"
+			class="btn h-auto min-h-10 min-w-0 shrink justify-end gap-2 btn-ghost"
 		>
 			<span class="min-w-0 text-right">{next.label}</span>
 			<span aria-hidden="true">→</span>

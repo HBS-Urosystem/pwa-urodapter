@@ -2,11 +2,19 @@
 	import { resolve } from '$app/paths';
 	import ContentFlowNav from '$lib/components/ContentFlowNav.svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
-	import { CONTENT_FLOW_NAV } from '$lib/data/content-flow-nav';
+	import { onMount } from 'svelte';
+	import { CONTENT_FLOW_NAV, SELF_INSTILLATION_BRANCH } from '$lib/data/content-flow-nav';
+	import { readLastInstillationBranch } from '$lib/instillation-branch-storage';
 	import { siteContent } from '$lib/content';
 	import { formatInlineMarkdown } from '$lib/markdown-inline';
 
 	const flow = CONTENT_FLOW_NAV['/faq'];
+
+	/** "Previous" leads back to the branch the reader last opened (clinician instructions until read after mount). */
+	let cameFromSelfInstillation = $state(false);
+	onMount(() => {
+		cameFromSelfInstillation = readLastInstillationBranch() === 'self';
+	});
 
 	const faq = siteContent.pageCopy.faq;
 	const pageTitle = `${faq.title} | Urodapter`;
@@ -30,14 +38,16 @@
 		<div class="join join-vertical w-full bg-base-100 shadow-sm">
 			{#each faq.items as item, i (item.question)}
 				<details
-					class="collapse collapse-arrow join-item border border-base-300 bg-base-100"
+					class="collapse-arrow collapse join-item border border-base-300 bg-base-100"
 					name="faq-accordion"
 					open={i === 0}
 				>
 					<summary class="collapse-title text-left font-medium">{item.question}</summary>
 					<div class="collapse-content space-y-2 text-base-content/90">
 						{#each item.paragraphs as para, j (`${item.question}-${j}`)}
-							<p class="pt-2 first:pt-0">{@html formatInlineMarkdown(para).replace(/\n/g, '<br/>')}</p>
+							<p class="pt-2 first:pt-0">
+								{@html formatInlineMarkdown(para).replace(/\n/g, '<br/>')}
+							</p>
 						{/each}
 					</div>
 				</details>
@@ -45,4 +55,8 @@
 		</div>
 	</div>
 </section>
-<ContentFlowNav prev={flow.prev} next={flow.next} lastInstructionsTabForPrev />
+<ContentFlowNav
+	prev={cameFromSelfInstillation ? SELF_INSTILLATION_BRANCH : flow.prev}
+	next={flow.next}
+	lastInstructionsTabForPrev={!cameFromSelfInstillation}
+/>

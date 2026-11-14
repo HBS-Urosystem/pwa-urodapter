@@ -90,9 +90,12 @@
 	--color-neutral-light: oklch(90% 0.025 195);
 	--font-heading: 'Josefin Sans', sans-serif;
 }
+/* Active tab: the text colour as fill (dark in the light theme, light in the dark theme), for a readable contrast in both. */
 .tab.tab-active {
-	--tab-bg: var(--color-primary);
-	color: var(--color-primary-content);
+	--tab-bg: var(--color-base-content);
+	/* Set directly too: daisyUI applies --tab-bg only to tabs that are direct children of .tabs-box, and the approach tabs sit in a list. */
+	background-color: var(--color-base-content);
+	color: var(--color-base-100);
 }
 
 h1, h2, h3, h4, h5, h6 {

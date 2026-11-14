@@ -1,34 +1,19 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { afterNavigate } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { page } from '$app/state';
 	import './layout.css';
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import UpdateToast from '$lib/components/UpdateToast.svelte';
 	import LogoMark from '$lib/components/LogoMark.svelte';
 	import MirrorLayer from '$lib/mirror/MirrorLayer.svelte';
-	import { JOURNEYS, journeyForPath } from '$lib/data/journeys';
-	import { lastJourney, rememberJourney, restoreJourney } from '$lib/stores/journey.svelte';
-	import { markIntroSeen, resetIntro } from '$lib/stores/intro.svelte';
+	import { EXTERNAL_LINKS, MORE_LINKS, TOC_GROUPS, TOC_LABEL } from '$lib/data/site-nav';
+	import { resetIntro } from '$lib/stores/intro.svelte';
 
 	let { children } = $props();
 
-	onMount(restoreJourney);
-
 	/** The pre-paint hint from app.html only covers the prerendered splash; from here on `introPlayed` decides. */
 	onMount(() => document.documentElement.removeAttribute('data-intro-seen'));
-
-	afterNavigate(({ to }) => {
-		const id = to ? journeyForPath(to.url.pathname) : null;
-		if (id) rememberJourney(id);
-	});
-
-	/** Journey pages use their own journey; shared pages (Contact, Install App, legal) keep the last one. */
-	const journey = $derived(JOURNEYS[journeyForPath(page.url.pathname) ?? lastJourney.id]);
-	/** The journey the menu can switch to (For Clinicians / Self-instillation). */
-	const otherJourneys = $derived(Object.values(JOURNEYS).filter((j) => j.id !== journey.id));
 
 	function closeDrawer() {
 		const el = document.getElementById('app-drawer');
@@ -39,18 +24,12 @@
 		resetIntro();
 		closeDrawer();
 	}
-
-	/** Opens the other journey's Table of Contents directly, without the splash screen. */
-	function switchJourney() {
-		markIntroSeen();
-		closeDrawer();
-	}
 </script>
 
 <div class="drawer drawer-end">
 	<input id="app-drawer" type="checkbox" class="drawer-toggle" />
 	<div class="drawer-content flex min-h-screen flex-col">
-		<Header tocPath={journey.tocPath} />
+		<Header />
 		<main class="flex min-h-0 flex-1 flex-col">
 			{@render children()}
 			<div class="w-full shrink-0">
@@ -66,7 +45,7 @@
 			<div
 				class="sticky top-0 z-10 flex h-16 shrink-0 items-center justify-end gap-1 bg-base-100 px-4 pt-2 pb-2 shadow-sm"
 			>
-				<!-- U+ logo brings back the splash screen (journey choice), like the header logo. -->
+				<!-- U+ logo brings back the splash screen, like the header logo. -->
 				<a
 					href={resolve('/')}
 					class="btn me-auto btn-square text-primary btn-ghost"
@@ -76,7 +55,7 @@
 					<LogoMark class="h-7" />
 				</a>
 				<a
-					href={resolve(journey.tocPath as '/')}
+					href={resolve('/')}
 					class="btn btn-square btn-ghost"
 					aria-label="Table of Contents"
 					onclick={closeDrawer}
@@ -109,31 +88,38 @@
 					</svg>
 				</label>
 			</div>
-			<!-- Menu of the current journey: Table of Contents + its entries, then the other journey between two dividers, then the app links ($lib/data/journeys.ts). -->
+			<!-- One menu for the whole app: Table of Contents + its sections (sub-entries indented), then the app links, then the external links ($lib/data/site-nav.ts). -->
 			<nav class="menu p-4">
 				<ul>
-					<li><a href={resolve(journey.tocPath as '/')} onclick={closeDrawer}>{journey.tocLabel}</a></li>
-					{#each journey.sections as section (section.path)}
-						<li><a href={resolve(section.path as '/')} onclick={closeDrawer}>{section.title}</a></li>
+					<li><a href={resolve('/')} onclick={closeDrawer}>{TOC_LABEL}</a></li>
+					{#each TOC_GROUPS as group (group.heading)}
+						{#each group.sections as section (section.path)}
+							<li>
+								<a href={resolve(section.path as '/')} onclick={closeDrawer}>{section.title}</a>
+								{#if section.children}
+									<ul>
+										{#each section.children as child (child.path)}
+											<li>
+												<a href={resolve(child.path as '/')} onclick={closeDrawer}>{child.title}</a>
+											</li>
+										{/each}
+									</ul>
+								{/if}
+							</li>
+						{/each}
 					{/each}
 					<div class="divider"></div>
-					{#each otherJourneys as other (other.id)}
-						<li>
-							<a href={resolve(other.tocPath as '/')} onclick={switchJourney}>{other.entryLabel}</a>
-						</li>
+					{#each MORE_LINKS as link (link.path)}
+						<li><a href={resolve(link.path as '/')} onclick={closeDrawer}>{link.label}</a></li>
 					{/each}
 					<div class="divider"></div>
-					{#each journey.moreLinks as link (link.path)}
+					{#each EXTERNAL_LINKS as link (link.path)}
 						<li>
-							{#if link.external}
-								<!-- External site: resolve() applies to app routes only -->
-								<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-								<a href={link.path} target="_blank" rel="noopener noreferrer" onclick={closeDrawer}
-									>{link.label}</a
-								>
-							{:else}
-								<a href={resolve(link.path as '/')} onclick={closeDrawer}>{link.label}</a>
-							{/if}
+							<!-- External site: resolve() applies to app routes only -->
+							<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+							<a href={link.path} target="_blank" rel="noopener noreferrer" onclick={closeDrawer}
+								>{link.label}</a
+							>
 						</li>
 					{/each}
 				</ul>

@@ -65,7 +65,7 @@
 			</a>
 		</span>
 		<span class="inline-flex items-center gap-1.5">
-			<!-- Logo brings back the splash screen (journey choice), same as the header logo. -->
+			<!-- Logo brings back the splash screen, same as the header logo. -->
 			<a href={resolve('/')} onclick={resetIntro}>
 				<!-- <img src="/assets/img/logo_white.svg" alt="Urodapter" class="h-4" /> -->
 				<LogoWordmark class="h-4" />

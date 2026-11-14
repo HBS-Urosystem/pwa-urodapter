@@ -2,12 +2,15 @@
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { browser } from '$app/environment';
-	import { tick, onMount } from 'svelte';
+	import { tick, onMount, untrack } from 'svelte';
 	import type { InstructionPack } from '$lib/content';
 	import ClipVideo from '$lib/components/ClipVideo.svelte';
 	import ContentFlowNav from '$lib/components/ContentFlowNav.svelte';
+	import NumberBadge from '$lib/components/NumberBadge.svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import { CONTENT_FLOW_NAV } from '$lib/data/content-flow-nav';
+	import { CLINICIAN_LABEL } from '$lib/data/site-nav';
+	import { persistLastInstillationBranch } from '$lib/instillation-branch-storage';
 	import { persistLastInstructionsTab } from '$lib/instructions-tab-storage';
 	import { formatInlineMarkdown } from '$lib/markdown-inline';
 
@@ -18,12 +21,18 @@
 		storageKey,
 		pack,
 		seoPath,
-		activeGender
+		activeGender,
+		stepId
 	}: {
 		storageKey: string;
 		pack: InstructionPack;
 		seoPath: string;
 		activeGender: 'female' | 'male';
+		/**
+		 * Step id from the address (`<seoPath>/<step id>`). Without it (or with an unknown id) the page
+		 * opens the step the reader last had open and puts that step into the address.
+		 */
+		stepId?: string;
 	} = $props();
 
 	const seoDescription = $derived(
@@ -46,8 +55,27 @@
 		}
 	}
 
+	/** Index of the step named in the address, or -1 when the address names no (known) step. */
+	const addressStepIndex = $derived(pack.steps.findIndex((s) => s.id === stepId));
+
 	// svelte-ignore state_referenced_locally
-	const initialStepIndex = readStoredStepIndex(storageKey, pack.steps.length);
+	const initialStepIndex =
+		addressStepIndex >= 0 ? addressStepIndex : readStoredStepIndex(storageKey, pack.steps.length);
+
+	/** Address of a step: every step has its own, so it can be linked and the browser's Back button steps back. */
+	function stepPath(i: number): string {
+		return `${seoPath}/${pack.steps[i].id}`;
+	}
+
+	/** Puts step `i` into the address. A new history entry, unless `replace` (used when the address named no step). */
+	function showStepInAddress(i: number, replace = false) {
+		if (!browser || pack.steps[i].id === stepId) return;
+		void goto(resolve(stepPath(i) as '/'), {
+			noScroll: true,
+			keepFocus: true,
+			replaceState: replace
+		});
+	}
 
 	const tabScope = $derived(storageKey.replace(/[^a-zA-Z0-9]+/g, '-'));
 	const femaleTabId = $derived(`${tabScope}-tab-female`);
@@ -93,6 +121,7 @@
 		if (clamped !== stepIndex) {
 			stepIndex = clamped;
 			persistStep();
+			showStepInAddress(clamped);
 		}
 	}
 
@@ -100,6 +129,7 @@
 		const clamped = Math.max(0, Math.min(pack.steps.length - 1, i));
 		stepIndex = clamped;
 		persistStep();
+		showStepInAddress(clamped);
 		const el = stepsCarouselEl;
 		if (!el) return;
 		const w = carouselWidth;
@@ -112,9 +142,21 @@
 
 	onMount(() => {
 		persistLastInstructionsTab(activeGender);
+		persistLastInstillationBranch('clinician');
+		persistStep();
+		if (addressStepIndex < 0) showStepInAddress(stepIndex, true);
 		void tick().then(() => {
 			allowStepAnim = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 			requestAnimationFrame(() => alignCarouselToStep());
+		});
+	});
+
+	/** The address changed (step circle, browser Back / Forward): show that step. */
+	$effect(() => {
+		const i = addressStepIndex;
+		if (i < 0) return;
+		untrack(() => {
+			if (i !== stepIndex) moveToStep(i);
 		});
 	});
 
@@ -256,7 +298,7 @@
 
 <section class="bg-primary/20 px-4 pt-8 pb-12">
 	<div class="mx-auto max-w-3xl">
-		<h1 class="mb-6 text-3xl">{pack.pageTitle}</h1>
+		<h1 class="mb-6 text-3xl">{CLINICIAN_LABEL}</h1>
 
 		<!-- Opaque page background behind the sticky tabs: covers the content scrolling under their rounded corners and in the 4px gap below the header (pt-1; -mt-1 keeps the unscrolled position). -mx-2 px-2 also covers the shadow of the content beside the tabs. -->
 		<div class="sticky top-16 z-10 -mx-2 -mt-1 mb-6 bg-primary-20-opaque px-2 pt-1">
@@ -286,6 +328,31 @@
 			</div>
 		</div>
 
+		<!-- Step circles, as on the self-instillation step pages: each is a link to the step's own address. Two rows of six on phones (44px touch targets), one row from the `sm` breakpoint up. -->
+		<nav aria-label="Steps" class="mb-6">
+			<ol class="grid grid-cols-6 justify-items-center gap-2 sm:flex sm:flex-wrap">
+				{#each pack.steps as s, i (s.id)}
+					{@const current = i === stepIndex}
+					<li>
+						<a
+							href={resolve(stepPath(i) as '/')}
+							data-sveltekit-noscroll
+							data-sveltekit-keepfocus
+							class={[
+								'flex h-11 w-11 items-center justify-center rounded-full border text-base font-bold no-underline transition-colors',
+								current
+									? 'border-base-content bg-base-content text-base-100'
+									: 'border-base-content/30 bg-transparent text-base-content hover:border-base-content'
+							]}
+							aria-current={current ? 'step' : undefined}
+							aria-label={`Step ${i + 1}: ${s.title}`}
+							title={s.title}>{i + 1}</a
+						>
+					</li>
+				{/each}
+			</ol>
+		</nav>
+
 		<div
 			bind:this={stepContentRegionEl}
 			class="card scroll-mt-24 border border-base-300 bg-base-100 shadow-sm"
@@ -293,21 +360,18 @@
 			aria-label="Instruction step content"
 		>
 			<div class="card-body gap-4">
-				<div class="flex flex-wrap items-center justify-between gap-2 text-sm opacity-80">
-					<span>Step {stepIndex + 1} / {pack.steps.length}</span>
-					<span class="sm:hidden">Swipe to change steps</span>
-					<span class="hidden sm:inline">Use arrow keys to change steps</span>
-				</div>
-
 				<div
 					bind:this={stepsCarouselEl}
 					class="carousel w-full carousel-start gap-2 rounded-lg"
 					aria-label="Instruction video steps"
 				>
-					{#each pack.steps as s (s.id)}
+					{#each pack.steps as s, i (s.id)}
 						<div class="carousel-item w-full">
 							<div class="flex w-full min-w-0 flex-col gap-4">
-								<h2 class="text-xl font-semibold">{s.title}</h2>
+								<div class="flex items-center gap-3">
+									<NumberBadge value={i + 1} />
+									<h2 class="text-xl font-semibold">{s.title}</h2>
+								</div>
 
 								{#if s.video != null}
 									<ClipVideo
