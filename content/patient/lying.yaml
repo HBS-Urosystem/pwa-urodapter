@@ -142,7 +142,7 @@ steps:
     Once the seal feels stable, maintain the same pressure and alignment while beginning the instillation.
 - id: instill
   label: Instill the solution
-  title: Instilling the solution
+  title: Instill the solution
   summary: Keep the UroDapter steady and maintain the seal while slowly pressing the plunger of the syringe at a controlled pace. The solution should flow with steady pressure; if you feel marked resistance or notice leakage, pause and adjust before proceeding.
   body: |
     Once the UroDapter is correctly positioned and the seal is stable, keep your pelvic area relaxed and maintain the same alignment and steady inward pressure on the adapter.
@@ -151,7 +151,7 @@ steps:
 
     The fluid should flow smoothly with steady, controlled pressure on the plunger. Some pressure is normally needed, but it should not require forceful pushing. With practice, you will become familiar with the usual amount of pressure needed and will be better able to recognize when resistance increases.
 
-    [[video:163]]
+    [[video:163|Instilling the solution]]
 
     Continue at a pace that allows you to maintain the position, alignment, and seal throughout the instillation until the prescribed volume has been delivered.
 
