@@ -142,7 +142,7 @@
 				alt={nav.imageAlt}
 				width="384"
 				height="308"
-				class="mb-6 aspect-[384/308] h-auto w-full rounded-box object-cover sm:aspect-[2/1]"
+				class="mx-auto mb-6 block aspect-[384/308] h-auto w-full max-w-sm rounded-box object-cover"
 			/>
 		{/if}
 
