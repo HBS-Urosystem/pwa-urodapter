@@ -3,6 +3,7 @@
 	import ContentFlowNav from '$lib/components/ContentFlowNav.svelte';
 	import DoctorPriorToInstillationPanel from '$lib/components/DoctorPriorToInstillationPanel.svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import { afterNavigate } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { CONTENT_FLOW_NAV, SELF_INSTILLATION_BRANCH } from '$lib/data/content-flow-nav';
 	import {
@@ -36,8 +37,25 @@
 	let clinicianPath = $state(CLINICIAN_PATH);
 
 	onMount(() => {
-		audience = readStoredPriorInstillationAudience();
 		clinicianPath = readLastInstructionsPath();
+	});
+
+	/**
+	 * The tab to open depends on the page the reader arrives from: "Patient" from the self-instillation
+	 * pages, "Doctor" from the clinician instruction pages. From any other page, and on a direct load,
+	 * it is the tab the reader last had open here.
+	 */
+	afterNavigate(({ from }) => {
+		const fromPath = from?.url.pathname ?? '';
+		if (fromPath.startsWith(SELF_INSTILLATION_PATH)) {
+			audience = 'patient';
+			persistPriorInstillationAudience('patient');
+		} else if (fromPath.startsWith('/instructions-for-doctors-on-')) {
+			audience = 'doctor';
+			persistPriorInstillationAudience('doctor');
+		} else {
+			audience = readStoredPriorInstillationAudience();
+		}
 	});
 
 	/**

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { afterNavigate } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import './layout.css';
 	import Header from '$lib/components/Header.svelte';
@@ -8,12 +9,21 @@
 	import LogoMark from '$lib/components/LogoMark.svelte';
 	import MirrorLayer from '$lib/mirror/MirrorLayer.svelte';
 	import { EXTERNAL_LINKS, MORE_LINKS, TOC_GROUPS, TOC_LABEL } from '$lib/data/site-nav';
-	import { resetIntro } from '$lib/stores/intro.svelte';
+	import { markIntroSeen, resetIntro } from '$lib/stores/intro.svelte';
 
 	let { children } = $props();
 
 	/** The pre-paint hint from app.html only covers the prerendered splash; from here on `introPlayed` decides. */
 	onMount(() => document.documentElement.removeAttribute('data-intro-seen'));
+
+	/**
+	 * A reader who is on any page other than the home page is already inside the app, also after opening
+	 * that page directly or reloading it. Marking the splash as passed there makes every "Table of
+	 * Contents" link open the Table of Contents; only the logos (`resetIntro`) bring the splash back.
+	 */
+	afterNavigate(({ to }) => {
+		if (to && to.url.pathname !== '/') markIntroSeen();
+	});
 
 	function closeDrawer() {
 		const el = document.getElementById('app-drawer');

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
+	import { afterNavigate, goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import ContentFlowNav from '$lib/components/ContentFlowNav.svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
@@ -56,6 +56,45 @@
 	$effect(() => {
 		if (!entry) rememberPatientApproach(approach.id);
 	});
+
+	/** The paragraph that asks the reader to choose an approach tab (`overview.howToUse`). */
+	let tabPrompt = $state<HTMLElement>();
+	/** Height of the sticky header (64px) plus a 16px gap; matches `scroll-mt-20` on the paragraph. */
+	const TAB_PROMPT_TOP = 80;
+	/**
+	 * When the "Read first" text closes, the page becomes shorter and the content below moves up under the
+	 * reader. If that leaves the tab prompt above the visible area, scroll it to the top of the visible area.
+	 */
+	function showTabPromptAfterClose() {
+		if (tabPrompt && tabPrompt.getBoundingClientRect().top < TAB_PROMPT_TOP) {
+			tabPrompt.scrollIntoView({ block: 'start' });
+		}
+	}
+	/**
+	 * The "Read first" text closes with an animation, so the page keeps getting shorter for a moment after
+	 * the `toggle` event. For one second after closing, every change of the element's height repeats the
+	 * check, so the tab prompt stays in the visible area until the animation has finished.
+	 */
+	let readFirst = $state<HTMLDetailsElement>();
+	let readFirstClosedAt = 0;
+	function onReadFirstToggle() {
+		if (!readFirst || readFirst.open) return;
+		readFirstClosedAt = performance.now();
+		showTabPromptAfterClose();
+	}
+	$effect(() => {
+		if (!readFirst) return;
+		const observer = new ResizeObserver(() => {
+			if (performance.now() - readFirstClosedAt < 1000) showTabPromptAfterClose();
+		});
+		observer.observe(readFirst);
+		return () => observer.disconnect();
+	});
+	/** Choosing a tab at the entry address opens the approach address, where "Read first" is closed. */
+	afterNavigate(({ from }) => {
+		if (!entry && from?.route.id === '/self-instillation') showTabPromptAfterClose();
+	});
+
 	/** Index of the step the reader last opened in this approach (-1 = none). */
 	const lastIndex = $derived(approach.steps.findIndex((s) => s.id === progress[approach.id]));
 </script>
@@ -71,7 +110,12 @@
 		<h1 class="mb-6 text-3xl">{SELF_INSTILLATION_LABEL}</h1>
 
 		<!-- The text every reader should read once. Open at the entry address, closed on the approach tabs. -->
-		<details class="collapse-arrow collapse border border-base-300 bg-base-100" open={entry}>
+		<details
+			class="collapse-arrow collapse border border-base-300 bg-base-100"
+			open={entry}
+			bind:this={readFirst}
+			ontoggle={onReadFirstToggle}
+		>
 			<summary class="collapse-title font-semibold">Read first: {overview.title}</summary>
 			<div class="collapse-content">
 				<div class="prose max-w-none text-base-content">
@@ -108,7 +152,7 @@
 			</div>
 		</details>
 
-		<div class="prose mt-6 mb-4 max-w-none text-base-content">
+		<div bind:this={tabPrompt} class="prose mt-6 mb-4 max-w-none scroll-mt-20 text-base-content">
 			<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 			{@html formatBlockMarkdown(overview.howToUse)}
 		</div>
