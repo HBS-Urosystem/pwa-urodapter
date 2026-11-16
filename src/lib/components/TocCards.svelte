@@ -5,13 +5,17 @@
 	/**
 	 * Table of Contents: one card per section, grouped under headings (entries come from `$lib/data/site-nav.ts`).
 	 * From the `sm` breakpoint up the cards of a group stand two per row; a card left alone in the last row is centred.
+	 * The top margins of the groups are the smallest distances; a taller parent adds its spare height between the groups.
 	 */
 	let { groups }: { groups: readonly NavGroup[] } = $props();
 </script>
 
-<div class="mx-auto flex max-w-4xl flex-col gap-6 px-4">
-	{#each groups as group (group.heading)}
-		<section class="flex flex-col gap-3">
+<!-- `contents`: each group is laid out directly by the parent, so the parent can share spare height between the groups. -->
+<div class="contents">
+	{#each groups as group, i (group.heading)}
+		<section
+			class={['mx-auto flex w-full max-w-4xl flex-col gap-3 px-4', i === 0 ? 'mt-4' : 'mt-6']}
+		>
 			<h3 class="text-sm font-bold tracking-wider uppercase sm:text-center">{group.heading}</h3>
 			<div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
 				{#each group.sections as section (section.path)}

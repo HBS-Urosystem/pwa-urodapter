@@ -205,75 +205,84 @@
 	</div>
 {/if}
 
-<section class="flex-1 bg-primary/20 py-12">
-	<div class="mx-auto">
-		<h1 class="mb-8 text-center text-3xl">How to Use</h1>
+<!--
+	When the window is taller than the content, the spare height is shared evenly between the six blocks
+	(title and introduction, "Table of Contents" heading, the three card groups, the download and install/share actions).
+	The margins on the blocks are the smallest distances, used when there is no spare height.
+-->
+<section class="flex flex-1 flex-col bg-primary/20 py-12">
+	<div class="flex w-full flex-1 flex-col justify-between">
+		<div>
+			<h1 class="mb-8 text-center text-3xl">How to Use</h1>
 
-		<p class="mx-auto mb-8 max-w-2xl border-b px-1 pb-4 text-center font-bold">
-			This detailed guide entails all the necessary information regarding instructions and the tips
-			and tricks you may need to make the use of the UroDapter® most efficient.
-		</p>
+			<p class="mx-auto max-w-2xl border-b px-1 pb-4 text-center font-bold">
+				This detailed guide entails all the necessary information regarding instructions and the
+				tips and tricks you may need to make the use of the UroDapter® most efficient.
+			</p>
+		</div>
 
-		<h2 class="mb-4 text-center text-lg font-bold">Table of Contents</h2>
+		<h2 class="mt-8 text-center text-lg font-bold">Table of Contents</h2>
 
 		<TocCards groups={TOC_GROUPS} />
 
-		<div class="mt-12 mb-4 text-center">
-			{#if progress >= 100}
-				<p class="font-bold text-success">Downloaded!</p>
-			{:else}
-				<button
-					class="btn btn-outline btn-secondary"
-					onclick={downloadAllVideos}
-					disabled={downloading}
-				>
-					Download all videos for offline use
-				</button>
-			{/if}
-
-			{#if downloading && progress < 100}
-				<div class="mt-4 flex justify-center">
-					<progress class="progress w-64 progress-primary" value={progress} max="100"></progress>
-				</div>
-			{/if}
-		</div>
-
-		<div class="mt-4 flex flex-wrap items-center justify-center gap-2">
-			<a href={resolve('/install')} class="btn btn-ghost btn-sm">
-				<svg xmlns="http://www.w3.org/2000/svg" class="mt-1 h-6 w-6" viewBox="0 0 40 40">
-					<path
-						d="M16.5 3v18m0 0l-6-6m6 6l6-6M5 24v3h23v-3"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="4"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-					/>
-				</svg>
-				Install App
-			</a>
-
-			<button class="btn btn-ghost btn-sm" onclick={share}>
-				{#if copied}
-					Copied!
+		<div>
+			<div class="mt-12 mb-4 text-center">
+				{#if progress >= 100}
+					<p class="font-bold text-success">Downloaded!</p>
 				{:else}
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="mt-1 h-6 w-6"
-						viewBox="0 0 24 24"
-						fill="currentColor"
+					<button
+						class="btn btn-outline btn-secondary"
+						onclick={downloadAllVideos}
+						disabled={downloading}
 					>
+						Download all videos for offline use
+					</button>
+				{/if}
+
+				{#if downloading && progress < 100}
+					<div class="mt-4 flex justify-center">
+						<progress class="progress w-64 progress-primary" value={progress} max="100"></progress>
+					</div>
+				{/if}
+			</div>
+
+			<div class="mt-4 flex flex-wrap items-center justify-center gap-2">
+				<a href={resolve('/install')} class="btn btn-ghost btn-sm">
+					<svg xmlns="http://www.w3.org/2000/svg" class="mt-1 h-6 w-6" viewBox="0 0 40 40">
 						<path
-							stroke-width="1"
-							d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"
+							d="M16.5 3v18m0 0l-6-6m6 6l6-6M5 24v3h23v-3"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="4"
+							stroke-linecap="round"
+							stroke-linejoin="round"
 						/>
 					</svg>
-					Share
-				{/if}
-			</button>
-			<!-- {#if error != null}
+					Install App
+				</a>
+
+				<button class="btn btn-ghost btn-sm" onclick={share}>
+					{#if copied}
+						Copied!
+					{:else}
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="mt-1 h-6 w-6"
+							viewBox="0 0 24 24"
+							fill="currentColor"
+						>
+							<path
+								stroke-width="1"
+								d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"
+							/>
+						</svg>
+						Share
+					{/if}
+				</button>
+				<!-- {#if error != null}
 				<span class="text-info text-center text-sm">{error}</span>
 			{/if} -->
+			</div>
 		</div>
 	</div>
 </section>

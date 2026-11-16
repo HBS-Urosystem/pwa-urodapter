@@ -1,25 +1,23 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import LogoWordmark from '$lib/components/LogoWordmark.svelte';
-	import { resetIntro } from '$lib/stores/intro.svelte';
 </script>
 
 <nav class="navbar sticky top-0 z-40 bg-base-100 px-4 shadow-sm">
 	<div class="flex-1">
-		<!-- Logo brings back the splash screen. -->
+		<!-- Logo opens the Table of Contents. The splash screen shows there only if it was not passed yet in this tab, or after a reload. -->
 		<!-- svelte-ignore a11y_consider_explicit_label -->
 		<a
 			href={resolve('/')}
-			onclick={resetIntro}
 			class="btn text-primary btn-ghost hover:border-transparent hover:bg-transparent hover:shadow-none max-[359px]:px-1"
-			aria-label="Home"
+			aria-label="Table of Contents"
 		>
 			<!-- Below 360px the logo is slightly smaller so the "Contents" button fits beside it. -->
 			<LogoWordmark class="h-8 max-[359px]:h-7" />
 		</a>
 	</div>
 	<div class="flex-none gap-1">
-		<!-- Text instead of an icon: no icon says "table of contents" unambiguously, and a house would suggest the logo's target (the splash screen). -->
+		<!-- Text instead of an icon: no icon says "table of contents" unambiguously, and a house would suggest a separate home page. -->
 		<a
 			href={resolve('/')}
 			class="btn px-3 btn-ghost max-[359px]:px-2"

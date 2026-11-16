@@ -9,7 +9,7 @@
 	import LogoMark from '$lib/components/LogoMark.svelte';
 	import MirrorLayer from '$lib/mirror/MirrorLayer.svelte';
 	import { EXTERNAL_LINKS, MORE_LINKS, TOC_GROUPS, TOC_LABEL } from '$lib/data/site-nav';
-	import { markIntroSeen, resetIntro } from '$lib/stores/intro.svelte';
+	import { markIntroSeen } from '$lib/stores/intro.svelte';
 
 	let { children } = $props();
 
@@ -19,7 +19,7 @@
 	/**
 	 * A reader who is on any page other than the home page is already inside the app, also after opening
 	 * that page directly or reloading it. Marking the splash as passed there makes every "Table of
-	 * Contents" link open the Table of Contents; only the logos (`resetIntro`) bring the splash back.
+	 * Contents" link and every logo open the Table of Contents.
 	 */
 	afterNavigate(({ to }) => {
 		if (to && to.url.pathname !== '/') markIntroSeen();
@@ -28,11 +28,6 @@
 	function closeDrawer() {
 		const el = document.getElementById('app-drawer');
 		if (el) (el as HTMLInputElement).checked = false;
-	}
-
-	function goToSplash() {
-		resetIntro();
-		closeDrawer();
 	}
 </script>
 
@@ -55,16 +50,16 @@
 			<div
 				class="sticky top-0 z-10 flex h-16 shrink-0 items-center justify-end gap-1 bg-base-100 px-4 pt-2 pb-2 shadow-sm"
 			>
-				<!-- U+ logo brings back the splash screen, like the header logo. -->
+				<!-- U+ logo opens the Table of Contents, like the header logo. -->
 				<a
 					href={resolve('/')}
 					class="btn me-auto btn-square text-primary btn-ghost"
-					aria-label="Home"
-					onclick={goToSplash}
+					aria-label="Table of Contents"
+					onclick={closeDrawer}
 				>
 					<LogoMark class="h-7" />
 				</a>
-				<!-- Text instead of an icon: no icon says "table of contents" unambiguously, and a house would suggest the logo's target (the splash screen). -->
+				<!-- Text instead of an icon: no icon says "table of contents" unambiguously, and a house would suggest a separate home page. -->
 				<a
 					href={resolve('/')}
 					class="btn px-3 btn-ghost"
