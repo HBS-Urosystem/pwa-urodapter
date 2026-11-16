@@ -23,8 +23,9 @@ export const SELF_INSTILLATION_BRANCH: ContentFlowNavEnd = {
 
 /**
  * Previous / next links of each flow page (the order of the Table of Contents).
- * Where the neighbour is a branch (next of the "prior" page, previous of the FAQ), the entry holds the
- * clinician branch; the page replaces it with the self-instillation branch when that is the reader's branch.
+ * The "prior" page's next link is a branch: the entry holds the clinician branch, and the page replaces it
+ * with the self-instillation branch when the Patient tab is selected. The FAQ's previous link is the "prior"
+ * page (the last shared page before the fork); the FAQ page replaces it with the branch the reader last opened.
  */
 export const CONTENT_FLOW_NAV: Record<
 	string,
@@ -42,7 +43,7 @@ export const CONTENT_FLOW_NAV: Record<
 	'/instructions-for-doctors-on-male-patients': { prev: PRIOR, next: FAQ },
 	[SELF_INSTILLATION_PATH]: { prev: PRIOR, next: FAQ },
 	'/faq': {
-		prev: CLINICIAN_BRANCH,
+		prev: PRIOR,
 		next: { path: TOC_PATH, label: TOC_LABEL }
 	}
 };
