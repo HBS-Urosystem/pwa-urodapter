@@ -210,7 +210,7 @@
 		<h1 class="mb-8 text-center text-3xl">How to Use</h1>
 
 		<p class="mx-auto mb-8 max-w-2xl border-b px-1 pb-4 text-center font-bold">
-			This detailed manual entails all the necessary information regarding instructions and the tips
+			This detailed guide entails all the necessary information regarding instructions and the tips
 			and tricks you may need to make the use of the UroDapter® most efficient.
 		</p>
 

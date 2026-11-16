@@ -67,10 +67,15 @@
 		return `${seoPath}/${pack.steps[i].id}`;
 	}
 
-	/** Puts step `i` into the address. A new history entry, unless `replace` (used when the address named no step). */
-	function showStepInAddress(i: number, replace = false) {
+	/**
+	 * Puts step `i` into the address. A new history entry, unless `replace` (used when the address named no step).
+	 * The returned promise settles when the address change is complete. With `noScroll` SvelteKit puts the
+	 * window back to the scroll position it had when the change started, so any scrolling of the window
+	 * has to wait for this promise.
+	 */
+	async function showStepInAddress(i: number, replace = false): Promise<void> {
 		if (!browser || pack.steps[i].id === stepId) return;
-		void goto(resolve(stepPath(i) as '/'), {
+		await goto(resolve(stepPath(i) as '/'), {
 			noScroll: true,
 			keepFocus: true,
 			replaceState: replace
@@ -121,30 +126,32 @@
 		if (clamped !== stepIndex) {
 			stepIndex = clamped;
 			persistStep();
-			showStepInAddress(clamped);
+			void showStepInAddress(clamped);
 		}
 	}
 
-	function moveToStep(i: number) {
+	/** Shows step `i`. The returned promise settles when the step's address is in place (see `showStepInAddress`). */
+	function moveToStep(i: number): Promise<void> {
 		const clamped = Math.max(0, Math.min(pack.steps.length - 1, i));
 		stepIndex = clamped;
 		persistStep();
-		showStepInAddress(clamped);
+		const addressChanged = showStepInAddress(clamped);
 		const el = stepsCarouselEl;
-		if (!el) return;
 		const w = carouselWidth;
-		if (w <= 0) return;
-		el.scrollTo({
-			left: clamped * w,
-			behavior: allowStepAnim ? 'smooth' : 'auto'
-		});
+		if (el && w > 0) {
+			el.scrollTo({
+				left: clamped * w,
+				behavior: allowStepAnim ? 'smooth' : 'auto'
+			});
+		}
+		return addressChanged;
 	}
 
 	onMount(() => {
 		persistLastInstructionsTab(activeGender);
 		persistLastInstillationBranch('clinician');
 		persistStep();
-		if (addressStepIndex < 0) showStepInAddress(stepIndex, true);
+		if (addressStepIndex < 0) void showStepInAddress(stepIndex, true);
 		void tick().then(() => {
 			allowStepAnim = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 			requestAnimationFrame(() => alignCarouselToStep());
@@ -156,8 +163,18 @@
 		const i = addressStepIndex;
 		if (i < 0) return;
 		untrack(() => {
-			if (i !== stepIndex) moveToStep(i);
+			if (i !== stepIndex) void moveToStep(i);
 		});
+	});
+
+	/** The row of step circles. It scrolls sideways when the circles do not fit; the current step is kept in view. */
+	let stepCirclesEl = $state<HTMLOListElement | undefined>(undefined);
+	$effect(() => {
+		const row = stepCirclesEl;
+		const item = row?.children[stepIndex];
+		if (!row || !(item instanceof HTMLElement)) return;
+		const left = item.offsetLeft - (row.clientWidth - item.offsetWidth) / 2;
+		row.scrollTo({ left, behavior: untrack(() => allowStepAnim) ? 'smooth' : 'auto' });
 	});
 
 	$effect(() => {
@@ -226,20 +243,20 @@
 
 	async function goNextStep() {
 		if (stepIndex >= pack.steps.length - 1) return;
-		moveToStep(stepIndex + 1);
+		await moveToStep(stepIndex + 1);
 		await tick();
 		scrollInstructionStepContentIntoView();
 	}
 
 	async function startOver() {
-		moveToStep(0);
+		await moveToStep(0);
 		await tick();
 		scrollInstructionStepContentIntoView();
 	}
 
 	async function goPrevStep() {
 		if (stepIndex <= 0) return;
-		moveToStep(stepIndex - 1);
+		await moveToStep(stepIndex - 1);
 		await tick();
 		scrollInstructionStepContentIntoView();
 	}
@@ -328,18 +345,21 @@
 			</div>
 		</div>
 
-		<!-- Step circles, as on the self-instillation step pages: each is a link to the step's own address. Two rows of six on phones (44px touch targets), one row from the `sm` breakpoint up. -->
+		<!-- Step circles, the same size as on the self-instillation step pages (`StepStrip`): nine circles share the width with 6px gaps, each at most 44px. The steps beyond the ninth are reached by scrolling the row sideways. p-1 / -m-1 keeps the focus outline inside the scrolling row. -->
 		<nav aria-label="Steps" class="mb-6">
-			<ol class="grid grid-cols-6 justify-items-center gap-2 sm:flex sm:flex-wrap">
+			<ol
+				bind:this={stepCirclesEl}
+				class="relative -m-1 flex gap-1.5 overflow-x-auto overscroll-x-contain p-1"
+			>
 				{#each pack.steps as s, i (s.id)}
 					{@const current = i === stepIndex}
-					<li>
+					<li class="shrink-0 grow-0 basis-[calc((100%-3rem)/9)]">
 						<a
 							href={resolve(stepPath(i) as '/')}
 							data-sveltekit-noscroll
 							data-sveltekit-keepfocus
 							class={[
-								'flex h-11 w-11 items-center justify-center rounded-full border text-base font-bold no-underline transition-colors',
+								'mx-auto flex aspect-square max-w-11 items-center justify-center rounded-full border text-base font-bold no-underline transition-colors',
 								current
 									? 'border-base-content bg-base-content text-base-100'
 									: 'border-base-content/30 bg-transparent text-base-content hover:border-base-content'
@@ -383,7 +403,7 @@
 								{/if}
 
 								{#each s.paragraphs as para, pi (`${s.id}-${pi}`)}
-									<p class="text-base-content/90">
+									<p class="text-base text-base-content/90">
 										<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 										{@html formatInlineMarkdown(para).replace(/\n/g, '<br/>')}
 									</p>
@@ -507,9 +527,7 @@
 		modalTitle = '';
 	}}
 >
-	<div
-		class="relative modal-box prose max-h-[85vh] max-w-lg overflow-y-auto text-base-content max-sm:prose-sm"
-	>
+	<div class="relative modal-box prose max-h-[85vh] max-w-lg overflow-y-auto text-base-content">
 		<form method="dialog" class="not-prose absolute end-2 top-2 z-10">
 			<button type="submit" class="btn btn-square btn-ghost btn-sm" aria-label="Close dialog">
 				<svg

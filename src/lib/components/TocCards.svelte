@@ -23,7 +23,7 @@
 							>{section.title}</span
 						>
 						{#if section.description}
-							<span class="mt-0.5 text-sm text-base-content/80">{section.description}</span>
+							<span class="mt-0.5 text-base-content/80">{section.description}</span>
 						{/if}
 					</a>
 				{/each}

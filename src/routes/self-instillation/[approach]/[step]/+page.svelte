@@ -5,7 +5,6 @@
 	import NumberBadge from '$lib/components/NumberBadge.svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import StepStrip from '$lib/components/StepStrip.svelte';
-	import { TOC_LABEL } from '$lib/data/site-nav';
 	import { formatBlockMarkdown } from '$lib/markdown-blocks';
 	import { rememberPatientStep } from '$lib/patient-progress-storage';
 
@@ -49,7 +48,7 @@
 	<div class="mx-auto max-w-2xl">
 		<div class="breadcrumbs text-sm">
 			<ul>
-				<li><a href={resolve('/')}>{TOC_LABEL}</a></li>
+				<li><a href={resolve('/self-instillation')}>Self-instillation</a></li>
 				<li>
 					<a href={resolve('/self-instillation/[approach]', { approach: approach.id })}
 						>{approach.label}</a
@@ -69,14 +68,14 @@
 		</div>
 
 		<article
-			class="prose mt-6 max-w-none rounded-box border border-base-300 bg-base-100 p-5 text-[1.0625rem] leading-relaxed text-base-content shadow-sm sm:p-8 sm:text-lg"
+			class="prose mt-6 max-w-none rounded-box border border-base-300 bg-base-100 p-5 text-base-content shadow-sm sm:p-8"
 		>
 			{#each step.segments as segment, i (`${approach.id}/${step.id}/${i}`)}
 				{#if segment.kind === 'md'}
 					<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 					{@html formatBlockMarkdown(segment.text, {
 						orderedLists: true,
-						h3Class: 'text-xl !mt-8 mb-2'
+						h3Class: 'text-lg !mt-8 mb-2'
 					})}
 				{:else if segment.kind === 'video'}
 					<FigureDisclosure

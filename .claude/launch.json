@@ -1,0 +1,33 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "urodapter-dev",
+      "runtimeExecutable": "env",
+      "runtimeArgs": [
+        "NODE_ENV=development",
+        "npm",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "5199",
+        "--strictPort"
+      ],
+      "port": 5199
+    },
+    {
+      "name": "urodapter-preview",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "preview",
+        "--",
+        "--port",
+        "5198",
+        "--strictPort"
+      ],
+      "port": 5198
+    }
+  ]
+}

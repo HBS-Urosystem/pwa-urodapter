@@ -163,7 +163,7 @@
 						<span class="[font-family:var(--font-heading)] text-lg leading-snug font-bold"
 							>{branch.label}</span
 						>
-						<span class="text-sm">{branch.description}</span>
+						<span>{branch.description}</span>
 					</span>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
