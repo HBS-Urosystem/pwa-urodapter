@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { afterNavigate, goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { browser } from '$app/environment';
 	import { tick, onMount, untrack } from 'svelte';
@@ -13,6 +13,7 @@
 	import { persistLastInstillationBranch } from '$lib/instillation-branch-storage';
 	import { persistLastInstructionsTab } from '$lib/instructions-tab-storage';
 	import { formatInlineMarkdown } from '$lib/markdown-inline';
+	import { scrollToTabContent, tabsAreStuck } from '$lib/tab-scroll';
 
 	const femalePath = '/instructions-for-doctors-on-female-patients';
 	const malePath = '/instructions-for-doctors-on-male-patients';
@@ -68,17 +69,16 @@
 	}
 
 	/**
-	 * Puts step `i` into the address. A new history entry, unless `replace` (used when the address named no step).
-	 * The returned promise settles when the address change is complete. With `noScroll` SvelteKit puts the
-	 * window back to the scroll position it had when the change started, so any scrolling of the window
-	 * has to wait for this promise.
+	 * Puts step `i` into the address. A step change replaces the current entry of the browser history, so the
+	 * browser's Back button leaves the instructions in one go instead of walking back through the steps.
+	 * The returned promise settles when the address change is complete.
 	 */
-	async function showStepInAddress(i: number, replace = false): Promise<void> {
+	async function showStepInAddress(i: number): Promise<void> {
 		if (!browser || pack.steps[i].id === stepId) return;
 		await goto(resolve(stepPath(i) as '/'), {
 			noScroll: true,
 			keepFocus: true,
-			replaceState: replace
+			replaceState: true
 		});
 	}
 
@@ -90,7 +90,7 @@
 	/** false until after mount + tick so prefers-reduced-motion is known */
 	let allowStepAnim = $state(false);
 	let stepsCarouselEl = $state<HTMLDivElement | undefined>(undefined);
-	/** Region with `aria-label="Instruction step content"` — scroll into view on step prev/next */
+	/** Region with `aria-label="Instruction step content"`: brought into view when the step changes */
 	let stepContentRegionEl = $state<HTMLElement | undefined>(undefined);
 	let carouselWidth = $state(0);
 	let dialogMainEl = $state<HTMLDialogElement | undefined>(undefined);
@@ -151,7 +151,7 @@
 		persistLastInstructionsTab(activeGender);
 		persistLastInstillationBranch('clinician');
 		persistStep();
-		if (addressStepIndex < 0) void showStepInAddress(stepIndex, true);
+		if (addressStepIndex < 0) void showStepInAddress(stepIndex);
 		void tick().then(() => {
 			allowStepAnim = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 			requestAnimationFrame(() => alignCarouselToStep());
@@ -175,6 +175,49 @@
 		if (!row || !(item instanceof HTMLElement)) return;
 		const left = item.offsetLeft - (row.clientWidth - item.offsetWidth) / 2;
 		row.scrollTo({ left, behavior: untrack(() => allowStepAnim) ? 'smooth' : 'auto' });
+	});
+
+	/** Whether more step circles are hidden to the left / right of the row; that edge of the row fades out. */
+	let moreCirclesLeft = $state(false);
+	let moreCirclesRight = $state(false);
+	$effect(() => {
+		const row = stepCirclesEl;
+		if (!row) return;
+		const update = () => {
+			moreCirclesLeft = row.scrollLeft > 2;
+			moreCirclesRight = row.scrollLeft + row.clientWidth < row.scrollWidth - 2;
+		};
+		update();
+		row.addEventListener('scroll', update, { passive: true });
+		const observer = new ResizeObserver(update);
+		observer.observe(row);
+		return () => {
+			row.removeEventListener('scroll', update);
+			observer.disconnect();
+		};
+	});
+	const circlesFade = $derived(
+		moreCirclesLeft || moreCirclesRight
+			? `mask-image: linear-gradient(to right, ${moreCirclesLeft ? 'transparent, #000 3rem' : '#000, #000'}, ${moreCirclesRight ? '#000 calc(100% - 3rem), transparent' : '#000, #000'})`
+			: undefined
+	);
+
+	/**
+	 * The card is as tall as the current step, not as the longest step: the height of the swipeable row
+	 * follows the content of the current step.
+	 */
+	let stepContentEls = $state<(HTMLElement | undefined)[]>([]);
+	let currentStepHeight = $state(0);
+	$effect(() => {
+		const el = stepContentEls[stepIndex];
+		if (!el) return;
+		const update = () => {
+			currentStepHeight = Math.ceil(el.getBoundingClientRect().height);
+		};
+		update();
+		const observer = new ResizeObserver(update);
+		observer.observe(el);
+		return () => observer.disconnect();
 	});
 
 	$effect(() => {
@@ -216,50 +259,67 @@
 		return () => window.removeEventListener('resize', onResize);
 	});
 
-	function scrollInstructionStepContentIntoView() {
-		if (!browser || !stepContentRegionEl) return;
-		stepContentRegionEl.scrollIntoView({
-			block: 'start',
-			behavior: allowStepAnim ? 'smooth' : 'auto'
-		});
+	/** Sticky header (64px) plus the sticky tabs; matches `scroll-mt-24` on the card. */
+	const STEP_TOP_MIN = 96;
+	/**
+	 * One rule for every way of changing the step (step circle, bottom bar, arrow keys, swipe, "Start at
+	 * step 1"): afterwards the top of the card, with the step's heading, is in the visible area. The page
+	 * scrolls only when the top of the card is hidden under the header and tabs or too far down the screen.
+	 * Runs after the address change is complete, because with `noScroll` SvelteKit first puts the window
+	 * back to the scroll position it had when the change started.
+	 */
+	function showStepTop() {
+		const card = stepContentRegionEl;
+		if (!browser || !card) return;
+		const top = card.getBoundingClientRect().top;
+		if (top >= STEP_TOP_MIN - 1 && top <= window.innerHeight * 0.5) return;
+		card.scrollIntoView({ block: 'start', behavior: allowStepAnim ? 'smooth' : 'auto' });
 	}
+	afterNavigate(({ type, from, to }) => {
+		if (type === 'enter' || !from || from.route.id !== to?.route.id) return;
+		showStepTop();
+	});
 
-	/** Match prior-instillation Patient/Doctor tabs: smooth scroll to top after gender tab navigation */
+	/** Female / Male tabs: the page moves only when the tabs are held under the header (see `$lib/tab-scroll`). */
 	async function onGenderTabClick(
 		e: MouseEvent & { currentTarget: HTMLAnchorElement },
 		href: string,
 		isCurrentTab: boolean
 	) {
 		if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
-		if (isCurrentTab) {
-			e.preventDefault();
-			return;
-		}
 		e.preventDefault();
+		if (isCurrentTab) return;
+		const stuck = tabsAreStuck();
 		await goto(href, { noScroll: true });
 		await tick();
-		window.scrollTo({ top: 0, behavior: 'smooth' });
+		if (stuck) scrollToTabContent();
 	}
 
-	async function goNextStep() {
-		if (stepIndex >= pack.steps.length - 1) return;
-		await moveToStep(stepIndex + 1);
-		await tick();
-		scrollInstructionStepContentIntoView();
+	function goNextStep() {
+		if (stepIndex < pack.steps.length - 1) void moveToStep(stepIndex + 1);
 	}
 
-	async function startOver() {
-		await moveToStep(0);
-		await tick();
-		scrollInstructionStepContentIntoView();
+	function goPrevStep() {
+		if (stepIndex > 0) void moveToStep(stepIndex - 1);
 	}
 
-	async function goPrevStep() {
-		if (stepIndex <= 0) return;
-		await moveToStep(stepIndex - 1);
-		await tick();
-		scrollInstructionStepContentIntoView();
-	}
+	/**
+	 * The bottom bar steps through the instructions, as on the self-instillation step pages: the step's
+	 * number and title; before the first step the previous section, after the last step the next section.
+	 */
+	const prevEnd = $derived(
+		stepIndex > 0
+			? { path: stepPath(stepIndex - 1), label: `${stepIndex}.\u00A0${pack.steps[stepIndex - 1].title}` }
+			: flow?.prev
+	);
+	const nextEnd = $derived(
+		stepIndex < pack.steps.length - 1
+			? {
+					path: stepPath(stepIndex + 1),
+					label: `${stepIndex + 2}.\u00A0${pack.steps[stepIndex + 1].title}`
+				}
+			: flow?.next
+	);
 
 	type ModalKind = NonNullable<typeof activeModal>;
 
@@ -318,7 +378,7 @@
 		<h1 class="mb-6 text-3xl">{CLINICIAN_LABEL}</h1>
 
 		<!-- Opaque page background behind the sticky tabs: covers the content scrolling under their rounded corners and in the 4px gap below the header (pt-1; -mt-1 keeps the unscrolled position). -mx-2 px-2 also covers the shadow of the content beside the tabs. -->
-		<div class="sticky top-16 z-10 -mx-2 -mt-1 mb-6 bg-primary-20-opaque px-2 pt-1">
+		<div data-tab-bar class="sticky top-16 z-10 -mx-2 -mt-1 mb-6 bg-primary-20-opaque px-2 pt-1">
 			<div role="tablist" class="tabs-box tabs flex w-full" aria-label="Patient type">
 				<a
 					id={femaleTabId}
@@ -345,10 +405,11 @@
 			</div>
 		</div>
 
-		<!-- Step circles, the same size as on the self-instillation step pages (`StepStrip`): nine circles share the width with 6px gaps, each at most 44px. The steps beyond the ninth are reached by scrolling the row sideways. p-1 / -m-1 keeps the focus outline inside the scrolling row. -->
-		<nav aria-label="Steps" class="mb-6">
+		<!-- Step circles, the same size as on the self-instillation step pages (`StepStrip`): nine circles share the width with 6px gaps, each at most 44px. The steps beyond the ninth are reached by scrolling the row sideways; the edge of the row fades out where more circles are hidden. p-1 / -m-1 keeps the focus outline inside the scrolling row. -->
+		<nav aria-label="Steps" class="mb-6" data-tab-content>
 			<ol
 				bind:this={stepCirclesEl}
+				style={circlesFade}
 				class="relative -m-1 flex gap-1.5 overflow-x-auto overscroll-x-contain p-1"
 			>
 				{#each pack.steps as s, i (s.id)}
@@ -358,6 +419,7 @@
 							href={resolve(stepPath(i) as '/')}
 							data-sveltekit-noscroll
 							data-sveltekit-keepfocus
+							data-sveltekit-replacestate
 							class={[
 								'mx-auto flex aspect-square max-w-11 items-center justify-center rounded-full border text-base font-bold no-underline transition-colors',
 								current
@@ -382,12 +444,13 @@
 			<div class="card-body gap-4">
 				<div
 					bind:this={stepsCarouselEl}
-					class="carousel w-full carousel-start gap-2 rounded-lg"
+					class="carousel w-full carousel-start items-start gap-2 overflow-y-hidden rounded-lg transition-[height] duration-200 motion-reduce:transition-none"
+					style:height={currentStepHeight > 0 ? `${currentStepHeight}px` : undefined}
 					aria-label="Instruction video steps"
 				>
 					{#each pack.steps as s, i (s.id)}
 						<div class="carousel-item w-full">
-							<div class="flex w-full min-w-0 flex-col gap-4">
+							<div bind:this={stepContentEls[i]} class="flex w-full min-w-0 flex-col gap-4">
 								<div class="flex items-center gap-3">
 									<NumberBadge value={i + 1} />
 									<h2 class="text-xl font-semibold">{s.title}</h2>
@@ -440,82 +503,30 @@
 						</div>
 					{/each}
 				</div>
-
-				<div class="flex justify-between pt-4">
-					<button
-						type="button"
-						class="btn btn-square btn-outline"
-						disabled={stepIndex === 0}
-						onclick={goPrevStep}
-						aria-label="Step back"
-						title="Step back"
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							class="h-5 w-5"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-							stroke-width="2"
-							aria-hidden="true"
-						>
-							<path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-						</svg>
-					</button>
-					{#if stepIndex >= pack.steps.length - 1}
-						<button
-							type="button"
-							class="btn btn-square btn-primary"
-							onclick={() => void startOver()}
-							aria-label="Start over"
-							title="Start over"
-						>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="h-5 w-5"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								aria-hidden="true"
-							>
-								<g transform={`scale(${24 / 256})`}>
-									<path
-										stroke-width={(256 / 18).toString()}
-										d="M228,184a4,4,0,0,1-8,0A91.99984,91.99984,0,0,0,62.94629,118.94629L37.77441,144.11816H92.11816a4,4,0,0,1,0,8h-64a4.03169,4.03169,0,0,1-.78375-.0791c-.11542-.023-.22211-.0664-.33368-.09863a2.339,2.339,0,0,1-.7879-.32568c-.10455-.05713-.21307-.103-.31323-.16993a4.026,4.026,0,0,1-1.10834-1.10888c-.06494-.09717-.10931-.20264-.16486-.30371a3.972,3.972,0,0,1-.20221-.38428,3.9069,3.9069,0,0,1-.12646-.40723c-.03333-.11328-.07721-.22168-.10053-.33935a4.01022,4.01022,0,0,1-.079-.78321v-64a4,4,0,0,1,8,0v54.34375L57.29,113.29A100,100,0,0,1,228,184Z"
-									/>
-								</g>
-							</svg>
-						</button>
-					{:else}
-						<button
-							type="button"
-							class="btn btn-square btn-primary"
-							onclick={goNextStep}
-							aria-label="Next step"
-							title="Next step"
-						>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="h-5 w-5"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
-								stroke-width="2"
-								aria-hidden="true"
-							>
-								<path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-							</svg>
-						</button>
-					{/if}
-				</div>
 			</div>
 		</div>
+
+		<!-- Visible way back to the first step, as "Start at step 1" on the self-instillation summary page. -->
+		{#if stepIndex > 0}
+			<div class="mt-4">
+				<a
+					href={resolve(stepPath(0) as '/')}
+					data-sveltekit-noscroll
+					data-sveltekit-keepfocus
+					data-sveltekit-replacestate
+					class="btn border-base-content btn-outline btn-sm">Start at step 1</a
+				>
+			</div>
+		{/if}
 	</div>
 </section>
-{#if flow}
-	<ContentFlowNav prev={flow.prev} next={flow.next} />
+{#if prevEnd && nextEnd}
+	<ContentFlowNav
+		prev={prevEnd}
+		next={nextEnd}
+		prevStep={stepIndex > 0 ? 'in-page' : undefined}
+		nextStep={stepIndex < pack.steps.length - 1 ? 'in-page' : undefined}
+	/>
 {/if}
 
 <dialog

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { afterNavigate, goto } from '$app/navigation';
+	import { afterNavigate, beforeNavigate, goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import ContentFlowNav from '$lib/components/ContentFlowNav.svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
@@ -10,6 +10,7 @@
 	import { CONTENT_FLOW_NAV } from '$lib/data/content-flow-nav';
 	import { SELF_INSTILLATION_LABEL, SELF_INSTILLATION_PATH } from '$lib/data/site-nav';
 	import { formatBlockMarkdown } from '$lib/markdown-blocks';
+	import { rememberTabsStuck, scrollToTabContent, tabsWereStuck } from '$lib/tab-scroll';
 	import {
 		readLastPatientApproach,
 		readPatientProgress,
@@ -77,22 +78,49 @@
 	 */
 	let readFirst = $state<HTMLDetailsElement>();
 	let readFirstClosedAt = 0;
+	/** What keeps the reader's place while "Read first" closes: the tab prompt, or the content below the tabs. */
+	let keepPlaceAfterClose = showTabPromptAfterClose;
 	function onReadFirstToggle() {
 		if (!readFirst || readFirst.open) return;
 		readFirstClosedAt = performance.now();
-		showTabPromptAfterClose();
+		keepPlaceAfterClose();
 	}
 	$effect(() => {
 		if (!readFirst) return;
 		const observer = new ResizeObserver(() => {
-			if (performance.now() - readFirstClosedAt < 1000) showTabPromptAfterClose();
+			if (performance.now() - readFirstClosedAt < 1000) keepPlaceAfterClose();
 		});
 		observer.observe(readFirst);
 		return () => observer.disconnect();
 	});
-	/** Choosing a tab at the entry address opens the approach address, where "Read first" is closed. */
-	afterNavigate(({ from }) => {
-		if (!entry && from?.route.id === '/self-instillation') showTabPromptAfterClose();
+	/**
+	 * Choosing an approach tab (see `$lib/tab-scroll` for the rule shared by all tabs):
+	 * - the tabs were held under the header: scroll to the start of the content below the tabs;
+	 * - otherwise the page does not move, except that when "Read first" closes (it is open at the entry
+	 *   address and closed on the approach tabs) the tab prompt is kept in the visible area.
+	 */
+	let readFirstWasOpen = false;
+	beforeNavigate(() => {
+		rememberTabsStuck();
+		readFirstWasOpen = readFirst?.open ?? false;
+	});
+	afterNavigate(({ type, from, to }) => {
+		const tabChange =
+			!entry &&
+			type !== 'popstate' &&
+			type !== 'enter' &&
+			to?.route.id === '/self-instillation/[approach]' &&
+			(from?.route.id === '/self-instillation' ||
+				from?.route.id === '/self-instillation/[approach]');
+		if (!tabChange) return;
+		const closing = readFirstWasOpen || from?.route.id === '/self-instillation';
+		if (tabsWereStuck()) {
+			keepPlaceAfterClose = () => scrollToTabContent(false);
+			scrollToTabContent(!closing);
+		} else {
+			keepPlaceAfterClose = showTabPromptAfterClose;
+			if (closing) showTabPromptAfterClose();
+		}
 	});
 
 	/** Index of the step the reader last opened in this approach (-1 = none). */
@@ -160,6 +188,7 @@
 		<!-- Opaque page background behind the sticky tabs: covers the content scrolling under their rounded corners and in the 4px gap below the header (pt-1; -mt-1 keeps the unscrolled position). -mx-2 px-2 also covers the shadow of the content beside the tabs. -->
 		<nav
 			aria-label="Approaches"
+			data-tab-bar
 			class="sticky top-16 z-10 -mx-2 -mt-1 mb-6 bg-primary-20-opaque px-2 pt-1"
 		>
 			<ul class="tabs-box tabs flex w-full flex-nowrap">
@@ -180,6 +209,7 @@
 			</ul>
 		</nav>
 
+		<div data-tab-content></div>
 		{#if nav}
 			<img
 				src={nav.image}

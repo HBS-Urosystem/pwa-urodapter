@@ -20,7 +20,7 @@
 		index > 0
 			? {
 					path: `${approachPath}/${approach.steps[index - 1].id}`,
-					label: `${index}. ${approach.steps[index - 1].title}`
+					label: `${index}.\u00A0${approach.steps[index - 1].title}`
 				}
 			: { path: approachPath, label: 'Short summary' }
 	);
@@ -28,7 +28,7 @@
 		index < approach.steps.length - 1
 			? {
 					path: `${approachPath}/${approach.steps[index + 1].id}`,
-					label: `${index + 2}. ${approach.steps[index + 1].title}`
+					label: `${index + 2}.\u00A0${approach.steps[index + 1].title}`
 				}
 			: { path: approachPath, label: 'Short summary' }
 	);
@@ -142,4 +142,9 @@
 		</article>
 	</div>
 </section>
-<ContentFlowNav {prev} {next} />
+<ContentFlowNav
+	{prev}
+	{next}
+	prevStep={index > 0 ? 'page' : undefined}
+	nextStep={index < approach.steps.length - 1 ? 'page' : undefined}
+/>

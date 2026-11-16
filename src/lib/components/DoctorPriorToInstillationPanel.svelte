@@ -41,7 +41,7 @@
 
 <div class="card border border-base-300 bg-base-100 shadow-sm">
 	<div class="card-body gap-8">
-		<h2 class="text-2xl !mt-4 mb-2">For healthcare professionals</h2>
+		<h2 class="!mt-4 mb-2 text-2xl">For healthcare professionals</h2>
 		{#each data.beforeStarting as item (item.letter)}
 			<div class="flex gap-4">
 				<div
@@ -50,7 +50,7 @@
 					{item.letter}
 				</div>
 				<div class="min-w-0 flex-1">
-					<div class="prose max-w-none flex-1 text-base-content max-sm:prose-sm">
+					<div class="prose max-w-none flex-1 text-base-content">
 						<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 						{@html formatBlockMarkdown(item.paragraphs.join('\n\n'), {
 							h3Class: 'text-lg !mt-4 mb-2'
@@ -59,7 +59,7 @@
 					{#each data.modalButtons.filter((b) => b.letter === item.letter) as btn (btn.label)}
 						<button
 							type="button"
-							class="btn mt-2 gap-1 text-primary btn-ghost btn-sm min-h-8 h-auto text-left"
+							class="btn mt-2 h-auto min-h-8 gap-1 text-left text-primary btn-ghost btn-sm"
 							onclick={() => void openModal(btn.modal, btn.label)}
 						>
 							<svg
@@ -93,9 +93,7 @@
 		modalTitle = '';
 	}}
 >
-	<div
-		class="modal-box prose relative max-h-[85vh] max-w-lg overflow-y-auto text-base-content max-sm:prose-sm"
-	>
+	<div class="relative modal-box prose max-h-[85vh] max-w-lg overflow-y-auto text-base-content">
 		<form method="dialog" class="not-prose absolute end-2 top-2 z-10">
 			<button type="submit" class="btn btn-square btn-ghost btn-sm" aria-label="Close dialog">
 				<svg

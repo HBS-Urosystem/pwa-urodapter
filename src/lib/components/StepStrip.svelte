@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 
-	/** Links to the summary (0) and all steps of an approach; the current step is filled with the theme's dark colour, the others are transparent. */
+	/** Links to the summary (0) and all steps of an approach. A step link replaces the current entry of the browser history, so the browser's Back button leaves the steps in one go; the current step is filled with the theme's dark colour, the others are transparent. */
 	let {
 		approachId,
 		steps,
@@ -45,6 +45,7 @@
 						approach: approachId,
 						step: step.id
 					})}
+					data-sveltekit-replacestate
 					class={[
 						'mx-auto flex aspect-square max-w-11 items-center justify-center rounded-full border text-base font-bold no-underline transition-colors',
 						current

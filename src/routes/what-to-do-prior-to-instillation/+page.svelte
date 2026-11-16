@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import ContentFlowNav from '$lib/components/ContentFlowNav.svelte';
 	import DoctorPriorToInstillationPanel from '$lib/components/DoctorPriorToInstillationPanel.svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
@@ -18,6 +18,7 @@
 	import { readLastInstructionsPath } from '$lib/instructions-tab-storage';
 	import { siteContent } from '$lib/content';
 	import { formatBlockMarkdown } from '$lib/markdown-blocks';
+	import { scrollToTabContent, tabsAreStuck } from '$lib/tab-scroll';
 	import {
 		persistPriorInstillationAudience,
 		readStoredPriorInstillationAudience
@@ -76,11 +77,14 @@
 		return audience === 'patient' ? [self, clinician] : [clinician, self];
 	});
 
-	function setAudience(next: 'patient' | 'doctor') {
+	/** Doctor / Patient tabs: the page moves only when the tabs are held under the header (see `$lib/tab-scroll`). */
+	async function setAudience(next: 'patient' | 'doctor') {
 		if (next === audience) return;
+		const stuck = tabsAreStuck();
 		audience = next;
 		persistPriorInstillationAudience(next);
-		window.scrollTo({ top: 0, behavior: 'smooth' });
+		await tick();
+		if (stuck) scrollToTabContent();
 	}
 </script>
 
@@ -91,7 +95,7 @@
 		<h1 class="mb-6 text-3xl">{page.title}</h1>
 
 		<!-- Opaque page background behind the sticky tabs: covers the content scrolling under their rounded corners and in the 4px gap below the header (pt-1; -mt-1 keeps the unscrolled position). -mx-2 px-2 also covers the shadow of the content beside the tabs. -->
-		<div class="sticky top-16 z-10 -mx-2 -mt-1 mb-6 bg-primary-20-opaque px-2 pt-1">
+		<div data-tab-bar class="sticky top-16 z-10 -mx-2 -mt-1 mb-6 bg-primary-20-opaque px-2 pt-1">
 			<div role="tablist" class="tabs-box tabs flex w-full" aria-label="Audience">
 				<button
 					type="button"
@@ -118,6 +122,7 @@
 			</div>
 		</div>
 
+		<div data-tab-content></div>
 		{#if audience === 'patient'}
 			<div class="card border border-base-300 bg-base-100 shadow-sm">
 				<div class="card-body gap-8">
@@ -130,7 +135,7 @@
 								{s.letter}
 							</div>
 							<div class="min-w-0 flex-1">
-								<div class="prose max-w-none flex-1 text-base-content max-sm:prose-sm">
+								<div class="prose max-w-none flex-1 text-base-content">
 									<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 									{@html formatBlockMarkdown(s.body, {
 										h3Class: 'text-lg !mt-4 mb-2'
