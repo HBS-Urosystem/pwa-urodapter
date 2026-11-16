@@ -64,27 +64,13 @@
 				>
 					<LogoMark class="h-7" />
 				</a>
+				<!-- Text instead of an icon: no icon says "table of contents" unambiguously, and a house would suggest the logo's target (the splash screen). -->
 				<a
 					href={resolve('/')}
-					class="btn btn-square btn-ghost"
+					class="btn px-3 btn-ghost"
 					aria-label="Table of Contents"
-					onclick={closeDrawer}
+					onclick={closeDrawer}>Contents</a
 				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-6 w-6"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-						stroke-width="2"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							d="M4 6h4M4 12h4M4 18h4M12 6h8M12 12h8M12 18h8"
-						/>
-					</svg>
-				</a>
 				<label for="app-drawer" class="btn btn-square btn-ghost" aria-label="Close menu">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
