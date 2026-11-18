@@ -151,11 +151,21 @@ function parseDoctorPriorModals(md) {
 	};
 }
 
-function buildDoctorPriorInstillation() {
+/**
+ * Step 1 of the clinician instructions ("What to do prior to the instillation"): lettered points A, B, C
+ * and, after a point, buttons that open a dialog (`pages/doctor-prior-instillation.meta.yaml`).
+ */
+function buildPriorStep() {
+	const items = parseBeforeStarting(readText('pages/doctor-prior-instillation.md'));
+	const modals = parseDoctorPriorModals(readText('pages/doctor-prior-instillation-modals.md'));
+	const buttons = assertModalButtons(readYaml('pages/doctor-prior-instillation.meta.yaml')).map(
+		(b) => ({ letter: b.letter, label: b.label, paragraphs: modals[b.modal] })
+	);
 	return {
-		beforeStarting: parseBeforeStarting(readText('pages/doctor-prior-instillation.md')),
-		modalButtons: assertModalButtons(readYaml('pages/doctor-prior-instillation.meta.yaml')),
-		modals: parseDoctorPriorModals(readText('pages/doctor-prior-instillation-modals.md'))
+		id: 'prior-to-instillation',
+		title: 'What to do prior to the instillation',
+		items,
+		buttons
 	};
 }
 
@@ -228,21 +238,6 @@ function parseContact(md) {
 	};
 }
 
-/** @param {string} md */
-function parsePreInstillation(md) {
-	const titleMatch = md.match(/^#\s+(.+)$/m);
-	const title = titleMatch ? titleMatch[1].trim() : '';
-	const afterTitle = titleMatch ? md.slice(titleMatch.index + titleMatch[0].length).trim() : md;
-	const sections = parseH2Sections(afterTitle);
-	const blocks = sections
-		.filter((s) => /^[ab]$/i.test(s.key))
-		.map((s) => ({
-			letter: s.key.toUpperCase(),
-			body: s.body.trim()
-		}));
-	return { title, sections: blocks };
-}
-
 function assertModalButtons(meta) {
 	const parsed = ModalButtonsSchema.parse(meta);
 	for (const b of parsed.modalButtons) {
@@ -260,6 +255,7 @@ function buildFemale() {
 	return {
 		pageTitle: 'Instructions for doctors',
 		modals,
+		priorStep: buildPriorStep(),
 		steps: steps.map((step) => {
 			const { body, ...rest } = step;
 			return {
@@ -278,6 +274,7 @@ function buildMale() {
 	return {
 		pageTitle: 'Instructions for doctors',
 		modals,
+		priorStep: buildPriorStep(),
 		steps: steps.map((step) => {
 			const { body, ...rest } = step;
 			return {
@@ -487,8 +484,6 @@ function main() {
 		maleInstructions: buildMale(),
 		pageCopy: {
 			educationalVideo: parseEducationalVideo(readText('pages/educational-video.md')),
-			preInstillation: parsePreInstillation(readText('pages/pre-instillation.md')),
-			doctorPriorInstillation: buildDoctorPriorInstillation(),
 			faq: parseFaq(readText('pages/faq.md')),
 			contact: parseContact(readText('pages/contact.md'))
 		},

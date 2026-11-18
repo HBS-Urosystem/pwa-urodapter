@@ -2,7 +2,7 @@
  * Navigation of the whole app: one Table of Contents (`/`) and one menu.
  *
  * The content is one sequence with a fork in the middle:
- * Educational Video → What to do prior to instillation →
+ * Educational Video →
  * either "Instillation by a clinician" (Female / Male tabs)
  * or "Self-instillation at home" (three approach tabs) → FAQ.
  */
@@ -12,8 +12,6 @@ import { INSTRUCTIONS_FEMALE_PATH, INSTRUCTIONS_MALE_PATH } from '$lib/instructi
 
 export const TOC_PATH = '/';
 export const TOC_LABEL = 'Table of Contents';
-
-export const PRIOR_PATH = '/what-to-do-prior-to-instillation';
 
 /** Branch performed by a clinician. Its entry is the female instructions page (the tabs switch to male). */
 export const CLINICIAN_PATH = INSTRUCTIONS_FEMALE_PATH;
@@ -37,22 +35,16 @@ export type NavSection = {
 	children?: readonly NavChild[];
 };
 
-/** Cards under one heading of the Table of Contents. */
-export type NavGroup = { heading: string; sections: readonly NavSection[] };
+/** Cards of the Table of Contents under one heading; a group without a heading shows its cards only. */
+export type NavGroup = { heading?: string; sections: readonly NavSection[] };
 
 export const TOC_GROUPS: readonly NavGroup[] = [
 	{
-		heading: 'Before instillation',
 		sections: [
 			{
 				title: 'Educational Video',
 				path: '/how-the-urodapter-works',
 				description: 'How the UroDapter works'
-			},
-			{
-				title: 'What to do prior to instillation',
-				path: PRIOR_PATH,
-				description: 'Doctor · Patient'
 			}
 		]
 	},

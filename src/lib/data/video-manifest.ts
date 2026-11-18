@@ -22,5 +22,9 @@ export const videoFiles = [
 	'/assets/video/168.mp4',
 	'/assets/video/169.mp4',
 	'/assets/video/170.mp4',
-	'/assets/video/193.mp4'
+	'/assets/video/193.mp4',
+	'/assets/video/real-case-female-1.mp4',
+	'/assets/video/real-case-female-2.mp4',
+	'/assets/video/real-case-female-3.mp4',
+	'/assets/video/real-case-male.mp4'
 ];

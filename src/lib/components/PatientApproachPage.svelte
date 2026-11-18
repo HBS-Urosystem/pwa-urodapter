@@ -134,7 +134,7 @@
 />
 
 <section class="bg-primary/20 px-4 pt-8 pb-12">
-	<div class="mx-auto max-w-2xl">
+	<div class="mx-auto max-w-3xl">
 		<h1 class="mb-6 text-3xl">{SELF_INSTILLATION_LABEL}</h1>
 
 		<!-- The text every reader should read once. Open at the entry address, closed on the approach tabs. -->

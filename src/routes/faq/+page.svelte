@@ -19,8 +19,7 @@
 
 	/**
 	 * "Previous" leads back to the branch the reader last opened. Until that is read after mount, and when
-	 * the reader has opened neither branch, it leads to "What to do prior to instillation", the last shared
-	 * page before the fork, which ends with the choice between the two branches.
+	 * the reader has opened neither branch, it leads to "Instillation by a clinician".
 	 */
 	let lastBranch = $state<InstillationBranch | null>(null);
 	onMount(() => {
@@ -73,4 +72,4 @@
 		</div>
 	</div>
 </section>
-<ContentFlowNav {prev} next={flow.next} lastInstructionsTabForPrev={lastBranch === 'clinician'} />
+<ContentFlowNav {prev} next={flow.next} lastInstructionsTabForPrev={lastBranch !== 'self'} />

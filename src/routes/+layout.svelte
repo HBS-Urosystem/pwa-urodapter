@@ -83,7 +83,7 @@
 			<nav class="menu p-4">
 				<ul>
 					<li><a href={resolve('/')} onclick={closeDrawer}>{TOC_LABEL}</a></li>
-					{#each TOC_GROUPS as group (group.heading)}
+					{#each TOC_GROUPS as group (group.sections[0].path)}
 						{#each group.sections as section (section.path)}
 							<li>
 								<a href={resolve(section.path as '/')} onclick={closeDrawer}>{section.title}</a>

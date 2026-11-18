@@ -7,6 +7,15 @@
 	import ClipVideo from '$lib/components/ClipVideo.svelte';
 	import ContentFlowNav from '$lib/components/ContentFlowNav.svelte';
 	import NumberBadge from '$lib/components/NumberBadge.svelte';
+	import PlayBadge from '$lib/components/PlayBadge.svelte';
+	import PlayIcon from '$lib/components/PlayIcon.svelte';
+	import RealCaseVideoList from '$lib/components/RealCaseVideoList.svelte';
+	import {
+		REAL_CASE_ID,
+		REAL_CASE_LABELS,
+		REAL_CASE_LINK_TEXT,
+		REAL_CASE_VIDEOS
+	} from '$lib/data/real-case-videos';
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import { CONTENT_FLOW_NAV } from '$lib/data/content-flow-nav';
 	import { CLINICIAN_LABEL } from '$lib/data/site-nav';
@@ -56,16 +65,33 @@
 		}
 	}
 
+	/**
+	 * All steps of the page: step 1 is "What to do prior to instillation" (lettered points, no video),
+	 * followed by the video steps of the female or male instructions; the last one is the real-case videos
+	 * (marked with a play icon instead of a number).
+	 */
+	const steps = $derived([
+		{ ...pack.priorStep, kind: 'prior' as const },
+		...pack.steps.map((s) => ({ ...s, kind: 'video' as const })),
+		{ id: REAL_CASE_ID, title: REAL_CASE_LABELS[activeGender], kind: 'real-case' as const }
+	]);
+
+	/** Label of step `i` in the bottom bar: number and title; the real-case videos without a number. */
+	function stepLabel(i: number): string {
+		const s = steps[i];
+		return s.kind === 'real-case' ? s.title : `${i + 1}.\u00A0${s.title}`;
+	}
+
 	/** Index of the step named in the address, or -1 when the address names no (known) step. */
-	const addressStepIndex = $derived(pack.steps.findIndex((s) => s.id === stepId));
+	const addressStepIndex = $derived(steps.findIndex((s) => s.id === stepId));
 
 	// svelte-ignore state_referenced_locally
 	const initialStepIndex =
-		addressStepIndex >= 0 ? addressStepIndex : readStoredStepIndex(storageKey, pack.steps.length);
+		addressStepIndex >= 0 ? addressStepIndex : readStoredStepIndex(storageKey, steps.length);
 
 	/** Address of a step: every step has its own, so it can be linked and the browser's Back button steps back. */
 	function stepPath(i: number): string {
-		return `${seoPath}/${pack.steps[i].id}`;
+		return `${seoPath}/${steps[i].id}`;
 	}
 
 	/**
@@ -74,7 +100,7 @@
 	 * The returned promise settles when the address change is complete.
 	 */
 	async function showStepInAddress(i: number): Promise<void> {
-		if (!browser || pack.steps[i].id === stepId) return;
+		if (!browser || steps[i].id === stepId) return;
 		await goto(resolve(stepPath(i) as '/'), {
 			noScroll: true,
 			keepFocus: true,
@@ -94,7 +120,9 @@
 	let stepContentRegionEl = $state<HTMLElement | undefined>(undefined);
 	let carouselWidth = $state(0);
 	let dialogMainEl = $state<HTMLDialogElement | undefined>(undefined);
-	let activeModal = $state<null | 'plus-1' | 'plus-3' | 'plus-6' | 'plus-9'>(null);
+	let activeModal = $state<null | 'plus-1' | 'plus-3' | 'plus-6' | 'plus-9' | 'prior'>(null);
+	/** Text of the dialog opened from a button of step 1 ("What to do prior to instillation"). */
+	let priorModalParagraphs = $state<readonly string[]>([]);
 	/** Heading in the dialog: matches the button label that opened it */
 	let modalTitle = $state('');
 
@@ -106,23 +134,33 @@
 		}
 	}
 
+	/** Horizontal scroll position of step `i` in the carousel: the item's own offset, so the gap between items is included. */
+	function stepScrollLeft(i: number): number {
+		const item = stepsCarouselEl?.children[i];
+		return item instanceof HTMLElement ? item.offsetLeft : 0;
+	}
+
+	/** Distance between two neighbouring steps in the carousel (item width plus gap). */
+	function stepPitch(): number {
+		const el = stepsCarouselEl;
+		if (!el || el.children.length < 2) return carouselWidth;
+		return stepScrollLeft(1) - stepScrollLeft(0);
+	}
+
 	function alignCarouselToStep() {
 		const el = stepsCarouselEl;
-		if (!el) return;
-		const w = carouselWidth;
-		if (w <= 0) return;
-		const maxIdx = Math.max(0, pack.steps.length - 1);
-		const idx = Math.min(maxIdx, stepIndex);
-		el.scrollLeft = idx * w;
+		if (!el || carouselWidth <= 0) return;
+		const idx = Math.min(Math.max(0, steps.length - 1), stepIndex);
+		el.scrollTo({ left: stepScrollLeft(idx), behavior: 'instant' });
 	}
 
 	function syncStepIndexFromCarouselScroll() {
 		const el = stepsCarouselEl;
 		if (!el) return;
-		const w = carouselWidth;
-		if (w <= 0) return;
-		const i = Math.round(el.scrollLeft / w);
-		const clamped = Math.max(0, Math.min(pack.steps.length - 1, i));
+		const pitch = stepPitch();
+		if (pitch <= 0 || !carouselAligned) return;
+		const i = Math.round(el.scrollLeft / pitch);
+		const clamped = Math.max(0, Math.min(steps.length - 1, i));
 		if (clamped !== stepIndex) {
 			stepIndex = clamped;
 			persistStep();
@@ -132,15 +170,14 @@
 
 	/** Shows step `i`. The returned promise settles when the step's address is in place (see `showStepInAddress`). */
 	function moveToStep(i: number): Promise<void> {
-		const clamped = Math.max(0, Math.min(pack.steps.length - 1, i));
+		const clamped = Math.max(0, Math.min(steps.length - 1, i));
 		stepIndex = clamped;
 		persistStep();
 		const addressChanged = showStepInAddress(clamped);
 		const el = stepsCarouselEl;
-		const w = carouselWidth;
-		if (el && w > 0) {
+		if (el && carouselWidth > 0) {
 			el.scrollTo({
-				left: clamped * w,
+				left: stepScrollLeft(clamped),
 				behavior: allowStepAnim ? 'smooth' : 'auto'
 			});
 		}
@@ -154,7 +191,22 @@
 		if (addressStepIndex < 0) void showStepInAddress(stepIndex);
 		void tick().then(() => {
 			allowStepAnim = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-			requestAnimationFrame(() => alignCarouselToStep());
+		});
+	});
+
+	/**
+	 * The carousel starts at the step in the address. It is aligned as soon as its width is known
+	 * (on a reload the width can still be 0 at mount) and again whenever the width changes.
+	 * Until the first alignment, scroll events (for example the browser restoring the old scroll position)
+	 * must not change the step.
+	 */
+	let carouselAligned = false;
+	$effect(() => {
+		if (carouselWidth <= 0 || !stepsCarouselEl) return;
+		untrack(() => alignCarouselToStep());
+		requestAnimationFrame(() => {
+			untrack(() => alignCarouselToStep());
+			carouselAligned = true;
 		});
 	});
 
@@ -198,7 +250,7 @@
 	});
 	const circlesFade = $derived(
 		moreCirclesLeft || moreCirclesRight
-			? `mask-image: linear-gradient(to right, ${moreCirclesLeft ? 'transparent, #000 3rem' : '#000, #000'}, ${moreCirclesRight ? '#000 calc(100% - 3rem), transparent' : '#000, #000'})`
+			? `mask-image: linear-gradient(to right, ${moreCirclesLeft ? 'transparent, #000 3rem' : '#000, #000'}, ${moreCirclesRight ? '#000 calc(100% - 4.5rem), transparent calc(100% - 2rem), #000 calc(100% - 1.75rem)' : '#000, #000'})`
 			: undefined
 	);
 
@@ -296,7 +348,7 @@
 	}
 
 	function goNextStep() {
-		if (stepIndex < pack.steps.length - 1) void moveToStep(stepIndex + 1);
+		if (stepIndex < steps.length - 1) void moveToStep(stepIndex + 1);
 	}
 
 	function goPrevStep() {
@@ -309,14 +361,17 @@
 	 */
 	const prevEnd = $derived(
 		stepIndex > 0
-			? { path: stepPath(stepIndex - 1), label: `${stepIndex}.\u00A0${pack.steps[stepIndex - 1].title}` }
+			? {
+					path: stepPath(stepIndex - 1),
+					label: stepLabel(stepIndex - 1)
+				}
 			: flow?.prev
 	);
 	const nextEnd = $derived(
-		stepIndex < pack.steps.length - 1
+		stepIndex < steps.length - 1
 			? {
 					path: stepPath(stepIndex + 1),
-					label: `${stepIndex + 2}.\u00A0${pack.steps[stepIndex + 1].title}`
+					label: stepLabel(stepIndex + 1)
 				}
 			: flow?.next
 	);
@@ -342,8 +397,14 @@
 		dialog.close();
 	}
 
+	function openPriorModal(label: string, paragraphs: readonly string[]) {
+		priorModalParagraphs = paragraphs;
+		void showDialog('prior', label);
+	}
+
 	function mainModalParagraphs(): string[] {
 		if (!activeModal) return [];
+		if (activeModal === 'prior') return [...priorModalParagraphs];
 		if (activeModal === 'plus-1' && 'plus1' in pack.modals && pack.modals.plus1)
 			return [...pack.modals.plus1.paragraphs];
 		if (activeModal === 'plus-3' && 'plus3' in pack.modals && pack.modals.plus3)
@@ -405,16 +466,21 @@
 			</div>
 		</div>
 
-		<!-- Step circles, the same size as on the self-instillation step pages (`StepStrip`): nine circles share the width with 6px gaps, each at most 44px. The steps beyond the ninth are reached by scrolling the row sideways; the edge of the row fades out where more circles are hidden. p-1 / -m-1 keeps the focus outline inside the scrolling row. -->
+		<!-- Step circles, the same size as on the self-instillation step pages (`StepStrip`): the circles are 44px wide and spread over the full width; the gap is at least 4px. Only when they do not fit does a circle shrink, down to 28px; below that the row scrolls sideways, and the edge of the row fades out where more circles are hidden. The last circle (play icon, the real-case videos) stays at the right end while the row scrolls. p-1 / -m-1 keeps the focus outline inside the scrolling row. -->
 		<nav aria-label="Steps" class="mb-6" data-tab-content>
 			<ol
 				bind:this={stepCirclesEl}
 				style={circlesFade}
-				class="relative -m-1 flex gap-1.5 overflow-x-auto overscroll-x-contain p-1"
+				class="relative -m-1 flex justify-between gap-1 overflow-x-auto overscroll-x-contain p-1"
 			>
-				{#each pack.steps as s, i (s.id)}
+				{#each steps as s, i (s.id)}
 					{@const current = i === stepIndex}
-					<li class="shrink-0 grow-0 basis-[calc((100%-3rem)/9)]">
+					<li
+						class={[
+							'max-w-11 min-w-7 flex-1',
+							s.kind === 'real-case' && 'sticky right-0 z-10 bg-primary-20-opaque'
+						]}
+					>
 						<a
 							href={resolve(stepPath(i) as '/')}
 							data-sveltekit-noscroll
@@ -427,8 +493,9 @@
 									: 'border-base-content/30 bg-transparent text-base-content hover:border-base-content'
 							]}
 							aria-current={current ? 'step' : undefined}
-							aria-label={`Step ${i + 1}: ${s.title}`}
-							title={s.title}>{i + 1}</a
+							aria-label={s.kind === 'real-case' ? s.title : `Step ${i + 1}: ${s.title}`}
+							title={s.title}
+							>{#if s.kind === 'real-case'}<PlayIcon class="ml-0.5 h-4 w-4" />{:else}{i + 1}{/if}</a
 						>
 					</li>
 				{/each}
@@ -448,15 +515,94 @@
 					style:height={currentStepHeight > 0 ? `${currentStepHeight}px` : undefined}
 					aria-label="Instruction video steps"
 				>
-					{#each pack.steps as s, i (s.id)}
+					{#each steps as s, i (s.id)}
 						<div class="carousel-item w-full">
 							<div bind:this={stepContentEls[i]} class="flex w-full min-w-0 flex-col gap-4">
 								<div class="flex items-center gap-3">
-									<NumberBadge value={i + 1} />
+									{#if s.kind === 'real-case'}
+										<PlayBadge />
+									{:else}
+										<NumberBadge value={i + 1} />
+									{/if}
 									<h2 class="text-xl font-semibold">{s.title}</h2>
 								</div>
 
-								{#if s.video != null}
+								{#if s.kind === 'real-case'}
+									<RealCaseVideoList videos={REAL_CASE_VIDEOS[activeGender]} />
+								{/if}
+
+								{#if s.kind === 'prior'}
+									<!-- Points A–C: the letter sits in a column as wide as the step's number badge (40px, 12px gap), so the letters are centred under the number and the text starts in line with the step title; each letter is centred on the first line of the point's title (pt-1 on the title); title, text and dialog button share one text column. The link to the real-case videos closes the list in the same columns, with a play circle in place of a letter. -->
+									<ol class="flex flex-col gap-6">
+										{#each s.items as item (item.letter)}
+											{@const [first = '', ...rest] = item.paragraphs}
+											{@const title = first.startsWith('### ') ? first.slice(4) : ''}
+											{@const body = title ? rest : item.paragraphs}
+											<li class="grid grid-cols-[2.5rem_1fr] gap-x-3">
+												<span
+													class="mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-primary/30 text-base font-bold text-base-content"
+													aria-hidden="true">{item.letter}</span
+												>
+												<div class="min-w-0">
+													{#if title}
+														<h3
+															class="pt-1 [font-family:var(--font-heading)] text-lg leading-snug font-semibold text-pretty"
+														>
+															<span class="sr-only">{item.letter}. </span>{title}
+														</h3>
+													{/if}
+													{#each body as para, pi (pi)}
+														<p class="mt-1 text-base text-base-content/80">
+															<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+															{@html formatInlineMarkdown(para)}
+														</p>
+													{/each}
+													{#each s.buttons.filter((b) => b.letter === item.letter) as btn (btn.label)}
+														<button
+															type="button"
+															class="mt-3 inline-flex cursor-pointer items-center gap-2 rounded-sm text-base font-semibold underline decoration-primary decoration-2 underline-offset-4 hover:decoration-base-content focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+															onclick={() => openPriorModal(btn.label, btn.paragraphs)}
+														>
+															<svg
+																xmlns="http://www.w3.org/2000/svg"
+																class="h-5 w-5 shrink-0 text-primary"
+																fill="none"
+																viewBox="0 0 24 24"
+																stroke="currentColor"
+																stroke-width="2"
+																aria-hidden="true"
+																><path
+																	stroke-linecap="round"
+																	stroke-linejoin="round"
+																	d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+																/></svg
+															>
+															{btn.label}
+														</button>
+													{/each}
+												</div>
+											</li>
+										{/each}
+									</ol>
+									<a
+										href={resolve(stepPath(steps.length - 1) as '/')}
+										data-sveltekit-noscroll
+										data-sveltekit-keepfocus
+										data-sveltekit-replacestate
+										class="group mt-2 grid grid-cols-[2.5rem_1fr] items-center gap-x-3 border-t border-base-300 pt-5 no-underline focus-visible:outline-none"
+									>
+										<span
+											class="mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-base-content text-base-100 transition-transform group-hover:scale-110"
+											aria-hidden="true"><PlayIcon class="ml-0.5 h-4 w-4" /></span
+										>
+										<span
+											class="text-base font-semibold underline decoration-base-content/30 decoration-2 underline-offset-4 group-hover:decoration-base-content group-focus-visible:outline-2 group-focus-visible:outline-offset-4 group-focus-visible:outline-base-content"
+											>{REAL_CASE_LINK_TEXT[activeGender]}</span
+										>
+									</a>
+								{/if}
+
+								{#if s.kind === 'video' && s.video != null}
 									<ClipVideo
 										class="instruction-step-video aspect-video w-full rounded-lg bg-black"
 										src={`/assets/video/${s.video}.mp4`}
@@ -465,14 +611,14 @@
 									/>
 								{/if}
 
-								{#each s.paragraphs as para, pi (`${s.id}-${pi}`)}
+								{#each s.kind === 'video' ? s.paragraphs : [] as para, pi (`${s.id}-${pi}`)}
 									<p class="text-base text-base-content/90">
 										<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 										{@html formatInlineMarkdown(para).replace(/\n/g, '<br/>')}
 									</p>
 								{/each}
 
-								{#if 'plusModalId' in s && s.plusModalId != null}
+								{#if s.kind === 'video' && 'plusModalId' in s && s.plusModalId != null}
 									<button
 										type="button"
 										class="btn h-auto min-h-8 gap-1 self-start text-left text-primary btn-ghost btn-sm"
@@ -525,7 +671,7 @@
 		prev={prevEnd}
 		next={nextEnd}
 		prevStep={stepIndex > 0 ? 'in-page' : undefined}
-		nextStep={stepIndex < pack.steps.length - 1 ? 'in-page' : undefined}
+		nextStep={stepIndex < steps.length - 1 ? 'in-page' : undefined}
 	/>
 {/if}
 

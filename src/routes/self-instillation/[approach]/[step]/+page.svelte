@@ -7,6 +7,7 @@
 	import StepStrip from '$lib/components/StepStrip.svelte';
 	import { formatBlockMarkdown } from '$lib/markdown-blocks';
 	import { rememberPatientStep } from '$lib/patient-progress-storage';
+	import { REAL_CASE_ID, REAL_CASE_LABEL } from '$lib/data/real-case-videos';
 
 	let { data } = $props();
 
@@ -15,7 +16,7 @@
 	const step = $derived(approach.steps[index]);
 	const approachPath = $derived(`/self-instillation/${approach.id}`);
 
-	/** Previous / next step with its number ("2. Choose …"); the summary page before step 1 and after the last step. */
+	/** Previous / next step with its number ("2. Choose …"); the summary page before step 1, the real-case videos after the last step. */
 	const prev = $derived(
 		index > 0
 			? {
@@ -30,7 +31,7 @@
 					path: `${approachPath}/${approach.steps[index + 1].id}`,
 					label: `${index + 2}.\u00A0${approach.steps[index + 1].title}`
 				}
-			: { path: approachPath, label: 'Short summary' }
+			: { path: `${approachPath}/${REAL_CASE_ID}`, label: REAL_CASE_LABEL }
 	);
 
 	$effect(() => {
@@ -45,7 +46,7 @@
 />
 
 <section class="bg-primary/20 px-4 pt-3 pb-12">
-	<div class="mx-auto max-w-2xl">
+	<div class="mx-auto max-w-3xl">
 		<div class="breadcrumbs text-sm">
 			<ul>
 				<li><a href={resolve('/self-instillation')}>Self-instillation</a></li>
@@ -142,9 +143,4 @@
 		</article>
 	</div>
 </section>
-<ContentFlowNav
-	{prev}
-	{next}
-	prevStep={index > 0 ? 'page' : undefined}
-	nextStep={index < approach.steps.length - 1 ? 'page' : undefined}
-/>
+<ContentFlowNav {prev} {next} prevStep={index > 0 ? 'page' : undefined} nextStep="page" />

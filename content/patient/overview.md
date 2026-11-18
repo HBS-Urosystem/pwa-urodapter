@@ -14,7 +14,7 @@ There is no single method that works best for everyone. You may need to try diff
 
 ## practise
 
-Read the detailed instructions for your chosen method carefully and take your time to become familiar with the key principles and movements. For the first attempts, it may be useful to practice with **sterile saline or another suitable solution recommended by your healthcare professional**, rather than using the prescribed instillation solution.
+Read the detailed instructions for your chosen method carefully and take your time to become familiar with the key principles and movements. For the first attempts, it may be useful to practice with **sterile saline or another suitable solution recommended by your healthcare professional**, rather than using the prescribed instillation solution. **Only perform self-instillation after it has been approved by your therapist.** If you plan to instill anything other than the prescribed solution, consult with your therapist beforehand.
 
 ## not-for-everyone
 

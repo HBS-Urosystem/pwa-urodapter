@@ -12,11 +12,13 @@
 
 <!-- `contents`: each group is laid out directly by the parent, so the parent can share spare height between the groups. -->
 <div class="contents">
-	{#each groups as group, i (group.heading)}
+	{#each groups as group, i (group.sections[0].path)}
 		<section
 			class={['mx-auto flex w-full max-w-4xl flex-col gap-3 px-4', i === 0 ? 'mt-4' : 'mt-6']}
 		>
-			<h3 class="text-sm font-bold tracking-wider uppercase sm:text-center">{group.heading}</h3>
+			{#if group.heading}
+				<h3 class="text-sm font-bold tracking-wider uppercase sm:text-center">{group.heading}</h3>
+			{/if}
 			<div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
 				{#each group.sections as section (section.path)}
 					<a
