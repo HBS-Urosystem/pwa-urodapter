@@ -15,4 +15,4 @@ Please, fill out this form below and leave us a short description of your inquir
 
 ## legalCheckbox
 
-I have read and agree to the Privacy Policy
+I explicitly consent to UroSystem Zrt. processing the data I give in this form, including any information about my health, to answer my message, as described in the Privacy Policy.

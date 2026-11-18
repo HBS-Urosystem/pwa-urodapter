@@ -12,9 +12,4 @@
 	[headers.values]
 		"cache-control" = "public, max-age=3600"
 
-# The former "What to do prior to instillation" page: its doctor content is step 1 of the clinician instructions.
-[[redirects]]
-	from = "/what-to-do-prior-to-instillation"
-	to = "/instructions-for-doctors-on-female-patients/prior-to-instillation"
-	status = 301
-	force = true
+# Redirects live in the root `_redirects` file: `@sveltejs/adapter-netlify` refuses [[redirects]] here.

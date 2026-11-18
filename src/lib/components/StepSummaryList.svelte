@@ -33,7 +33,7 @@
 							approach: approachId,
 							step: step.id
 						})}
-						class="block [font-family:var(--font-heading)] text-lg leading-snug font-semibold no-underline after:absolute after:inset-0 after:rounded-box focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-base-content"
+						class="block font-display text-lg leading-snug font-semibold no-underline after:absolute after:inset-0 after:rounded-box focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-base-content"
 						>{step.label}</a
 					>
 					<span class="mt-1 block text-base-content/80">{step.summary}</span>
@@ -60,7 +60,7 @@
 			<span class="min-w-0 flex-1 pt-1.5">
 				<a
 					href={resolve('/self-instillation/[approach]/real-case-videos', { approach: approachId })}
-					class="block [font-family:var(--font-heading)] text-lg leading-snug font-semibold no-underline after:absolute after:inset-0 after:rounded-box focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-base-content"
+					class="block font-display text-lg leading-snug font-semibold no-underline after:absolute after:inset-0 after:rounded-box focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-base-content"
 					>{REAL_CASE_LABEL}</a
 				>
 				<span class="mt-1 block text-base-content/80">{REAL_CASE_SUMMARY.female}</span>

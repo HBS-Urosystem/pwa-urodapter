@@ -25,7 +25,7 @@
 						href={resolve(section.path as '/')}
 						class="card h-full bg-base-100 px-5 py-4 no-underline shadow-md transition-shadow hover:shadow-lg sm:col-span-2 sm:items-center sm:text-center sm:odd:last:col-start-2"
 					>
-						<span class="[font-family:var(--font-heading)] text-lg leading-snug font-bold"
+						<span class="font-display text-lg leading-snug font-bold"
 							>{section.title}</span
 						>
 						{#if section.description}

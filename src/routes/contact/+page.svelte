@@ -125,14 +125,20 @@
 				required
 			></textarea>
 
-			<label class="label cursor-pointer items-center gap-3">
-				<input type="checkbox" name="contact_legal" class="checkbox checkbox-primary" required />
+			<!-- daisyUI `.label` sets `white-space: nowrap`; the consent text is a full sentence, so it must wrap. -->
+			<label class="label cursor-pointer items-start gap-3 whitespace-normal">
+				<input
+					type="checkbox"
+					name="contact_legal"
+					class="checkbox shrink-0 checkbox-primary"
+					required
+				/>
 				<span class="label-text text-sm">
-					{beforePrivacy}
-					{#if privacyIdx >= 0}
-						<a href={resolve('/privacy-policy')} class="link link-primary">Privacy Policy</a>
-					{/if}
-					{afterPrivacy}
+					<!-- No whitespace between the link and the text after it, so "Privacy Policy." has no space before the full stop. -->
+					{beforePrivacy}{#if privacyIdx >= 0}<a
+							href={resolve('/privacy-policy')}
+							class="link link-primary">Privacy Policy</a
+						>{/if}{afterPrivacy}
 				</span>
 			</label>
 

@@ -1,4 +1,7 @@
 @import 'tailwindcss';
+/* Self-hosted variable font (bundled by Vite), so no request goes to Google Fonts. */
+@import '@fontsource-variable/source-sans-3';
+@import '@fontsource-variable/source-sans-3/wght-italic.css';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 @plugin 'daisyui';
@@ -88,7 +91,8 @@
 	--color-primary-dark: oklch(42.95% 0.0735 193.48);
 	--color-secondary-dark: oklch(52% 0.11 199);
 	--color-neutral-light: oklch(90% 0.025 195);
-	--font-heading: 'Josefin Sans', sans-serif;
+	--font-sans: 'Source Sans 3 Variable', 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+	--font-display: 'Source Sans 3 Variable', 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
 }
 /* Active tab: the text colour as fill (dark in the light theme, light in the dark theme), for a readable contrast in both. */
 .tab.tab-active {
@@ -99,7 +103,7 @@
 }
 
 h1, h2, h3, h4, h5, h6 {
-	font-family: var(--font-heading);
+	font-family: var(--font-display);
 }
 
 /* Instruction steps: silent MP4s — hide native volume/mute controls (WebKit/Blink). */

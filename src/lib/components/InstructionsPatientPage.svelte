@@ -546,7 +546,7 @@
 												<div class="min-w-0">
 													{#if title}
 														<h3
-															class="pt-1 [font-family:var(--font-heading)] text-lg leading-snug font-semibold text-pretty"
+															class="pt-1 font-display text-lg leading-snug font-semibold text-pretty"
 														>
 															<span class="sr-only">{item.letter}. </span>{title}
 														</h3>

@@ -1,0 +1,3 @@
+# Netlify redirects. @sveltejs/adapter-netlify copies this file into the build; netlify.toml must not contain [[redirects]].
+# The former "What to do prior to instillation" page: its doctor content is step 1 of the clinician instructions.
+/what-to-do-prior-to-instillation  /instructions-for-doctors-on-female-patients/prior-to-instillation  301!

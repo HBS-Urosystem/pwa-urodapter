@@ -8,6 +8,8 @@ Differences between the original scraped site (`scraped/app.urodapter.com/`) and
 
 The app **follows the device light/dark setting automatically**. **Light** appearance is based on the **Urodapter brandbook**; **dark** appearance is based on the **Urosystem brandbook**.
 
+All text, headings included, uses the **Source Sans 3** typeface. The font files are served by the app itself (and cached for offline use), so no request goes to Google Fonts and visitors' IP addresses are not sent to Google.
+
 ---
 
 ## Intro Page
@@ -59,15 +61,22 @@ The app **follows the device light/dark setting automatically**. **Light** appea
 
 ## Privacy Policy Changes
 
-- Removed irrelevant third-party list (Facebook, Instagram, PayPal, Pinterest, Playbuzz, Viber, Vimeo, YouTube) from Section 8
-- Added **Netlify** as the sole external data processor (hosting + form submissions)
+- Removed irrelevant third-party list (Facebook, Instagram, PayPal, Pinterest, Playbuzz, Viber, Vimeo, YouTube) from the data transfer section
+- Added **Netlify** as the sole external data processor (hosting, server logs, form submissions and their spam filtering); fonts, images and videos are served by the app itself
 - Added "Last Updated" date
-- Added disclosure about PWA/service worker local caching
-- Fixed "app. urodapter.com" spacing
+- Added the Data Controller's postal address, e-mail and company registration number
+- Every visitor is covered: the server logs (IP address and request data) are listed, not only contact form data
+- Messages are covered only when sent through the contact form; e-mail is no longer named as a way of sending them (the Controller's e-mail address remains for exercising data subject rights)
+- Health data section: the form does not ask for health data; any health data in a message is processed on the basis of explicit consent (GDPR Art. 9(2)(a)), only to answer the message
+- Purpose, legal basis and retention are stated per purpose (answering messages: voluntary and explicit consent under Infotv. 5. § (1) a), GDPR Art. 6(1)(a) and 9(2)(a), plus contract / legal obligation where they apply; server logs and spam protection: legitimate interest)
+- The contact form checkbox is an explicit consent statement ("I explicitly consent to UroSystem Zrt. processing the data I give in this form, including any information about my health, …") instead of "I have read and agree to the Privacy Policy"; it is unticked by default and required to send the form
+- New sections: transfers outside the EEA (EU–U.S. Data Privacy Framework, EU Standard Contractual Clauses), data stored on the device (cache, local storage reading position, session storage intro screen), data subject rights and how to exercise them, complaint to the Hungarian authority (NAIH) and court remedy, no automated decision-making, changes to the Policy
+- Data breach section also states the 72-hour notification to the authority
+- Fixed "app. urodapter.com" spacing and "natural security" → "national security"
 
 ## Cookie Policy Changes
 
 - Fixed "Webshop" / "purchasing goods" references to "Webpage" / "contact" in Terms and Definitions
 - Removed redundant preamble (replaced with cross-reference to Privacy Policy)
-- States that **no cookies** are used; PWA/cache storage is not cookie-based and is covered in the Privacy Policy (no analytics)
+- States that **no cookies** are used; the cache, local storage and session storage the app does use are not cookie-based and are listed in the Privacy Policy (no analytics)
 - Added "Last Updated" date

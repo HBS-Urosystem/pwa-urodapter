@@ -47,5 +47,8 @@
 		"vite-plugin-devtools-json": "^1.0.0",
 		"yaml": "^2.8.3",
 		"zod": "^4.3.6"
+	},
+	"dependencies": {
+		"@fontsource-variable/source-sans-3": "^5.3.1"
 	}
 }

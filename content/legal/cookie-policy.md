@@ -1,6 +1,6 @@
 # Cookie Policy
 
-**Last updated:** March 2025 (see app release notes).
+**Last updated:** November 2026
 
 ## Terms and definitions
 
@@ -10,7 +10,7 @@
 
 ## Relationship to the Privacy Policy
 
-Personal data that may be collected through forms is described in the **Privacy Policy**. This Cookie Policy states that the Webpage does **not** use cookies. Offline and installable app behaviour may use other browser storage (for example cache APIs), which is **not** cookie-based; see the Privacy Policy for that detail.
+Personal data that may be collected through forms is described in the **Privacy Policy**. This Cookie Policy states that the Webpage does **not** use cookies. The Webpage does use other browser storage, which is **not** cookie-based: cache storage for the offline copy of the app, local storage for your reading position, and session storage for the intro screen. This data stays on your device and is not sent to us; section 9 of the Privacy Policy lists what is stored and why.
 
 ## Use of cookies
 
@@ -20,4 +20,4 @@ We do **not** use analytics or advertising cookies (Google Analytics and similar
 
 ## Your choices
 
-You can manage **site data** (including cached files from the PWA) through your browser or device settings if you want to free space or reset offline content. That is separate from cookies, which this Webpage does not use.
+You can manage **site data** (cached files from the PWA, your stored reading position) through your browser or device settings if you want to free space, reset offline content, or remove where you left off. That is separate from cookies, which this Webpage does not use.
