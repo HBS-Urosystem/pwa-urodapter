@@ -1,8 +1,5 @@
 import adapter from '@sveltejs/adapter-netlify';
 
-/** Disable SW registration during `vite dev` so Cache API does not mask fresh assets. */
-const devDisableServiceWorker = process.env.NODE_ENV === 'development';
-
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	kit: {
@@ -14,7 +11,11 @@ const config = {
 		 * (`./_app/...`) would point to the wrong folder there.
 		 */
 		paths: { relative: false },
-		...(devDisableServiceWorker ? { serviceWorker: { register: false } } : {})
+		/**
+		 * Registered by `src/lib/service-worker-registration.ts` instead, which skips localhost (any port,
+		 * also `vite preview`) so the Cache API never serves stale builds there.
+		 */
+		serviceWorker: { register: false }
 	},
 	vitePlugin: {
 		dynamicCompileOptions: ({ filename }) =>

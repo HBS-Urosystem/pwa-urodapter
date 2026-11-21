@@ -10,11 +10,17 @@
 	import MirrorLayer from '$lib/mirror/MirrorLayer.svelte';
 	import { EXTERNAL_LINKS, MORE_LINKS, TOC_GROUPS, TOC_LABEL } from '$lib/data/site-nav';
 	import { markIntroSeen } from '$lib/stores/intro.svelte';
+	import { setUpServiceWorker } from '$lib/service-worker-registration';
 
 	let { children } = $props();
 
 	/** The pre-paint hint from app.html only covers the prerendered splash; from here on `introPlayed` decides. */
 	onMount(() => document.documentElement.removeAttribute('data-intro-seen'));
+
+	/** No service worker on localhost; see `$lib/service-worker-registration`. */
+	onMount(() => {
+		setUpServiceWorker().catch(() => {});
+	});
 
 	/**
 	 * A reader who is on any page other than the home page is already inside the app, also after opening

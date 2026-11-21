@@ -9,6 +9,32 @@ const sw = self as unknown as ServiceWorkerGlobalScope;
 
 const CACHE_NAME = `cache-${version}`;
 
+/**
+ * A worker installed on a local development host by an older build removes itself: when the browser
+ * fetches this script during its update check, the new worker deletes all caches and unregisters.
+ * The same host list as `isLocalHost` in `src/lib/service-worker-registration.ts`.
+ */
+const host = sw.location.hostname;
+const ON_LOCAL_HOST =
+	host === 'localhost' ||
+	host.endsWith('.localhost') ||
+	host === '127.0.0.1' ||
+	host === '[::1]' ||
+	host === '::1';
+
+if (ON_LOCAL_HOST) {
+	sw.addEventListener('install', () => sw.skipWaiting());
+	sw.addEventListener('activate', (event) => {
+		event.waitUntil(
+			(async () => {
+				const keys = await caches.keys();
+				await Promise.all(keys.map((k) => caches.delete(k)));
+				await sw.registration.unregister();
+			})()
+		);
+	});
+}
+
 /** Cache API cannot store 206 Partial Content; `response.ok` is still true for 206 (common for video `Range` requests). */
 function canStoreInCache(response: Response): boolean {
 	if (!response.ok) return false;
@@ -37,12 +63,11 @@ async function cachedStepPage(url: URL): Promise<Response | undefined> {
 
 const PRECACHE_ASSETS = [
 	...build,
-	...files.filter(
-		(f) => !f.startsWith('/assets/video/') || f.includes('intro_loop_seq')
-	)
+	...files.filter((f) => !f.startsWith('/assets/video/') || f.includes('intro_loop_seq'))
 ];
 
 sw.addEventListener('install', (event) => {
+	if (ON_LOCAL_HOST) return;
 	event.waitUntil(
 		caches
 			.open(CACHE_NAME)
@@ -52,6 +77,7 @@ sw.addEventListener('install', (event) => {
 });
 
 sw.addEventListener('activate', (event) => {
+	if (ON_LOCAL_HOST) return;
 	event.waitUntil(
 		(async () => {
 			const oldKeys = (await caches.keys()).filter((k) => k !== CACHE_NAME);
@@ -68,6 +94,7 @@ sw.addEventListener('activate', (event) => {
 });
 
 sw.addEventListener('fetch', (event) => {
+	if (ON_LOCAL_HOST) return;
 	if (event.request.method !== 'GET') return;
 
 	const url = new URL(event.request.url);
@@ -119,6 +146,7 @@ sw.addEventListener('fetch', (event) => {
 });
 
 sw.addEventListener('message', (event) => {
+	if (ON_LOCAL_HOST) return;
 	if (event.data?.type === 'CACHE_ALL_VIDEOS') {
 		const videoUrls = (event.data.urls as string[]) || [];
 		const total = videoUrls.length;
