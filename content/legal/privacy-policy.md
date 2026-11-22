@@ -39,7 +39,7 @@ The Controller is the operator of the **app.urodapter.com** webpage (**Webpage**
 
 ### When you visit the Webpage
 
-- IP address, date and time of the request, the address of the requested page, the referring page, and the browser and operating system type, as recorded in the server logs of our hosting provider.
+- Technical data recorded in the server logs of our hosting provider, such as your IP address, the date and time of the request and the address of the requested page.
 
 We do not use this technical data to identify visitors.
 
