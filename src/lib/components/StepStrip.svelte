@@ -3,7 +3,7 @@
 	import PlayIcon from '$lib/components/PlayIcon.svelte';
 	import { REAL_CASE_ID, REAL_CASE_LABEL } from '$lib/data/real-case-videos';
 
-	/** Links to the summary (0), all steps of an approach and, last, the real-case video page (a play icon instead of a number). A step link replaces the current entry of the browser history, so the browser's Back button leaves the steps in one go; the current step is filled with the theme's dark colour, the others are transparent. */
+	/** Links to the summary (0), all steps of an approach and, last, the real-case video page (a play icon instead of a number). A step link replaces the current entry of the browser history, so the browser's Back button leaves the steps in one go; the current step has a white background with black text, the others are transparent. */
 	let {
 		approachId,
 		steps,
@@ -53,7 +53,7 @@
 					class={[
 						'mx-auto flex aspect-square max-w-11 items-center justify-center rounded-full border text-base font-bold no-underline transition-colors',
 						current
-							? 'border-base-content bg-base-content text-base-100'
+							? 'border-base-content bg-white text-black'
 							: 'border-base-content/30 bg-transparent text-base-content hover:border-base-content'
 					]}
 					aria-current={current ? 'step' : undefined}
@@ -70,7 +70,7 @@
 				class={[
 					'mx-auto flex aspect-square max-w-11 items-center justify-center rounded-full border no-underline transition-colors',
 					currentId === REAL_CASE_ID
-						? 'border-base-content bg-base-content text-base-100'
+						? 'border-base-content bg-white text-black'
 						: 'border-base-content/30 bg-transparent text-base-content hover:border-base-content'
 				]}
 				aria-current={currentId === REAL_CASE_ID ? 'step' : undefined}

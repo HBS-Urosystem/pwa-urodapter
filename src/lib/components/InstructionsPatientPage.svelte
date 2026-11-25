@@ -489,7 +489,7 @@
 							class={[
 								'mx-auto flex aspect-square max-w-11 items-center justify-center rounded-full border text-base font-bold no-underline transition-colors',
 								current
-									? 'border-base-content bg-base-content text-base-100'
+									? 'border-base-content bg-white text-black'
 									: 'border-base-content/30 bg-transparent text-base-content hover:border-base-content'
 							]}
 							aria-current={current ? 'step' : undefined}

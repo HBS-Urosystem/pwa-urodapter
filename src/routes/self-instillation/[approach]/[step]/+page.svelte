@@ -54,32 +54,28 @@
 	path={`${approachPath}/${step.id}`}
 />
 
-<section class="bg-primary/20 px-4 pt-3 pb-12">
+<section class="bg-primary/20 px-4 pt-8 pb-12">
 	<div class="mx-auto max-w-3xl">
-		<div class="breadcrumbs text-sm">
-			<ul>
-				<li><a href={resolve('/self-instillation')}>Self-instillation</a></li>
-				<li>
-					<a href={resolve('/self-instillation/[approach]', { approach: approach.id })}
-						>{approach.label}</a
-					>
-				</li>
-				<li aria-current="page">Step {index + 1}</li>
-			</ul>
-		</div>
+		<!-- Page title like on the clinician page: "Self-instillation / <approach>"; both parts link to their pages. -->
+		<h1 class="mb-6 text-3xl">
+			<a href={resolve('/self-instillation')} class="hover:underline">Self-instillation</a>
+			<span class="text-base-content/40" aria-hidden="true">/</span>
+			<a
+				href={resolve('/self-instillation/[approach]', { approach: approach.id })}
+				class="hover:underline">{approach.label}</a
+			>
+		</h1>
 
-		<div class="mt-2">
-			<StepStrip approachId={approach.id} steps={approach.steps} currentId={step.id} />
-		</div>
-
-		<div bind:this={titleEl} class="mt-6 flex items-center gap-4">
-			<NumberBadge value={index + 1} size="lg" light />
-			<h1 class="text-2xl leading-tight sm:text-3xl">{step.title}</h1>
-		</div>
+		<StepStrip approachId={approach.id} steps={approach.steps} currentId={step.id} />
 
 		<article
+			bind:this={titleEl}
 			class="prose mt-6 max-w-none rounded-box border border-base-300 bg-base-100 p-5 text-base-content shadow-sm sm:p-8"
 		>
+			<div class="not-prose mb-6 flex items-center gap-3">
+				<NumberBadge value={index + 1} />
+				<h2 class="text-xl font-semibold">{step.title}</h2>
+			</div>
 			{#each step.segments as segment, i (`${approach.id}/${step.id}/${i}`)}
 				{#if segment.kind === 'md'}
 					<!-- eslint-disable-next-line svelte/no-at-html-tags -->
