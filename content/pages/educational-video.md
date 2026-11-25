@@ -1,4 +1,4 @@
-# Educational Video
+# Introductory Video
 
 ## video-id
 

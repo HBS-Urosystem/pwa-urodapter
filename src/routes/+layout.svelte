@@ -8,7 +8,7 @@
 	import UpdateToast from '$lib/components/UpdateToast.svelte';
 	import LogoMark from '$lib/components/LogoMark.svelte';
 	import MirrorLayer from '$lib/mirror/MirrorLayer.svelte';
-	import { EXTERNAL_LINKS, MORE_LINKS, TOC_GROUPS, TOC_LABEL } from '$lib/data/site-nav';
+	import { EXTERNAL_LINKS, MENU_SECTIONS, MORE_LINKS, TOC_LABEL } from '$lib/data/site-nav';
 	import { markIntroSeen } from '$lib/stores/intro.svelte';
 	import { setUpServiceWorker } from '$lib/service-worker-registration';
 
@@ -39,11 +39,12 @@
 
 <div class="drawer drawer-end">
 	<input id="app-drawer" type="checkbox" class="drawer-toggle" />
-	<div class="drawer-content flex min-h-screen flex-col">
+	<div class="drawer-content flex min-h-dvh flex-col">
 		<Header />
 		<main class="flex min-h-0 flex-1 flex-col">
 			{@render children()}
-			<div class="w-full shrink-0">
+			<!-- Short pages: see "Footer and bottom bar at the bottom of the window" in layout.css. -->
+			<div class="app-footer w-full shrink-0">
 				<Footer />
 			</div>
 		</main>
@@ -89,21 +90,19 @@
 			<nav class="menu p-4">
 				<ul>
 					<li><a href={resolve('/')} onclick={closeDrawer}>{TOC_LABEL}</a></li>
-					{#each TOC_GROUPS as group (group.sections[0].path)}
-						{#each group.sections as section (section.path)}
-							<li>
-								<a href={resolve(section.path as '/')} onclick={closeDrawer}>{section.title}</a>
-								{#if section.children}
-									<ul>
-										{#each section.children as child (child.path)}
-											<li>
-												<a href={resolve(child.path as '/')} onclick={closeDrawer}>{child.title}</a>
-											</li>
-										{/each}
-									</ul>
-								{/if}
-							</li>
-						{/each}
+					{#each MENU_SECTIONS as section (section.path)}
+						<li>
+							<a href={resolve(section.path as '/')} onclick={closeDrawer}>{section.title}</a>
+							{#if section.children}
+								<ul>
+									{#each section.children as child (child.path)}
+										<li>
+											<a href={resolve(child.path as '/')} onclick={closeDrawer}>{child.title}</a>
+										</li>
+									{/each}
+								</ul>
+							{/if}
+						</li>
 					{/each}
 					<div class="divider"></div>
 					{#each MORE_LINKS as link (link.path)}

@@ -1,11 +1,18 @@
 <script lang="ts">
+	import { afterNavigate, beforeNavigate } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import ContentFlowNav from '$lib/components/ContentFlowNav.svelte';
 	import PlayBadge from '$lib/components/PlayBadge.svelte';
 	import RealCaseVideoList from '$lib/components/RealCaseVideoList.svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import StepStrip from '$lib/components/StepStrip.svelte';
-	import { REAL_CASE_ID, REAL_CASE_LABEL, REAL_CASE_VIDEOS } from '$lib/data/real-case-videos';
+	import {
+		REAL_CASE_ID,
+		REAL_CASE_LABEL,
+		REAL_CASE_VIDEOS,
+		SELF_REAL_CASE_INTRO
+	} from '$lib/data/real-case-videos';
+	import { holdPageHeight, showStepTitle } from '$lib/step-title-scroll';
 
 	/** The page after the last step of an approach: recordings of real instillations (female patients). */
 	let { data } = $props();
@@ -18,6 +25,13 @@
 		label: `${lastIndex + 1}.\u00A0${approach.steps[lastIndex].title}`
 	});
 	const next = $derived({ path: approachPath, label: 'Short summary' });
+
+	/** After a change of step by a link, the title is in view (see `$lib/step-title-scroll`). */
+	let titleEl = $state<HTMLElement>();
+	beforeNavigate((navigation) => holdPageHeight(navigation, approachPath));
+	afterNavigate(({ type }) => {
+		if (type === 'link' || type === 'goto') showStepTitle(titleEl);
+	});
 </script>
 
 <SeoHead
@@ -44,9 +58,14 @@
 			<StepStrip approachId={approach.id} steps={approach.steps} currentId={REAL_CASE_ID} />
 		</div>
 
-		<div class="mt-6 flex items-center gap-4">
+		<div bind:this={titleEl} class="mt-6 flex items-center gap-4">
 			<PlayBadge size="lg" light />
 			<h1 class="text-2xl leading-tight sm:text-3xl">{REAL_CASE_LABEL}</h1>
+		</div>
+
+		<div class="mt-6 flex flex-col gap-3 text-base">
+			<p>{SELF_REAL_CASE_INTRO[0]}</p>
+			<p><em>{SELF_REAL_CASE_INTRO[1]}</em></p>
 		</div>
 
 		<div

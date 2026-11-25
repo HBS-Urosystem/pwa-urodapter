@@ -18,8 +18,10 @@ Read the detailed instructions for your chosen method carefully and take your ti
 
 ## not-for-everyone
 
+You can also watch real-patient videos showing UroDapter instillation performed by an experienced clinician. Although these videos do not show self-instillation at home, they can help you understand the key movements, placement, angle, sealing, and instillation technique.
+
 Not every woman will be able to perform UroDapter instillation successfully at home. For some, treatment performed by a healthcare professional may remain the most appropriate option.
 
 ## how-to-use
 
-**Select a tab below to choose your approach.** Before your first use, read the detailed instructions for that approach. Then use the short summary as a reminder. Select any step label in the summary to open its detailed explanation.
+**Choose one of the three approaches below.** Before your first use, read the detailed instructions for that approach. Then use the short summary as a reminder. Select any step label in the summary to open its detailed explanation.

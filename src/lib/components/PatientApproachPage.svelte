@@ -40,6 +40,24 @@
 	);
 	/** Image and one-sentence description of the approach (from `content/patient/*.yaml`). */
 	const nav = $derived(patientNav.find((n) => n.id === approach.id));
+	const pictureOf = (id: string) => patientNav.find((n) => n.id === id)?.image;
+
+	/**
+	 * From 640px each tab shows its approach's picture above its label. The tab bar then sticks so much higher
+	 * than the header's bottom edge that the pictures slide under the header and only the labels stay in view:
+	 * `picturesDepth` is the distance from the top of the bar to the bottom of the pictures (0 below 640px).
+	 */
+	let picturesDepth = $state(0);
+	function trackPicturesDepth(bar: HTMLElement) {
+		const measure = () => {
+			const rect = bar.querySelector('img')?.getBoundingClientRect();
+			picturesDepth = rect && rect.height > 0 ? rect.bottom - bar.getBoundingClientRect().top : 0;
+		};
+		const observer = new ResizeObserver(measure);
+		observer.observe(bar);
+		measure();
+		return () => observer.disconnect();
+	}
 
 	/** Last opened step per approach; read after mount so the prerendered HTML and hydration match. */
 	let progress = $state<PatientProgress>({});
@@ -187,9 +205,11 @@
 
 		<!-- Opaque page background behind the sticky tabs: covers the content scrolling under their rounded corners and in the 4px gap below the header (pt-1; -mt-1 keeps the unscrolled position). -mx-2 px-2 also covers the shadow of the content beside the tabs. -->
 		<nav
+			{@attach trackPicturesDepth}
 			aria-label="Approaches"
 			data-tab-bar
 			class="sticky top-16 z-10 -mx-2 -mt-1 mb-6 bg-primary-20-opaque px-2 pt-1"
+			style:top={picturesDepth > 0 ? `calc(4rem - ${picturesDepth}px)` : undefined}
 		>
 			<ul class="tabs-box tabs flex w-full flex-nowrap">
 				{#each approaches as a (a.id)}
@@ -199,10 +219,23 @@
 							href={resolve('/self-instillation/[approach]', { approach: a.id })}
 							data-sveltekit-noscroll
 							class={[
-								'tab h-auto min-h-11 w-full rounded-field px-2 py-2 text-center text-sm leading-tight',
+								'group tab h-auto min-h-11 w-full flex-col gap-2 rounded-field px-2 py-2 text-center text-sm leading-tight sm:p-1.5 sm:pb-2.5',
 								current && 'tab-active font-semibold'
 							]}
-							aria-current={current ? 'page' : undefined}>{a.label}</a
+							aria-current={current ? 'page' : undefined}
+						>
+							<!-- From 640px: the approach's picture above the label (the large picture below the tabs is shown only under 640px). -->
+							<img
+								src={pictureOf(a.id)}
+								alt=""
+								width="384"
+								height="308"
+								class={[
+									'hidden aspect-[384/308] h-auto w-full rounded-field object-cover sm:block',
+									!current && 'opacity-80 transition-opacity group-hover:opacity-100'
+								]}
+							/>
+							<span>{a.label}</span></a
 						>
 					</li>
 				{/each}
@@ -216,7 +249,7 @@
 				alt={nav.imageAlt}
 				width="384"
 				height="308"
-				class="mx-auto mb-6 block aspect-[384/308] h-auto w-full max-w-sm rounded-box object-cover"
+				class="mx-auto mb-6 block aspect-[384/308] h-auto w-full max-w-sm rounded-box object-cover sm:hidden"
 			/>
 		{/if}
 

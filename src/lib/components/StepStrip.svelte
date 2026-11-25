@@ -49,6 +49,7 @@
 						step: step.id
 					})}
 					data-sveltekit-replacestate
+					data-sveltekit-noscroll
 					class={[
 						'mx-auto flex aspect-square max-w-11 items-center justify-center rounded-full border text-base font-bold no-underline transition-colors',
 						current
@@ -65,6 +66,7 @@
 			<a
 				href={resolve('/self-instillation/[approach]/real-case-videos', { approach: approachId })}
 				data-sveltekit-replacestate
+				data-sveltekit-noscroll
 				class={[
 					'mx-auto flex aspect-square max-w-11 items-center justify-center rounded-full border no-underline transition-colors',
 					currentId === REAL_CASE_ID

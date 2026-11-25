@@ -9,8 +9,14 @@ export const REAL_CASE_ID = 'real-case-videos';
 
 /** Label of the video page: plural for the three female videos, singular for the one male video. */
 export const REAL_CASE_LABELS = { female: 'Real-case videos', male: 'Real-case video' } as const;
-/** Label on the self-instillation pages (female videos). */
-export const REAL_CASE_LABEL = REAL_CASE_LABELS.female;
+/** Title of the video page on the self-instillation pages (step row, bottom bar, short summary, page heading). */
+export const REAL_CASE_LABEL = 'Real-patient instillation videos';
+
+/** Text above the videos on the self-instillation video page; the second paragraph is shown in italics. */
+export const SELF_REAL_CASE_INTRO = [
+	'These real-patient videos show UroDapter instillation performed by an experienced clinician. Although the setting differs from home self-treatment, they can help you understand the key movements, placement, angle, sealing, and instillation technique in practice.',
+	'Use these videos as a practical reference alongside the specific home-treatment instructions for your chosen approach.'
+] as const;
 
 /** Link at the end of step 1 of the clinician instructions, leading to the video page (non-breaking hyphen in "real-case"). */
 export const REAL_CASE_LINK_TEXT = {
@@ -35,8 +41,6 @@ export const REAL_CASE_VIDEOS: Record<'female' | 'male', readonly RealCaseVideo[
 	]
 };
 
-/** Line under the label in the self-instillation short summary. */
-export const REAL_CASE_SUMMARY: Record<'female' | 'male', string> = {
-	female: 'Three recordings of real instillations with the UroDapter.',
-	male: 'A recording of a real instillation with the UroDapter.'
-};
+/** Line under the title in the self-instillation short summary. */
+export const REAL_CASE_SUMMARY =
+	'Watch clinician-performed UroDapter instillations in real patients to see the key placement, angle, sealing, and instillation technique in practice.';

@@ -25,3 +25,5 @@ vite.config.ts.timestamp-*
 # vhollo
 .cursor/plans
 ._*
+# Spreadsheets kept on SharePoint, not in the repository
+/_workfiles/*.xlsx

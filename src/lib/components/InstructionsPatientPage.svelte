@@ -19,7 +19,6 @@
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import { CONTENT_FLOW_NAV } from '$lib/data/content-flow-nav';
 	import { CLINICIAN_LABEL } from '$lib/data/site-nav';
-	import { persistLastInstillationBranch } from '$lib/instillation-branch-storage';
 	import { persistLastInstructionsTab } from '$lib/instructions-tab-storage';
 	import { formatInlineMarkdown } from '$lib/markdown-inline';
 	import { scrollToTabContent, tabsAreStuck } from '$lib/tab-scroll';
@@ -186,7 +185,6 @@
 
 	onMount(() => {
 		persistLastInstructionsTab(activeGender);
-		persistLastInstillationBranch('clinician');
 		persistStep();
 		if (addressStepIndex < 0) void showStepInAddress(stepIndex);
 		void tick().then(() => {

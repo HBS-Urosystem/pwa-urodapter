@@ -7,8 +7,8 @@
 @plugin 'daisyui';
 
 /* Light: primary #78c7c9, secondary #02979d, neutral #005c5b, accent #caa8cf; dark = urodapter-dark */
-@plugin "daisyui/theme" {
-	name: "urodapter";
+@plugin 'daisyui/theme' {
+	name: 'urodapter';
 	default: true;
 	prefersdark: false;
 	color-scheme: light;
@@ -44,8 +44,8 @@
 	--tab-radius: 0.5rem;
 }
 
-@plugin "daisyui/theme" {
-	name: "urodapter-dark";
+@plugin 'daisyui/theme' {
+	name: 'urodapter-dark';
 	default: false;
 	prefersdark: true;
 	color-scheme: dark;
@@ -61,10 +61,10 @@
 	--color-secondary: oklch(89.53% 0.0345 233.08);
 	--color-secondary-content: oklch(33% 0.06 237);
 
-	--color-accent: oklch(77.41% 0.0662 322.00);
+	--color-accent: oklch(77.41% 0.0662 322);
 	--color-accent-content: oklch(30% 0.02 322);
 
-	--color-neutral: oklch(54.26% 0.0012 17.20);
+	--color-neutral: oklch(54.26% 0.0012 17.2);
 	--color-neutral-content: oklch(100% 0 0);
 
 	--color-info: oklch(70% 0.08 226);
@@ -102,7 +102,12 @@
 	color: var(--color-base-100);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
 	font-family: var(--font-display);
 }
 
@@ -129,4 +134,16 @@ html[data-intro-seen] .intro-splash {
  */
 @utility bg-primary-20-opaque {
 	background-color: color-mix(in srgb, var(--color-primary) 20%, var(--color-base-100));
+}
+
+/*
+ * Footer and bottom bar at the bottom of the window: on a page shorter than the window, the page's last block
+ * grows (its background with it), so the previous / next bar and the footer sit at the bottom of the window.
+ * The block that grows is the one directly before the bar, or, on a page without a bar, the one directly before the footer.
+ */
+main > :has(+ .content-flow-nav) {
+	flex-grow: 1;
+}
+main:not(:has(> .content-flow-nav)) > :has(+ .app-footer) {
+	flex-grow: 1;
 }

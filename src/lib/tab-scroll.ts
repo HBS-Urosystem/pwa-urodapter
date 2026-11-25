@@ -9,10 +9,18 @@ import { browser } from '$app/environment';
  *   to the start of the content below the tabs, so the reader does not land in the middle of the new tab.
  *
  * A page marks its sticky tab bar with `data-tab-bar` and the first element below it with `data-tab-content`.
+ * A tab bar may stick higher than the header's bottom edge, so that its upper part (e.g. pictures) slides
+ * under the header and only its lower part stays visible; its own CSS `top` is used for that.
  */
 
 /** Height of the sticky page header in px (`top-16` on the tab bars). */
 const HEADER_HEIGHT = 64;
+
+/** Distance in px from the top of the window at which the tab bar sticks (its CSS `top`). */
+function stickyTop(bar: HTMLElement): number {
+	const top = parseFloat(getComputedStyle(bar).top);
+	return Number.isFinite(top) ? top : HEADER_HEIGHT;
+}
 /** Gap in px between the tab bar and the content after the scroll. */
 const GAP = 8;
 
@@ -26,7 +34,7 @@ function tabBar(): HTMLElement | null {
 export function tabsAreStuck(): boolean {
 	if (!browser) return false;
 	const bar = tabBar();
-	return !!bar && bar.getBoundingClientRect().top <= HEADER_HEIGHT + 1;
+	return !!bar && bar.getBoundingClientRect().top <= stickyTop(bar) + 1;
 }
 
 /** Call before the tab changes; the answer is kept for `tabsWereStuck()` (also across a page change). */
@@ -45,7 +53,9 @@ export function scrollToTabContent(smooth = true): void {
 	const content = document.querySelector<HTMLElement>('[data-tab-content]');
 	if (!bar || !content) return;
 	const top =
-		window.scrollY + content.getBoundingClientRect().top - (HEADER_HEIGHT + bar.offsetHeight + GAP);
+		window.scrollY +
+		content.getBoundingClientRect().top -
+		(stickyTop(bar) + bar.offsetHeight + GAP);
 	const animate = smooth && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	window.scrollTo({ top: Math.max(0, top), behavior: animate ? 'smooth' : 'auto' });
 }

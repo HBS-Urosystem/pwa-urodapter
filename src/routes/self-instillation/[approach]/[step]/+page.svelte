@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { afterNavigate, beforeNavigate } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import ContentFlowNav from '$lib/components/ContentFlowNav.svelte';
 	import FigureDisclosure from '$lib/components/FigureDisclosure.svelte';
@@ -8,6 +9,7 @@
 	import { formatBlockMarkdown } from '$lib/markdown-blocks';
 	import { rememberPatientStep } from '$lib/patient-progress-storage';
 	import { REAL_CASE_ID, REAL_CASE_LABEL } from '$lib/data/real-case-videos';
+	import { holdPageHeight, showStepTitle } from '$lib/step-title-scroll';
 
 	let { data } = $props();
 
@@ -37,6 +39,13 @@
 	$effect(() => {
 		rememberPatientStep(approach.id, step.id);
 	});
+
+	/** After a change of step by a link, the new step's title is in view (see `$lib/step-title-scroll`). */
+	let titleEl = $state<HTMLElement>();
+	beforeNavigate((navigation) => holdPageHeight(navigation, approachPath));
+	afterNavigate(({ type }) => {
+		if (type === 'link' || type === 'goto') showStepTitle(titleEl);
+	});
 </script>
 
 <SeoHead
@@ -63,7 +72,7 @@
 			<StepStrip approachId={approach.id} steps={approach.steps} currentId={step.id} />
 		</div>
 
-		<div class="mt-6 flex items-center gap-4">
+		<div bind:this={titleEl} class="mt-6 flex items-center gap-4">
 			<NumberBadge value={index + 1} size="lg" light />
 			<h1 class="text-2xl leading-tight sm:text-3xl">{step.title}</h1>
 		</div>

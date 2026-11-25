@@ -29,9 +29,9 @@
 	/**
 	 * A link from one step to another replaces the current entry of the browser history, so the browser's
 	 * Back button leaves the steps in one go.
-	 * - `'page'`: the step is a page of its own; the new page starts at its top.
-	 * - `'in-page'`: the step is shown on the same page; the page does not scroll and keeps the focus
-	 *   (the page itself brings the step into view).
+	 * The link keeps the scroll position; the page itself brings the new step into view.
+	 * - `'page'`: the step is a page of its own (self-instillation, see `$lib/step-title-scroll`).
+	 * - `'in-page'`: the step is shown on the same page, which also keeps the focus.
 	 */
 	type StepLink = 'page' | 'in-page';
 
@@ -47,12 +47,12 @@
 </script>
 
 <!-- Spacing above the bar lives in the page <section> padding (tinted), not margin on this block -->
-<div class="sticky bottom-0 z-10 w-full border-y border-base-300 bg-base-100 py-1">
+<div class="content-flow-nav sticky bottom-0 z-10 w-full border-y border-base-300 bg-base-100 py-1">
 	<nav class="mx-auto flex max-w-4xl justify-between gap-4 px-6" aria-label="Section navigation">
 		<a
 			href={resolve(prevPathResolved as '/')}
 			data-sveltekit-replacestate={prevStep ? '' : undefined}
-			data-sveltekit-noscroll={prevStep === 'in-page' ? '' : undefined}
+			data-sveltekit-noscroll={prevStep ? '' : undefined}
 			data-sveltekit-keepfocus={prevStep === 'in-page' ? '' : undefined}
 			class="btn h-auto min-h-10 min-w-0 shrink justify-start gap-2 btn-ghost"
 		>
@@ -62,7 +62,7 @@
 		<a
 			href={resolve(nextPathResolved as '/')}
 			data-sveltekit-replacestate={nextStep ? '' : undefined}
-			data-sveltekit-noscroll={nextStep === 'in-page' ? '' : undefined}
+			data-sveltekit-noscroll={nextStep ? '' : undefined}
 			data-sveltekit-keepfocus={nextStep === 'in-page' ? '' : undefined}
 			class="btn h-auto min-h-10 min-w-0 shrink justify-end gap-2 btn-ghost"
 		>

@@ -3,7 +3,7 @@
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import LogoWordmark from '$lib/components/LogoWordmark.svelte';
 	import TocCards from '$lib/components/TocCards.svelte';
-	import { TOC_GROUPS } from '$lib/data/site-nav';
+	import { TOC_GUIDES, TOC_MORE } from '$lib/data/site-nav';
 	import { videoFiles } from '$lib/data/video-manifest';
 	import { introPlayed, markIntroSeen } from '$lib/stores/intro.svelte';
 
@@ -65,7 +65,7 @@
 	const homeDescription =
 		'Everything you need to know about the urological syringe adapter which can completely replace the catheter in the field of Bladder Instillation';
 
-	/** First intro frame (PNG) + loop — preloaded in `<head>` when the splash is shown for LCP / fetch priority. */
+	/** Intro loop video and its first frame; the poster is preloaded in `<head>` while the splash is shown (LCP). */
 	const introVideoSrc = '/assets/intro_loop_seq.mp4';
 	const introPosterSrc = '/assets/intro_loop_seq-poster.jpg';
 
@@ -120,9 +120,9 @@
 
 <svelte:head>
 	{#if !introPlayed.seen}
-		<!-- LCP: poster + video URLs are discoverable in the initial document (not injected later). -->
+		<!-- LCP: the poster is preloaded. The video needs no preload link (browsers do not support `as="video"`):
+		     its element is in the prerendered HTML with `preload="auto"` and a high fetch priority. -->
 		<link rel="preload" href={introPosterSrc} as="image" fetchpriority="high" />
-		<link rel="preload" href={introVideoSrc} as="video" type="video/mp4" fetchpriority="high" />
 	{/if}
 </svelte:head>
 
@@ -206,27 +206,25 @@
 {/if}
 
 <!--
-	When the window is taller than the content, the spare height is shared evenly between the six blocks
-	(title and introduction, "Table of Contents" heading, the three card groups, the download and install/share actions).
-	The margins on the blocks are the smallest distances, used when there is no spare height.
+	When the window is taller than the content, the spare height is shared evenly between the four blocks
+	(title and introduction, the two guide cards, the video and FAQ cards, the download and install/share actions).
+	The gap between the blocks is the smallest distance, used when there is no spare height; the distances are always equal.
 -->
 <section class="flex flex-1 flex-col bg-primary/20 py-12">
-	<div class="flex w-full flex-1 flex-col justify-between">
+	<div class="flex w-full flex-1 flex-col justify-between gap-10">
 		<div>
 			<h1 class="mb-8 text-center text-3xl">How to Use</h1>
 
 			<p class="mx-auto max-w-2xl border-b px-1 pb-4 text-center font-bold">
-				This detailed guide entails all the necessary information regarding instructions and the
-				tips and tricks you may need to make the use of the UroDapter® most efficient.
+				Choose the guide that matches how UroDapter® will be used, with step-by-step instructions
+				and practical tips for both clinician-performed and home treatment.
 			</p>
 		</div>
 
-		<h2 class="mt-8 text-center text-lg font-bold">Table of Contents</h2>
-
-		<TocCards groups={TOC_GROUPS} />
+		<TocCards guides={TOC_GUIDES} more={TOC_MORE} />
 
 		<div>
-			<div class="mt-12 mb-4 text-center">
+			<div class="mb-4 text-center">
 				{#if progress >= 100}
 					<p class="font-bold text-success">Downloaded!</p>
 				{:else}

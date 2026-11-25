@@ -206,7 +206,7 @@ function parseSimplePage(md) {
 /** @param {string} md */
 function parseEducationalVideo(md) {
 	const titleMatch = md.match(/^#\s+(.+)$/m);
-	const title = titleMatch ? titleMatch[1].trim() : 'Educational Video';
+	const title = titleMatch ? titleMatch[1].trim() : 'Introductory Video';
 	const sections = parseH2Sections(md);
 	const vid = sections.find((s) => s.key === 'video-id');
 	let videoId = 193;

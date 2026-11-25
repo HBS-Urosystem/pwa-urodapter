@@ -2,36 +2,11 @@
 	import { resolve } from '$app/paths';
 	import ContentFlowNav from '$lib/components/ContentFlowNav.svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
-	import { onMount } from 'svelte';
-	import {
-		CLINICIAN_BRANCH,
-		CONTENT_FLOW_NAV,
-		SELF_INSTILLATION_BRANCH
-	} from '$lib/data/content-flow-nav';
-	import {
-		readLastInstillationBranch,
-		type InstillationBranch
-	} from '$lib/instillation-branch-storage';
+	import { CONTENT_FLOW_NAV } from '$lib/data/content-flow-nav';
 	import { siteContent } from '$lib/content';
 	import { formatInlineMarkdown } from '$lib/markdown-inline';
 
 	const flow = CONTENT_FLOW_NAV['/faq'];
-
-	/**
-	 * "Previous" leads back to the branch the reader last opened. Until that is read after mount, and when
-	 * the reader has opened neither branch, it leads to "Instillation by a clinician".
-	 */
-	let lastBranch = $state<InstillationBranch | null>(null);
-	onMount(() => {
-		lastBranch = readLastInstillationBranch();
-	});
-	const prev = $derived(
-		lastBranch === 'self'
-			? SELF_INSTILLATION_BRANCH
-			: lastBranch === 'clinician'
-				? CLINICIAN_BRANCH
-				: flow.prev
-	);
 
 	const faq = siteContent.pageCopy.faq;
 	const pageTitle = `${faq.title} | Urodapter`;
@@ -72,4 +47,4 @@
 		</div>
 	</div>
 </section>
-<ContentFlowNav {prev} next={flow.next} lastInstructionsTabForPrev={lastBranch !== 'self'} />
+<ContentFlowNav prev={flow.prev} next={flow.next} />

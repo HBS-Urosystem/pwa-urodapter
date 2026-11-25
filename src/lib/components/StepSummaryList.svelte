@@ -63,7 +63,7 @@
 					class="block font-display text-lg leading-snug font-semibold no-underline after:absolute after:inset-0 after:rounded-box focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-base-content"
 					>{REAL_CASE_LABEL}</a
 				>
-				<span class="mt-1 block text-base-content/80">{REAL_CASE_SUMMARY.female}</span>
+				<span class="mt-1 block text-base-content/80">{REAL_CASE_SUMMARY}</span>
 			</span>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
