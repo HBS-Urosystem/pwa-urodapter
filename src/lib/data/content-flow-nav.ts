@@ -1,4 +1,6 @@
 import {
+	CLINICIAN_LABEL,
+	CLINICIAN_PATH,
 	SELF_INSTILLATION_LABEL,
 	SELF_INSTILLATION_PATH,
 	TOC_LABEL,
@@ -13,6 +15,8 @@ const SELF_INSTILLATION: ContentFlowNavEnd = {
 	path: SELF_INSTILLATION_PATH,
 	label: SELF_INSTILLATION_LABEL
 };
+/** "Instillation by a clinician"; the Introductory Video's previous link when the reader last opened that branch. */
+export const CLINICIAN_BRANCH: ContentFlowNavEnd = { path: CLINICIAN_PATH, label: CLINICIAN_LABEL };
 const VIDEO: ContentFlowNavEnd = { path: '/how-the-urodapter-works', label: 'Introductory Video' };
 const FAQ: ContentFlowNavEnd = { path: '/faq', label: 'FAQ' };
 
@@ -22,6 +26,8 @@ const FAQ: ContentFlowNavEnd = { path: '/faq', label: 'FAQ' };
  * The two instillation branches do not link to each other: a reader of one branch is not led into the other.
  * - Instillation by a clinician: Table of Contents ← → FAQ
  * - Self-instillation at home: Table of Contents ← → Introductory Video → FAQ → Table of Contents
+ * The Introductory Video's previous link leads to the branch the reader last opened; the one below is used
+ * until that is read after mount, and when the reader has opened neither branch.
  */
 export const CONTENT_FLOW_NAV: Record<
 	string,

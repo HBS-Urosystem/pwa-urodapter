@@ -1,11 +1,22 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import ContentFlowNav from '$lib/components/ContentFlowNav.svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import VideoPlayer from '$lib/components/VideoPlayer.svelte';
-	import { CONTENT_FLOW_NAV } from '$lib/data/content-flow-nav';
+	import { CLINICIAN_BRANCH, CONTENT_FLOW_NAV } from '$lib/data/content-flow-nav';
+	import { readLastInstillationBranch } from '$lib/instillation-branch-storage';
 	import { siteContent } from '$lib/content';
 
 	const flow = CONTENT_FLOW_NAV['/how-the-urodapter-works'];
+
+	/**
+	 * "Previous" leads back to the branch the reader last opened: "Instillation by a clinician" (the female or
+	 * male instructions, whichever was open last) or "Self-instillation at home" (also when neither was opened).
+	 */
+	let clinicianLast = $state(false);
+	onMount(() => {
+		clinicianLast = readLastInstillationBranch() === 'clinician';
+	});
 
 	const { title, videoId, poster, notesParagraphs } = siteContent.pageCopy.educationalVideo;
 	const pageTitle = `${title} | Urodapter`;
@@ -33,4 +44,8 @@
 		/>
 	</div>
 </section>
-<ContentFlowNav prev={flow.prev} next={flow.next} />
+<ContentFlowNav
+	prev={clinicianLast ? CLINICIAN_BRANCH : flow.prev}
+	next={flow.next}
+	lastInstructionsTabForPrev={clinicianLast}
+/>

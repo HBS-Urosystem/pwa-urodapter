@@ -1,5 +1,11 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { persistLastInstillationBranch } from '$lib/instillation-branch-storage';
+
 	let { children } = $props();
+
+	/** Remembers that the reader last opened this branch (see `$lib/instillation-branch-storage`). */
+	onMount(() => persistLastInstillationBranch('self'));
 </script>
 
 <svelte:head>
